@@ -1,3 +1,6 @@
+// HomePage.js - Script untuk halaman utama
+
+// Navbar scroll effect - transparan di atas, solid coklat saat scroll
 window.onscroll = function() {
     var navbar = document.getElementById('navbar');
     if (window.scrollY > 50) {
@@ -7,6 +10,7 @@ window.onscroll = function() {
     }
 };
 
+// Smooth scroll untuk navigasi
 var smoothLinks = document.querySelectorAll('.nav-links a[href^="#"]');
 for (var i = 0; i < smoothLinks.length; i++) {
     smoothLinks[i].addEventListener('click', function(e) {
@@ -21,6 +25,7 @@ for (var i = 0; i < smoothLinks.length; i++) {
     });
 }
 
+// Animasi sederhana saat scroll
 window.addEventListener('scroll', function() {
     var elements = document.querySelectorAll('.step, .gallery-item');
     for (var j = 0; j < elements.length; j++) {
@@ -32,6 +37,7 @@ window.addEventListener('scroll', function() {
     }
 });
 
+// Set initial style untuk animasi
 window.addEventListener('DOMContentLoaded', function() {
     var elements = document.querySelectorAll('.step, .gallery-item');
     for (var k = 0; k < elements.length; k++) {
