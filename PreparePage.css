@@ -1,0 +1,117 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: #3b2a1a;
+    background-color: #f5f0e8;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background-color: #3b2a1a;
+    color: #fff;
+}
+
+.nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-style: italic;
+}
+
+.nav-links {
+    display: flex;
+    gap: 30px;
+}
+
+.nav-links a {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.nav-links a:hover {
+    opacity: 0.8;
+}
+
+.prepare-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 85vh;
+    padding: 40px;
+}
+
+.prepare-box {
+    text-align: center;
+    max-width: 550px;
+}
+
+.prepare-box h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.5;
+    margin-bottom: 30px;
+}
+
+.prepare-box h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 35px;
+}
+
+.prepare-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.btn-kembali {
+    display: inline-block;
+    padding: 12px 35px;
+    background-color: #e8cdb5;
+    color: #3b2a1a;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-kembali:hover {
+    background-color: #ddbfa5;
+}
+
+.btn-mulai {
+    display: inline-block;
+    padding: 12px 35px;
+    background-color: #3b2a1a;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-mulai:hover {
+    background-color: #2a1d12;
+}
