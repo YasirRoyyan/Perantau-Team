@@ -52,9 +52,9 @@ ul {
 
 .navbar {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
-    padding: 18px 60px;
+    padding: 30px 60px;
     background-color: transparent;
     color: #fff;
     position: fixed;
@@ -72,22 +72,24 @@ ul {
 .nav-logo {
     font-family: 'Sinera', 'Playfair Display', serif;
     font-size: 24px;
+    margin-right: 18%;
 }
 
 .nav-links {
     display: flex;
-    gap: 40px;
+    gap: 60px;
 }
 
 .nav-links a {
     color: #fff;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 14px;
+    letter-spacing: 0.5px;
     font-weight: 400;
 }
 
 .nav-links a:hover {
-    opacity: 0.8;
+    opacity: 0.7;
 }
 
 .hero {
@@ -115,15 +117,17 @@ ul {
     position: relative;
     z-index: 1;
     color: #fff;
-    max-width: 700px;
+    max-width: 900px; 
     padding: 20px;
+    margin-top: 30px; 
 }
 
 .hero-content h1 {
     font-family: 'Bethany Elingston', 'Playfair Display', serif;
-    font-size: 52px;
-    line-height: 1.2;
-    margin-bottom: 20px;
+    font-size: 88px; 
+    line-height: 0.95; 
+    letter-spacing: -2px; 
+    margin-bottom: 25px;
     font-weight: normal;
 }
 
@@ -131,18 +135,19 @@ ul {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 15px;
     font-weight: 300;
-    margin-bottom: 30px;
+    line-height: 1.5;
+    margin-bottom: 50px;
     opacity: 0.9;
 }
 
 .btn-hero {
     display: inline-block;
-    padding: 14px 35px;
-    background-color: #f5f0e8;
+    padding: 18px 75px;
+    background-color: #fff;
     color: #3b2a1a;
     border-radius: 50px;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 500;
     cursor: pointer;
     border: none;
