@@ -23,10 +23,9 @@ Project ini adalah website toko furnitur sederhana dengan tampilan mirip katalog
 
 ## Struktur File
 
-- `index.html` untuk struktur halaman.
-- `prepare.html` halaman persiapan sebelum user memulai asesmen
-- `asesmen.html` halaman untuk user menjawab pertanyaan dan melihat visual interior sesuai jawaban yang dipilihnya.
-- `hasil.html` halaman yang menampilkan hasil dari selera user beserta visual akhir interiornya.
-- `style.css` untuk tampilan website.
-- `script.js` untuk logika tombol, notifikasi, dan keranjang.
-- Folder `images` untuk foto produk.
+- `HomePage.html`, `HomePage.css`, dan `HomePage.js` untuk halaman utama.
+- `PreparePage.html`, `PreparePage.css`, dan `PreparePage.js` untuk halaman persiapan sebelum user memulai asesmen.
+- `AsesmentPage.html`, `AsesmentPage.css`, dan `AsesmentPage.js` untuk halaman asesmen.
+- `HasilPage.html`, `HasilPage.css`, dan `HasilPage.js` untuk halaman hasil akhir.
+- Folder `Image` untuk aset gambar.
+- Folder `Icons` untuk ikon yang digunakan pada tampilan website.
