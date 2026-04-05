@@ -129,7 +129,7 @@ h2 {
     position: relative;
     width: 100%;
     min-height: 1024px; /* Sesuai tinggi background Figma */
-    background: url("Image/img-home.png") center top / cover no-repeat;
+    background: url("Image/img-HomePage.png") center top / cover no-repeat;
     display: flex;
     justify-content: center;
     align-items: center;
