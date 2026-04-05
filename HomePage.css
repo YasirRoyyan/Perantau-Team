@@ -1,4 +1,3 @@
-/* ===== FONT FACES ===== */
 @font-face {
     font-family: 'Sinera';
     src: url('fonts/Sinera.ttf') format('truetype');
@@ -20,7 +19,6 @@
     font-style: normal;
 }
 
-/* ===== RESET & BASE ===== */
 * {
     margin: 0;
     padding: 0;
@@ -42,11 +40,11 @@ ul {
     list-style: none;
 }
 
-/* ===== NAVBAR ===== */
 .navbar {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    padding: 20px 80px;
+    padding: 18px 60px;
     background-color: transparent;
     color: #fff;
     position: fixed;
@@ -63,19 +61,18 @@ ul {
 
 .nav-logo {
     font-family: 'Sinera', 'Playfair Display', serif;
-    font-size: 26px;
-    margin-right: 80px;
+    font-size: 24px;
 }
 
 .nav-links {
     display: flex;
-    gap: 80px;
+    gap: 40px;
 }
 
 .nav-links a {
     color: #fff;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 400;
 }
 
@@ -83,7 +80,6 @@ ul {
     opacity: 0.8;
 }
 
-/* ===== HERO SECTION ===== */
 .hero {
     position: relative;
     height: 100vh;
@@ -102,142 +98,134 @@ ul {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(30, 20, 10, 0.55);
+    background-color: rgba(30, 20, 10, 0.6);
 }
 
 .hero-content {
     position: relative;
     z-index: 1;
     color: #fff;
-    max-width: 800px;
+    max-width: 700px;
     padding: 20px;
 }
 
 .hero-content h1 {
     font-family: 'Bethany Elingston', 'Playfair Display', serif;
-    font-size: 72px;
-    line-height: 1.15;
-    margin-bottom: 24px;
+    font-size: 52px;
+    line-height: 1.2;
+    margin-bottom: 20px;
     font-weight: normal;
 }
 
 .hero-content p {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 300;
-    margin-bottom: 35px;
+    margin-bottom: 30px;
     opacity: 0.9;
-    line-height: 1.6;
 }
 
-/* Button Hero - capsule besar dengan shadow */
 .btn-hero {
     display: inline-block;
-    padding: 16px 45px;
+    padding: 14px 35px;
     background-color: #f5f0e8;
     color: #3b2a1a;
     border-radius: 50px;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
     cursor: pointer;
     border: none;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     transition: background-color 0.3s, box-shadow 0.3s;
 }
 
 .btn-hero:hover {
     background-color: #e8dfd2;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-/* ===== CARA KERJA SECTION ===== */
 .cara-kerja {
-    padding: 80px 60px;
+    padding: 60px 40px;
     text-align: center;
     background-color: #f5f0e8;
 }
 
 .cara-kerja h2 {
     font-family: 'Bethany Elingston', 'Playfair Display', serif;
-    font-size: 42px;
+    font-size: 34px;
     font-weight: normal;
-    margin-bottom: 50px;
-    color: #3b2a1a;
+    margin-bottom: 40px;
 }
 
 .steps {
     display: flex;
     justify-content: center;
-    gap: 70px;
-    margin-bottom: 50px;
+    gap: 50px;
+    margin-bottom: 40px;
     flex-wrap: wrap;
 }
 
 .step {
     text-align: center;
-    max-width: 170px;
+    max-width: 150px;
 }
 
 .step-icon {
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
 .step-icon img {
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
     object-fit: contain;
 }
 
 .step p {
     font-family: 'Apple Garamond', 'Garamond', serif;
-    font-size: 16px;
+    font-size: 13px;
     font-weight: 500;
     color: #3b2a1a;
-    line-height: 1.4;
 }
 
 .cara-kerja-image {
-    max-width: 650px;
-    margin: 0 auto 40px auto;
-    border-radius: 12px;
+    max-width: 600px;
+    margin: 0 auto 30px auto;
+    border-radius: 10px;
     overflow: hidden;
 }
 
 .cara-kerja-image img {
     width: 100%;
-    height: 350px;
+    height: 300px;
     object-fit: cover;
 }
 
 .cara-kerja h3 {
     font-family: 'Bethany Elingston', 'Playfair Display', serif;
-    font-size: 40px;
+    font-size: 30px;
     font-weight: normal;
-    margin-bottom: 25px;
-    color: #3b2a1a;
+    margin-bottom: 20px;
 }
 
-/* Button Cara Kerja - capsule dengan border */
 .btn-cara-kerja {
     display: inline-block;
-    padding: 14px 40px;
-    background-color: transparent;
+    padding: 12px 32px;
+    background-color: #f5f0e8;
     color: #3b2a1a;
     border-radius: 50px;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
     cursor: pointer;
-    border: 2px solid #3b2a1a;
+    border: 1.5px solid #3b2a1a;
     transition: background-color 0.3s;
 }
 
 .btn-cara-kerja:hover {
-    background-color: rgba(59, 42, 26, 0.08);
+    background-color: #e8dfd2;
 }
 
-/* ===== GALLERY SECTION ===== */
 .gallery {
     padding: 0;
 }
@@ -248,7 +236,7 @@ ul {
 
 .gallery-item {
     flex: 1;
-    height: 400px;
+    height: 350px;
     overflow: hidden;
 }
 
@@ -264,55 +252,49 @@ ul {
     filter: grayscale(0%);
 }
 
-/* ===== FOOTER ===== */
 .footer {
     background-color: #3b2a1a;
     color: #fff;
     text-align: center;
-    padding: 60px 40px;
+    padding: 50px 40px;
 }
 
 .footer h2 {
     font-family: 'Bethany Elingston', 'Playfair Display', serif;
-    font-size: 38px;
+    font-size: 28px;
     font-weight: normal;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .footer-desc {
     font-family: 'Apple Garamond', 'Garamond', serif;
-    font-size: 16px;
+    font-size: 13px;
     font-weight: 300;
-    max-width: 650px;
-    margin: 0 auto 25px auto;
-    line-height: 1.7;
+    max-width: 600px;
+    margin: 0 auto 20px auto;
+    line-height: 1.6;
     opacity: 0.9;
 }
 
 .footer-location {
     font-family: 'Apple Garamond', 'Garamond', serif;
-    font-size: 16px;
-    margin-bottom: 20px;
-    opacity: 0.9;
+    font-size: 13px;
+    margin-bottom: 15px;
+    opacity: 0.8;
 }
 
 .footer-socials {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 15px;
 }
 
-.social-icon {
+.footer-socials a {
+    font-size: 20px;
     color: #fff;
-    opacity: 0.9;
-    transition: opacity 0.3s;
+    opacity: 0.8;
 }
 
-.social-icon:hover {
+.footer-socials a:hover {
     opacity: 1;
-}
-
-.social-icon svg {
-    width: 28px;
-    height: 28px;
 }
