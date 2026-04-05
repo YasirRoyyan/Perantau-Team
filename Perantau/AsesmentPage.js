@@ -56,15 +56,15 @@ var images = [
 
 var titles = [
     "Mulailah menjawab pertanyaan...",
-    "Mulailah menjawab pertanyaan...",
-    "Mulailah menjawab pertanyaan...",
+    "",
     "Terus jawab pertanyaannya...",
-    "Terus jawab pertanyaannya...",
-    "Terus jawab pertanyaannya...",
-    "Sedikit lagi...",
+    "",
+    "Hmmm, seleramu bagus",
+    "",
+    "Ayoo, sedikit lagi...",
     "Sedikit lagi...",
     "Ruanganmu hampir selesai...",
-    "Ruanganmu hampir selesai..."
+    "Hasilnya akan segera muncul..."
 ];
 
 var currentQuestion = 0;

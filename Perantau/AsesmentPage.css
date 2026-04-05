@@ -10,70 +10,57 @@ html {
 
 body {
     font-family: 'Poppins', sans-serif;
-    color: #3b2a1a;
+    color: #371E0A; 
     background-color: #f5f0e8;
-}
-
-a {
-    text-decoration: none;
-    color: inherit;
-}
-
-ul {
-    list-style: none;
 }
 
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 40px;
-    background-color: #3b2a1a;
+    padding: 20px 60px;
+    background-color: #371E0A; 
     color: #fff;
 }
 
 .nav-logo {
     font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    font-style: italic;
+    font-size: 24px;
+    font-weight: bold;
 }
 
 .nav-links {
     display: flex;
-    gap: 30px;
+    gap: 40px;
 }
 
 .nav-links a {
     color: #fff;
-    font-size: 14px;
-    font-weight: 400;
-}
-
-.nav-links a:hover {
-    opacity: 0.8;
+    font-size: 15px;
 }
 
 .asesmen-section {
-    max-width: 700px;
+    max-width: 800px;
     margin: 0 auto;
-    padding: 30px 20px 60px 20px;
+    padding: 50px 20px;
     text-align: center;
 }
 
 .asesmen-title {
     font-family: 'Playfair Display', serif;
-    font-size: 26px;
-    font-weight: 400;
-    font-style: italic;
-    margin-bottom: 25px;
+    font-size: 28px;
+    font-weight: 500;
+    margin-bottom: 30px;
+    color: #371E0A;
 }
 
 .asesmen-image {
     width: 100%;
-    height: 300px;
-    border-radius: 10px;
+    height: 350px;
+    border-radius: 20px; 
     overflow: hidden;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .asesmen-image img {
@@ -82,60 +69,46 @@ ul {
     object-fit: cover;
 }
 
-.progress {
-    font-size: 14px;
-    color: #9b7b5e;
-    margin-bottom: 10px;
-}
-
-.question {
-    font-family: 'Poppins', sans-serif;
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 25px;
-}
-
 .options {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 15px;
+    margin-top: 20px;
 }
 
 .option-btn {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 14px 18px;
-    background-color: #f0e0cc;
+    gap: 15px;
+    padding: 16px 20px;
+    background-color: #FFD9C0; 
     border: 2px solid transparent;
-    border-radius: 8px;
+    border-radius: 20px; 
     cursor: pointer;
-    text-align: left;
     font-family: 'Poppins', sans-serif;
-    font-size: 14px;
-    color: #3b2a1a;
-    transition: background-color 0.3s, border-color 0.3s;
+    color: #371E0A;
+    transition: all 0.3s ease;
 }
 
 .option-btn:hover {
-    background-color: #e8d2b8;
+    background-color: #fbc6a4;
+    transform: translateY(-2px);
 }
 
 .option-btn.selected {
-    border-color: #3b2a1a;
-    background-color: #e8d2b8;
+    border-color: #371E0A;
+    background-color: #fbc6a4;
 }
 
 .option-number {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
-    background-color: #c9a882;
+    width: 32px;
+    height: 32px;
+    background-color: #371E0A; 
     color: #fff;
-    border-radius: 5px;
-    font-size: 13px;
+    border-radius: 10px;
+    font-size: 14px;
     font-weight: 600;
-    flex-shrink: 0;
 }
