@@ -42,7 +42,8 @@ ul {
 
 .navbar {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 80px;
     align-items: center;
     padding: 18px 60px;
     background-color: transparent;
@@ -83,7 +84,7 @@ ul {
 .hero {
     position: relative;
     height: 100vh;
-    background-image: url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1400');
+    background-image: url('Image/img-home.png');
     background-size: cover;
     background-position: center;
     display: flex;
@@ -111,17 +112,17 @@ ul {
 
 .hero-content h1 {
     font-family: 'Bethany Elingston', 'Playfair Display', serif;
-    font-size: 52px;
-    line-height: 1.2;
+    font-size: 80px;
+    line-height: 1;
     margin-bottom: 20px;
     font-weight: normal;
 }
 
 .hero-content p {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 15px;
-    font-weight: 300;
-    margin-bottom: 30px;
+    font-size: 20px;
+    font-weight: 5;
+    margin-bottom: 10px;
     opacity: 0.9;
 }
 
@@ -130,7 +131,7 @@ ul {
     padding: 14px 35px;
     background-color: #f5f0e8;
     color: #3b2a1a;
-    border-radius: 50px;
+    border-radius: 10px;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 14px;
     font-weight: 500;
@@ -176,8 +177,8 @@ ul {
 }
 
 .step-icon img {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     object-fit: contain;
 }
 
@@ -191,7 +192,7 @@ ul {
 .cara-kerja-image {
     max-width: 600px;
     margin: 0 auto 30px auto;
-    border-radius: 10px;
+    border-radius: 30px;
     overflow: hidden;
 }
 
@@ -213,7 +214,7 @@ ul {
     padding: 12px 32px;
     background-color: #f5f0e8;
     color: #3b2a1a;
-    border-radius: 50px;
+    border-radius: 10px;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 14px;
     font-weight: 500;
@@ -245,11 +246,6 @@ ul {
     height: 100%;
     object-fit: cover;
     filter: grayscale(100%);
-    transition: filter 0.3s;
-}
-
-.gallery-item img:hover {
-    filter: grayscale(0%);
 }
 
 .footer {
@@ -268,7 +264,7 @@ ul {
 
 .footer-desc {
     font-family: 'Apple Garamond', 'Garamond', serif;
-    font-size: 13px;
+    font-size: 18px;
     font-weight: 300;
     max-width: 600px;
     margin: 0 auto 20px auto;
@@ -278,7 +274,7 @@ ul {
 
 .footer-location {
     font-family: 'Apple Garamond', 'Garamond', serif;
-    font-size: 13px;
+    font-size: 18px;
     margin-bottom: 15px;
     opacity: 0.8;
 }
@@ -286,15 +282,18 @@ ul {
 .footer-socials {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 15px;
 }
 
-.footer-socials a {
-    font-size: 20px;
-    color: #fff;
+.footer-socials img {
+    width: 20px;
+    height: 20px;
     opacity: 0.8;
+    transition: opacity 0.3s;
+    object-fit: contain;
 }
 
-.footer-socials a:hover {
-    opacity: 1;
+.footer-socials img:hover {
+    opacity: 2;
 }
