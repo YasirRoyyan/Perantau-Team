@@ -5,7 +5,7 @@
 }
 
 body {
-    font-family: 'Bethany Elingston', sans-serif;
+    font-family: 'Poppins', sans-serif;
     color: #3b2a1a;
     background-color: #f5f0e8;
 }
@@ -49,69 +49,94 @@ ul {
     opacity: 0.8;
 }
 
-.prepare-section {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 85vh;
-    padding: 40px;
-}
-
-.prepare-box {
+.hasil-section {
+    max-width: 650px;
+    margin: 0 auto;
+    padding: 30px 20px 60px 20px;
     text-align: center;
-    max-width: 550px;
 }
 
-.prepare-box h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 28px;
-    font-weight: 400;
+.hasil-image {
+    width: 100%;
+    height: 320px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 25px;
+}
+
+.hasil-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hasil-label {
+    font-size: 14px;
+    color: #9b7b5e;
     font-style: italic;
-    line-height: 1.5;
-    margin-bottom: 30px;
+    margin-bottom: 5px;
 }
 
-.prepare-box h2 {
+.hasil-title {
     font-family: 'Playfair Display', serif;
-    font-size: 26px;
+    font-size: 36px;
     font-weight: 700;
-    margin-bottom: 35px;
+    margin-bottom: 15px;
 }
 
-.prepare-buttons {
+.hasil-desc {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 500px;
+    margin: 0 auto 30px auto;
+    color: #5a4a3a;
+}
+
+.hasil-buttons {
     display: flex;
     justify-content: center;
     gap: 20px;
+    margin-bottom: 20px;
 }
 
-.btn-kembali {
+.btn-menu {
     display: inline-block;
-    padding: 12px 35px;
+    padding: 12px 30px;
     background-color: #e8cdb5;
     color: #3b2a1a;
     border-radius: 5px;
     font-size: 14px;
     font-weight: 500;
-    cursor: pointer;
     transition: background-color 0.3s;
 }
 
-.btn-kembali:hover {
+.btn-menu:hover {
     background-color: #ddbfa5;
 }
 
-.btn-mulai {
+.btn-tes-baru {
     display: inline-block;
-    padding: 12px 35px;
+    padding: 12px 30px;
     background-color: #3b2a1a;
     color: #fff;
     border-radius: 5px;
     font-size: 14px;
     font-weight: 500;
-    cursor: pointer;
     transition: background-color 0.3s;
 }
 
-.btn-mulai:hover {
+.btn-tes-baru:hover {
     background-color: #2a1d12;
+}
+
+.download-link {
+    font-size: 13px;
+    color: #3b2a1a;
+    text-decoration: underline;
+    opacity: 0.7;
+}
+
+.download-link:hover {
+    opacity: 1;
 }

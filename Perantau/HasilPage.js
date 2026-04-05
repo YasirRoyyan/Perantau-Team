@@ -32,6 +32,14 @@ document.addEventListener('DOMContentLoaded', function() {
         result = 'minimalis';
     }
 
+    const btnReset = document.getElementById('btn-ulang');
+    if (btnReset) {
+        btnReset.addEventListener('click', function() {
+            localStorage.removeItem('interiology-result');
+            window.location.href = 'PreparePage.html';
+        });
+    }
+
     var data = resultData[result];
 
     titleEl.textContent = data.title;
@@ -40,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     downloadLink.addEventListener('click', function(e) {
         e.preventDefault();
-        alert('Fitur download gambar akan segera tersedia!');
+        alert('Fitur download gambar akan segera tersedia di UAS!');
     });
 
     var section = document.querySelector('.hasil-section');
