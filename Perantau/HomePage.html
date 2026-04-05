@@ -5,94 +5,90 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interiology - Kenali Selera Desain Ruanganmu</title>
     <link rel="stylesheet" href="HomePage.css">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Helvetica+Neue:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="home-page">
+        <header class="hero-shell">
+            <nav class="navbar" id="navbar">
+                <a class="nav-logo" href="HomePage.html">Interiology</a>
+                <ul class="nav-links">
+                    <li><a href="HomePage.html">Beranda</a></li>
+                    <li><a href="#cara-kerja">Cara Kerja</a></li>
+                    <li><a href="#tentang">Tentang</a></li>
+                    <li><a href="PreparePage.html" class="nav-cta">Cari Selera mu!</a></li>
+                </ul>
+            </nav>
 
-    <nav class="navbar" id="navbar">
-        <div class="nav-logo">Interiology</div>
-        <ul class="nav-links">
-            <li><a href="HomePage.html">Beranda</a></li>
-            <li><a href="#cara-kerja">Cara Kerja</a></li>
-            <li><a href="#tentang">Tentang</a></li>
-            <li><a href="PreparePage.html">Cari Selera mu!</a></li>
-        </ul>
-    </nav>
-
-    <section class="hero">
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <h1>Kenali selera desain ruangan kamu di Interiology</h1>
-            <p>Jawab beberapa pertanyaan singkat dan lihat rekomendasi ruang tamu yang sesuai dengan kepribadianmu.</p>
-            <a href="PreparePage.html" class="btn-hero">Cari Selera mu!</a>
-        </div>
-    </section>
-
-    <section class="cara-kerja" id="cara-kerja">
-        <h2>Bagaimana cara untuk menentukan selera mu?</h2>
-
-        <div class="steps">
-            <div class="step">
-                <div class="step-icon">
-                    <img src="icons/icon-sofa.png" alt="Mulai Asesmen">
+            <section class="hero">
+                <div class="hero-content">
+                    <h1>Kenali selera desain ruangan kamu di Interiology</h1>
+                    <p>Jawab beberapa pertanyaan singkat dan lihat rekomendasi ruang tamu yang sesuai dengan kepribadianmu.</p>
+                    <a href="PreparePage.html" class="btn-primary">Cari Selera mu!</a>
                 </div>
-                <p>Mulai Asesmen</p>
-            </div>
-            <div class="step">
-                <div class="step-icon">
-                    <img src="icons/icon-table.png" alt="Jawab pertanyaan">
-                </div>
-                <p>Jawab beberapa pertanyaan</p>
-            </div>
-            <div class="step">
-                <div class="step-icon">
-                    <img src="icons/icon-tv.png" alt="Tampilan Interior">
-                </div>
-                <p>Tampilan Interior Muncul Sesuai Jawaban</p>
-            </div>
-            <div class="step">
-                <div class="step-icon">
-                    <img src="icons/icon-verified.png" alt="Selamat">
-                </div>
-                <p>Selamat Seleramu berhasil ditemukan!</p>
-            </div>
-        </div>
+            </section>
+        </header>
 
-        <div class="cara-kerja-image">
-            <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800" alt="Sofa ruang tamu">
-        </div>
+        <section class="cara-kerja" id="cara-kerja">
+            <h2>Bagaimana cara untuk menentukan selera mu?</h2>
+            
+            <div class="steps-container">
+                <div class="step-card step-card-1">
+                    <div class="icon-box"><img src="Icons/icon-sofa.png" alt="Sofa"></div>
+                    <p>Mulai Asesmen</p>
+                </div>
+                <div class="step-card step-card-2">
+                    <div class="icon-box"><img src="Icons/icon-table.png" alt="Nightstand"></div>
+                    <p>Jawab beberapa pertanyaan</p>
+                </div>
+                <div class="step-card step-card-3">
+                    <div class="icon-box"><img src="Icons/icon-tv.png" alt="Television"></div>
+                    <p>Tampilan Interior Muncul Sesuai Jawaban</p>
+                </div>
+                <div class="step-card step-card-4">
+                    <div class="icon-box"><img src="Icons/icon-verified.png" alt="Check"></div>
+                    <p>Selamat Seleramu berhasil ditemukan!</p>
+                </div>
+            </div>
 
-        <h3>Hanya butuh 10 menit untuk menemukan selera-mu</h3>
-        <a href="PreparePage.html" class="btn-cara-kerja">Cari Selera mu!</a>
-    </section>
+            <div class="showcase-image">
+                <img src="Image/img-container.png" alt="Contoh Ruangan">
+            </div>
 
-    <section class="gallery">
-        <div class="gallery-grid">
+            <div class="call-to-action">
+                <h2>Hanya butuh 10 menit untuk menemukan selera-mu</h2>
+                <a href="PreparePage.html" class="btn-primary">Cari Selera mu!</a>
+            </div>
+        </section>
+
+        <section class="gallery">
             <div class="gallery-item">
-                <img src="Image/img3.png" alt="Interior 1">
+                <img src="Image/img3.png" alt="Inspirasi 1">
             </div>
             <div class="gallery-item">
-                <img src="Image/img-5.png" alt="Interior 2">
+                <img src="Image/img-5.png" alt="Inspirasi 2">
             </div>
             <div class="gallery-item">
-                <img src="Image/img-container.png" alt="Interior 3">
+                <img src="Image/img-4.png" alt="Inspirasi 3">
             </div>
-        </div>
-    </section>
+        </section>
 
-    <footer class="footer" id="tentang">
-        <h2>Tentang Interiology</h2>
-        <p class="footer-desc">
-            Website ini dirancang untuk membantu kamu menemukan gaya ruang tamu yang paling sesuai dengan
-            kepribadian dan preferensimu. Melalui asesmen interaktif dan visualisasi sederhana, kami berharap kamu
-            bisa lebih percaya diri dalam menentukan pilihan desain interior.
-        </p>
-        <p class="footer-location">Bandung, Jawa Barat, Indonesia</p>
-        <div class="footer-socials">
-            <a href="#"><img src="Icons/wa.png"></a>
-            <a href="#"><img src="Icons/ig.png"></a>
-        </div>
-    </footer>
+        <footer class="footer" id="tentang">
+            <div class="footer-content">
+                <h2>Tentang Interiology</h2>
+                <p class="footer-desc">
+                    Website ini dirancang untuk membantu kamu menemukan gaya ruang tamu yang paling sesuai dengan
+                    kepribadian dan preferensimu. Melalui asesmen interaktif dan visualisasi sederhana, kami berharap kamu
+                    bisa lebih percaya diri dalam menentukan pilihan desain interior.
+                </p>
+                <p class="footer-location">Bandung, Jawa Barat, Indonesia</p>
+                <div class="footer-socials">
+                    <a href="#"><img src="Icons/wa.png" alt="WhatsApp"></a>
+                    <a href="#"><img src="Icons/ig.png" alt="Instagram"></a>
+                </div>
+            </div>
+        </footer>
+    </div>
 
     <script src="HomePage.js"></script>
 </body>
