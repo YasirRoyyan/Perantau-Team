@@ -1,16 +1,31 @@
 @font-face {
     font-family: 'Sinera';
-    src: url('fonts/Sinera.ttf') format('truetype');
+    src: url('fonts/Sinera.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Bethany Elingston';
-    src: url('fonts/BethanyElingston.ttf') format('truetype');
+    src: url('fonts/Bethany Elingston.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
 }
+
+@font-face {
+    font-family: 'Helvetica Neue Medium';
+    src: url('fonts/HelveticaNeueMedium.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Helvetica Neue Light';
+    src: url('fonts/HelveticaNeueLight.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 
 * {
     margin: 0;
@@ -19,7 +34,7 @@
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Helvetica Neue Light', sans-serif;
     color:#FFD9C0;
     background-color: #fbf8f1;
 }
@@ -47,7 +62,7 @@ ul {
 }
 
 .nav-logo {
-    font-family: 'Bethany Elingston', 'Playfair Display', serif; 
+    font-family: 'Sinera', 'Playfair Display', serif; 
     font-size: 20px;
     font-weight: normal;
     font-style: normal; 
@@ -56,14 +71,14 @@ ul {
 
 .nav-links {
     display: flex;
-    gap: 90px; 
+    gap: 100px; 
     margin: 0;
     padding: 0;
 }
 
 .nav-links a {
     color: #fff;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Helvetica Neue Medium', sans-serif;
     font-size: 12px; 
     font-weight: 400;
     transition: opacity 0.3s ease;
@@ -97,14 +112,14 @@ ul {
 .hasil-label {
     font-size: 15px;
     color: #371E0A;
-    font-style:normal;
-    margin-bottom: 15px;
+    font-style: normal;
+    margin-bottom: 22px;
     font-weight: 300;
 }
 
 .hasil-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 50px;
+    font-family: 'Bethany Elingston', serif;
+    font-size: 40px;
     margin-bottom: 15px;
     color: #371E0A;
     font-weight: 100;
@@ -136,6 +151,7 @@ ul {
     font-size: 14px;
     font-weight: 500;
     transition: background-color 0.3s;
+    font-family: 'Helvetica Neue Medium';
 }
 
 .btn-menu:hover {
@@ -151,6 +167,7 @@ ul {
     font-size: 14px;
     font-weight: 500;
     transition: background-color 0.3s;
+    font-family: 'Helvetica Neue Medium';
 }
 
 .btn-tes-baru:hover {
