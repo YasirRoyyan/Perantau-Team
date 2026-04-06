@@ -147,7 +147,7 @@ ul {
     background-color: #f5cca6; 
     border: 1.5px solid #371E0A;
     color:#371E0A;
-    border-radius: 15px;
+    border-radius: 12px;
     font-size: 14px;
     font-weight: 500;
     transition: background-color 0.3s;
@@ -160,10 +160,10 @@ ul {
 
 .btn-tes-baru {
     display: inline-block;
-    padding: 12px 30px;
+    padding: 11px 30px;
     background-color: #3b2a1a;
     color: #fff;
-    border-radius: 15px;
+    border-radius: 12px;
     font-size: 14px;
     font-weight: 500;
     transition: background-color 0.3s;
