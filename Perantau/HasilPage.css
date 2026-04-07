@@ -151,7 +151,7 @@ ul {
     color:#371E0A;
     border-radius: 16px;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: lighter;
     transition: background-color 0.3s;
     font-family: 'Helvetica Neue Medium';
 }
@@ -169,7 +169,7 @@ ul {
     color: #fff;
     border-radius: 16px;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: lighter;
     transition: background-color 0.3s;
     font-family: 'Helvetica Neue Medium';
 }
