@@ -162,22 +162,3 @@ ul {
 .btn-mulai:hover {
     background-color: #2a1e12;
 }
-
-.btn-instan{
-    display: inline-block;
-    width: 220px;
-    padding: 14px 0px;
-    text-align: center;
-    background-color: red;
-    color: #fff;
-    border: 1.5px solid #371E0A; 
-    border-radius: 15px;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.btn-instan:hover{
-    background-color: green;
-}
