@@ -61,7 +61,7 @@ ul {
 }
 
 .nav-logo {
-    font-family: 'Sinera', 'Playfair Display', serif; 
+    font-family: 'Sinera', serif; 
     font-size: 20px;
     font-weight: normal;
     font-style: normal; 
@@ -102,7 +102,7 @@ ul {
 }
 
 .prepare-box h1 {
-    font-family: 'Bethany Elingston', 'Playfair Display', serif; 
+    font-family: 'Bethany Elingston', serif; 
     font-size: 30px; 
     font-weight: normal;
     font-style: normal;
@@ -112,7 +112,7 @@ ul {
 }
 
 .prepare-box h2 {
-    font-family: 'Bethany Elingston', 'Playfair Display', serif;
+    font-family: 'Bethany Elingston', serif;
     font-size: 30px;
     font-weight: normal;
     margin-bottom: 50px;
@@ -161,4 +161,23 @@ ul {
 
 .btn-mulai:hover {
     background-color: #2a1e12;
+}
+
+.btn-instan{
+    display: inline-block;
+    width: 220px;
+    padding: 14px 0px;
+    text-align: center;
+    background-color: red;
+    color: #fff;
+    border: 1.5px solid #371E0A; 
+    border-radius: 15px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-instan:hover{
+    background-color: green;
 }
