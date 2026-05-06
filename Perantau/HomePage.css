@@ -28,7 +28,7 @@
 
 @font-face {
     font-family: "Apple Garamond";
-    src: url("fonts/apple_garamond/AppleGaramond.ttf") format("truetype");
+    src: url("fonts/AppleGaramond.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
 }
@@ -72,7 +72,7 @@ h2 {
 
 /* --- NAVBAR --- */
 .navbar {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
@@ -80,13 +80,13 @@ h2 {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 100px; /* Menyesuaikan gap yang rapi */
+    gap: clamp(40px, 8.3vw, 120px);
     z-index: 1000;
     transition: all 0.3s ease;
 }
 
 .navbar.scrolled {
-    background-color: rgba(37, 20, 7, 0.9);
+    background-color: #371E0A;
     backdrop-filter: blur(10px);
 }
 
@@ -99,7 +99,7 @@ h2 {
 .nav-links {
     display: flex;
     align-items: center;
-    gap: 60px;
+    gap: clamp(40px, 8.3vw, 120px);
 }
 
 .nav-links a {
@@ -127,12 +127,17 @@ h2 {
     font-weight: 500;
     font-size: 22px;
     color: #433809;
-    filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.15));
+    filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.15));
     transition: transform 0.3s ease;
 }
 
 .btn-primary:hover {
     transform: translateY(-3px);
+}
+
+.btn-dark {
+    background: #342A22;
+    color: #FFFFFF;
 }
 
 /* --- HERO SECTION --- */
@@ -143,7 +148,7 @@ h2 {
     background: url("Image/img-HomePage.png") center top / cover no-repeat;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .hero {
@@ -151,6 +156,7 @@ h2 {
     width: 100%;
     display: flex;
     justify-content: center;
+    padding-top: 252px;
 }
 
 .hero-content {
@@ -159,8 +165,7 @@ h2 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 30px;
-    margin-top: 100px;
+    gap: 28px;
 }
 
 .hero-content h1 {
@@ -168,7 +173,7 @@ h2 {
     font-weight: 400;
     font-size: 80px;
     line-height: 1.12; /* 90px */
-    letter-spacing: -0.03em;
+    letter-spacing: 0;
     color: #FFFFFF;
 }
 
@@ -183,11 +188,11 @@ h2 {
 
 /* --- CARA KERJA SECTION --- */
 .cara-kerja {
-    padding: 100px 20px;
+    padding: 149px 20px 88px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 80px;
+    gap: 90px;
 }
 
 .steps-container {
@@ -211,18 +216,16 @@ h2 {
 .icon-box {
     width: 46px;
     height: 46px;
-    background: #42230B;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 8px; /* Tambahan sedikit kelembutan pada kotak icon */
 }
 
 .icon-box img {
-    width: 24px;
-    height: 24px;
+    max-width: 42px;
+    max-height: 42px;
     object-fit: contain;
-    filter: brightness(0) invert(1);
+    filter: brightness(0) saturate(100%) invert(13%) sepia(34%) saturate(1540%) hue-rotate(355deg) brightness(94%) contrast(97%);
 }
 
 .step-card p {
@@ -237,7 +240,7 @@ h2 {
     max-width: 920px;
     height: 295px;
     background: #FFFFFF;
-    border-radius: 32px;
+    border-radius: 20px;
     overflow: hidden;
     display: flex;
     justify-content: center;
@@ -254,8 +257,7 @@ h2 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 40px;
-    margin-top: 40px;
+    gap: 57px;
 }
 
 /* --- GALLERY SECTION --- */
@@ -344,6 +346,7 @@ h2 {
 
 @media (max-width: 768px) {
     .navbar { flex-direction: column; height: auto; padding: 20px; gap: 20px; background-color: rgba(37, 20, 7, 0.9); }
+    .nav-links { flex-wrap: wrap; justify-content: center; gap: 14px 24px; }
     .hero-content h1 { font-size: 48px; }
     .hero-content p { font-size: 18px; }
     .gallery { flex-direction: column; height: auto; }

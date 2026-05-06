@@ -26,6 +26,14 @@
     font-style: normal;
 }
 
+:root {
+    --cream: #FFFDF3;
+    --brown: #42230B;
+    --brown-dark: #371E0A;
+    --button-dark: #342A22;
+    --orange: #D86D17;
+    --white: #FFFFFF;
+}
 
 * {
     margin: 0;
@@ -33,15 +41,21 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
-    font-family: 'Helvetica Neue Light', sans-serif;
-    color:#FFD9C0;
-    background-color: #fbf8f1;
+    min-width: 320px;
+    font-family: 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+    color: var(--brown);
+    background-color: var(--cream);
+    overflow-x: hidden;
 }
 
 a {
-    text-decoration: none;
     color: inherit;
+    text-decoration: none;
 }
 
 ul {
@@ -49,58 +63,58 @@ ul {
 }
 
 .navbar {
-    display: flex;
-    justify-content: center; 
-    align-items: center;
-    padding: 25px 0px;
-    background-color: #371E0A;
-    color: #fff;
-    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.4); 
     position: relative;
     z-index: 10;
-    gap: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 92px;
+    padding: 0 24px;
+    background-color: var(--brown-dark);
+    color: var(--white);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+    gap: clamp(40px, 8.3vw, 120px);
 }
 
 .nav-logo {
-    font-family: 'Sinera', serif; 
-    font-size: 20px;
+    font-family: 'Sinera', serif;
+    font-size: 24px;
     font-weight: normal;
-    font-style: normal; 
-    margin: 0; 
+    color: var(--white);
 }
 
 .nav-links {
     display: flex;
-    gap: 100px; 
-    margin: 0;
-    padding: 0;
+    align-items: center;
+    gap: clamp(40px, 8.3vw, 120px);
 }
 
 .nav-links a {
-    color: #fff;
-    font-family: 'Helvetica Neue Medium', sans-serif;
-    font-size: 12px; 
-    font-weight: 400;
+    font-family: 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--white);
+    white-space: nowrap;
     transition: opacity 0.3s ease;
 }
 
 .nav-links a:hover {
-    opacity: 0.7;
+    opacity: 0.75;
 }
 
 .hasil-section {
-    max-width: 850px;
-    margin: 0 auto;
-    padding: 50px 20px 60px 20px;
+    min-height: calc(100svh - 92px);
+    padding: 77px 24px 52px;
     text-align: center;
 }
 
 .hasil-image {
-    width: 100%;
-    height: 320px;
-    border-radius: 15px;
+    width: min(100%, 822px);
+    height: 357px;
+    margin: 0 auto;
     overflow: hidden;
-    margin-bottom: 25px;
+    border-radius: 32px;
 }
 
 .hasil-image img {
@@ -111,81 +125,155 @@ ul {
 }
 
 .hasil-label {
-    font-size: 15px;
-    color: #371E0A;
-    font-style: normal;
-    margin-bottom: 22px;
-    font-weight: 300;
+    margin-top: 49px;
+    font-family: 'Helvetica Neue light', Helvetica, Arial, sans-serif;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--brown);
 }
 
 .hasil-title {
+    margin-top: 15px;
     font-family: 'Bethany Elingston', serif;
-    font-size: 40px;
-    margin-bottom: 15px;
-    color: #371E0A;
-    font-weight: 100;
+    font-size: clamp(58px, 6vw, 90px);
+    font-weight: normal;
+    line-height: 0.95;
+    color: var(--brown);
 }
 
 .hasil-desc {
-    font-size: 14px;
-    font-weight: 300;
-    line-height: 1.2;
-    max-width: 500px;
-    margin: 0 auto 30px auto;
-    color: #371E0A;
+    width: min(100%, 626px);
+    margin: 58px auto 0;
+    font-family: 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.15;
+    color: var(--brown);
 }
 
 .hasil-buttons {
     display: flex;
     justify-content: center;
-    gap: 20px;
-    margin-bottom: 20px;
+    gap: 26px;
+    margin-top: 72px;
+}
+
+.btn-menu,
+.btn-tes-baru {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 207px;
+    height: 63px;
+    border-radius: 18px;
+    font-family: 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 .btn-menu {
-    display: inline-block;
-    width: 150px;
-    padding: 16px 0px; 
-    text-align: center;
-    background-color: #f5cca6; 
-    border: 1.5px solid #371E0A;
-    color:#371E0A;
-    border-radius: 16px;
-    font-size: 14px;
-    font-weight: lighter;
-    transition: background-color 0.3s;
-    font-family: 'Helvetica Neue Medium';
+    background-color: var(--button-dark);
+    color: var(--white);
+    border: 1.5px solid var(--brown);
 }
 
 .btn-menu:hover {
-    background-color: #ddbfa5;
+    background-color: #2A211B;
+    transform: translateY(-2px);
 }
 
 .btn-tes-baru {
-    display: inline-block;
-    width: 150px;
-    padding: 16px 0px; 
-    text-align: center;
-    background-color: #3b2a1a;
-    color: #fff;
-    border-radius: 16px;
-    font-size: 14px;
-    font-weight: lighter;
-    transition: background-color 0.3s;
-    font-family: 'Helvetica Neue Medium';
+    background-color: var(--orange);
+    color: var(--white);
+    border: 1.5px solid var(--orange);
 }
 
 .btn-tes-baru:hover {
-    background-color: #2a1d12;
+    background-color: #C86113;
+    transform: translateY(-2px);
 }
 
 .download-link {
-    font-size: 13px;
-    color: #3b2a1a;
+    display: inline-block;
+    margin-top: 110px;
+    font-family: 'Helvetica Neue Light', Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.1;
+    color: var(--brown);
     text-decoration: underline;
-    opacity: 0.7;
+    text-underline-offset: 6px;
+    transition: opacity 0.3s ease;
 }
 
 .download-link:hover {
-    opacity: 1;
+    opacity: 0.75;
+}
+
+@media (max-width: 1024px) {
+    .navbar {
+        gap: 40px;
+    }
+
+    .nav-links {
+        gap: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        height: auto;
+        min-height: 92px;
+        padding: 20px;
+        gap: 18px;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 14px 24px;
+    }
+
+    .hasil-section {
+        padding: 56px 20px 48px;
+    }
+
+    .hasil-image {
+        height: auto;
+        aspect-ratio: 822 / 357;
+        border-radius: 24px;
+    }
+
+    .hasil-label {
+        margin-top: 38px;
+        font-size: 18px;
+    }
+
+    .hasil-title {
+        font-size: 48px;
+        line-height: 1;
+    }
+
+    .hasil-desc {
+        margin-top: 38px;
+        font-size: 18px;
+    }
+
+    .hasil-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+        margin-top: 50px;
+    }
+
+    .btn-menu,
+    .btn-tes-baru {
+        width: min(100%, 268px);
+    }
+
+    .download-link {
+        margin-top: 70px;
+    }
 }
