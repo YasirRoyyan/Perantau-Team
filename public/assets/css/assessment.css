@@ -1,0 +1,144 @@
+.asesmen-section {
+    position: relative;
+    min-height: calc(100svh - 92px);
+    padding: 70px 24px 96px;
+    text-align: center;
+}
+
+.back-button {
+    position: absolute;
+    top: 54px;
+    left: clamp(24px, 10.8vw, 155px);
+}
+
+.asesmen-title {
+    margin-bottom: 54px;
+    font-family: 'Bethany Elingston', serif;
+    font-size: 40px;
+    font-weight: normal;
+    line-height: 1.2;
+    color: var(--brown);
+}
+
+.asesmen-image {
+    width: min(100%, 810px);
+    height: 368px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+.asesmen-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.progress {
+    margin-top: 40px;
+    font-family: 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--brown);
+}
+
+.question {
+    margin-top: 20px;
+    margin-bottom: 35px;
+    font-family: 'Bethany Elingston', serif;
+    font-size: 34px;
+    font-weight: normal;
+    line-height: 1.1;
+    color: var(--brown);
+}
+
+.options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 13px 15px;
+    width: min(100%, 738px);
+    margin: 0 auto;
+}
+
+.option-btn {
+    display: flex;
+    align-items: center;
+    min-height: 63px;
+    padding: 11px 16px;
+    gap: 14px;
+    background-color: var(--option-bg);
+    border: 2px solid transparent;
+    border-radius: 20px;
+    color: var(--button-dark);
+    cursor: pointer;
+    font-family: 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    text-align: left;
+    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+}
+
+.option-btn:hover {
+    background-color: #E8BE92;
+    transform: translateY(-2px);
+}
+
+.option-btn.selected {
+    border-color: var(--orange);
+    background-color: #E8BE92;
+}
+
+.option-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 40px;
+    width: 40px;
+    height: 38px;
+    background-color: var(--orange);
+    color: var(--white);
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1;
+}
+
+@media (max-width: 1024px) {
+    .back-button {
+        left: 32px;
+    }
+}
+
+@media (max-width: 768px) {
+    .asesmen-section {
+        padding: 96px 20px 72px;
+    }
+
+    .back-button {
+        top: 26px;
+        left: 20px;
+        width: 42px;
+        height: 42px;
+    }
+
+    .asesmen-title {
+        margin-bottom: 32px;
+        font-size: 32px;
+    }
+
+    .asesmen-image {
+        height: auto;
+        aspect-ratio: 810 / 368;
+    }
+
+    .question {
+        font-size: 30px;
+    }
+
+    .options {
+        grid-template-columns: 1fr;
+        gap: 13px;
+    }
+}
