@@ -35,8 +35,14 @@
         "setup": [
             "composer install",
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
-            "@php artisan key:generate",
-            "@php artisan migrate --force --seed"
+            "@php -r \"is_dir('database') || mkdir('database', 0777, true); file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
+            "@php -r \"$env = file_get_contents('.env'); if (! preg_match('/^APP_KEY=\\S+/m', $env)) { passthru('php artisan key:generate --force'); } else { echo 'APP_KEY sudah ada.'.PHP_EOL; }\"",
+            "@php artisan migrate --force --seed",
+            "@php artisan optimize:clear"
+        ],
+        "start": [
+            "@composer setup",
+            "@php artisan serve"
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",

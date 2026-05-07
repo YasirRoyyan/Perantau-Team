@@ -27,25 +27,47 @@ Interiology adalah website asesmen selera desain interior berbasis Laravel. Kont
 
 ## Cara Menjalankan
 
+Cara paling aman setelah clone/pull project dari GitHub:
+
 ```bash
-composer install
-copy .env.example .env
-php -r "file_exists('database/database.sqlite') || touch('database/database.sqlite');"
-php artisan key:generate
-php artisan migrate --seed
+composer setup
 php artisan serve
 ```
 
-Atau gunakan script Composer:
+Atau gunakan satu command:
 
 ```bash
-composer dev
+composer start
 ```
 
 Setelah server berjalan, buka:
 
 ```text
 http://127.0.0.1:8000
+```
+
+Jika ingin menjalankan manual satu per satu:
+
+```bash
+composer install
+copy .env.example .env
+php -r "file_exists('database/database.sqlite') || touch('database/database.sqlite');"
+php artisan key:generate
+php artisan migrate --seed
+php artisan optimize:clear
+php artisan serve
+```
+
+Catatan penting setelah ambil revisi dari Git:
+
+- Jalankan `composer install` jika ada perubahan dependency.
+- Jalankan `php artisan migrate --seed` jika ada perubahan database atau data awal.
+- Jalankan `php artisan optimize:clear` jika tampilan/route/config masih seperti versi lama.
+
+Untuk reset database lokal dari awal:
+
+```bash
+php artisan migrate:fresh --seed
 ```
 
 ## Akun Contoh

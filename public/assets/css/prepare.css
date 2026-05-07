@@ -15,6 +15,12 @@
     margin-top: -10px;
 }
 
+.prepare-box .alert {
+    width: min(100%, 620px);
+    margin: 0 auto clamp(24px, 4vh, 38px);
+    text-align: left;
+}
+
 .prepare-section .back-button {
     position: absolute;
     top: clamp(32px, 5vh, 56px);

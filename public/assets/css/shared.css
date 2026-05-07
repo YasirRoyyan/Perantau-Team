@@ -36,6 +36,32 @@ ul {
     list-style: none;
 }
 
+.alert {
+    margin: 16px 0 0;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 15px;
+    line-height: 1.35;
+}
+
+.alert ul {
+    display: grid;
+    gap: 4px;
+    margin-top: 8px;
+    padding-left: 20px;
+    list-style: disc;
+}
+
+.alert-success {
+    background: #EEF8E8;
+    color: #294C1D;
+}
+
+.alert-error {
+    background: #FFF0EA;
+    color: #7A2D12;
+}
+
 .navbar {
     position: relative;
     z-index: 10;

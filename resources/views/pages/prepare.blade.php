@@ -12,6 +12,8 @@
         </a>
 
         <div class="prepare-box">
+            @include('partials.alerts')
+
             <h1>
                 Kamu akan diberikan 10 pertanyaan<br>
                 dan tampilan ruangan akan berubah sesuai<br>
