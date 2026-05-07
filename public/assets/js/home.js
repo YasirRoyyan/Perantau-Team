@@ -17,12 +17,20 @@ for (var i = 0; i < smoothLinks.length; i++) {
     });
 }
 
-window.addEventListener('scroll', function() {
+function updateNavbarBackground() {
     var navbar = document.querySelector('.navbar');
+
+    if (!navbar) {
+        return;
+    }
     
     if (window.scrollY > 50) {
         navbar.classList.add('scrolled'); 
     } else {
         navbar.classList.remove('scrolled'); 
     }
-});
+}
+
+window.addEventListener('scroll', updateNavbarBackground);
+window.addEventListener('load', updateNavbarBackground);
+updateNavbarBackground();

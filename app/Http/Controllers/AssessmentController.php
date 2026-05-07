@@ -244,9 +244,9 @@ class AssessmentController extends Controller
             'showcase' => ['image' => 'assets/images/img-container.png', 'alt' => 'Contoh Ruangan'],
             'custom_room_cta' => ['title' => 'Tertarik untuk membuat ruangan sendiri?', 'button' => 'Mulai Sekarang!'],
             'gallery_images' => [
-                ['image' => 'assets/images/img3.png', 'alt' => 'Inspirasi 1'],
-                ['image' => 'assets/images/img-5.png', 'alt' => 'Inspirasi 2'],
-                ['image' => 'assets/images/img-4.png', 'alt' => 'Inspirasi 3'],
+                ['image' => 'assets/images/img3-bw.png', 'alt' => 'Inspirasi 1'],
+                ['image' => 'assets/images/img-5-bw.png', 'alt' => 'Inspirasi 2'],
+                ['image' => 'assets/images/img-4-bw.png', 'alt' => 'Inspirasi 3'],
             ],
             'footer' => [
                 'title' => 'Tentang Interiology',

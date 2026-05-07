@@ -54,7 +54,19 @@
                 <p class="footer-location">{{ $footer['location'] }}</p>
                 <div class="footer-socials">
                     @foreach ($footer['socials'] as $social)
-                        <a href="{{ $social['url'] }}"><img src="{{ asset($social['icon']) }}" alt="{{ $social['label'] ?? $social['alt'] ?? 'Sosial' }}"></a>
+                        @php
+                            $socialLabel = $social['label'] ?? $social['alt'] ?? 'Sosial';
+                            $socialKey = strtolower($socialLabel.' '.basename($social['icon'] ?? ''));
+                            $socialIcon = match (true) {
+                                str_contains($socialKey, 'whatsapp') || str_contains($socialKey, 'wa.') => 'assets/icons/wa.svg',
+                                str_contains($socialKey, 'instagram') || str_contains($socialKey, 'ig.') => 'assets/icons/ig.svg',
+                                default => $social['icon'],
+                            };
+                        @endphp
+
+                        <a href="{{ $social['url'] }}" aria-label="{{ $socialLabel }}">
+                            <img src="{{ asset($socialIcon) }}" alt="{{ $socialLabel }}">
+                        </a>
                     @endforeach
                 </div>
             </div>
