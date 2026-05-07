@@ -7,7 +7,8 @@
     <link rel="icon" type="image/png" href="{{ asset('assets/icons/icon-sofa.png') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/fonts.css') }}">
     @foreach (($styles ?? []) as $style)
-        <link rel="stylesheet" href="{{ asset($style) }}">
+        @php($stylePath = public_path($style))
+        <link rel="stylesheet" href="{{ asset($style) }}@if (file_exists($stylePath))?v={{ filemtime($stylePath) }}@endif">
     @endforeach
 </head>
 <body @if (! empty($bodyClass)) class="{{ $bodyClass }}" @endif>

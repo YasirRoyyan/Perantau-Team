@@ -10,8 +10,8 @@
             <div class="auth-header">
                 <a href="{{ route('home') }}" class="auth-back" aria-label="Kembali ke beranda">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M15 18 9 12l6-6"></path>
-                        <path d="M10 12h9"></path>
+                        <path d="M19 12H6"></path>
+                        <path d="m12 18-6-6 6-6"></path>
                     </svg>
                 </a>
                 <a href="{{ route('home') }}" class="auth-brand">Interiology</a>
