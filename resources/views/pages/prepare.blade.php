@@ -7,6 +7,10 @@
     @include('partials.nav')
 
     <main class="prepare-section">
+        <a href="{{ route('home') }}" class="back-button" aria-label="Kembali ke beranda">
+            <span class="back-icon" aria-hidden="true"></span>
+        </a>
+
         <div class="prepare-box">
             <h1>
                 Kamu akan diberikan 10 pertanyaan<br>
@@ -16,9 +20,6 @@
             <h2>Apakah kamu siap?</h2>
             <div class="prepare-actions">
                 <a href="{{ route('assessment.start') }}" class="btn-mulai">Mulai Sekarang!</a>
-                <a href="{{ route('home') }}" class="back-button" aria-label="Kembali ke beranda">
-                    <span class="back-icon" aria-hidden="true"></span>
-                </a>
             </div>
         </div>
     </main>

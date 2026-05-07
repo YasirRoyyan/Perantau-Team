@@ -257,9 +257,9 @@ ul {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    width: 47px;
-    height: 47px;
-    border: 1.4px solid var(--button-dark);
+    width: 36px;
+    height: 36px;
+    border: 1.2px solid var(--button-dark);
     border-radius: 50%;
     color: var(--button-dark);
     transition: transform 0.3s ease, background-color 0.3s ease;
@@ -272,17 +272,17 @@ ul {
 
 .back-icon {
     position: relative;
-    width: 22px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
 }
 
 .back-icon::before {
     content: "";
     position: absolute;
-    left: 1px;
-    top: 7px;
-    width: 21px;
-    height: 2px;
+    left: 2px;
+    top: 8px;
+    width: 14px;
+    height: 1.9px;
     background-color: currentColor;
     border-radius: 999px;
 }
@@ -290,13 +290,34 @@ ul {
 .back-icon::after {
     content: "";
     position: absolute;
-    left: 1px;
-    top: 2px;
-    width: 11px;
-    height: 11px;
-    border-left: 2px solid currentColor;
-    border-bottom: 2px solid currentColor;
+    left: 2px;
+    top: 4px;
+    width: 8px;
+    height: 8px;
+    border-left: 1.9px solid currentColor;
+    border-bottom: 1.9px solid currentColor;
     transform: rotate(45deg);
+}
+
+@media (max-height: 620px) and (min-width: 769px) {
+    .back-button {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 768px) and (max-height: 520px) {
+    .back-button {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+@media (max-width: 480px) {
+    .back-button {
+        width: 28px;
+        height: 28px;
+    }
 }
 
 @media (max-width: 1300px) {

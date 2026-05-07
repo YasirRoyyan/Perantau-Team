@@ -1,33 +1,42 @@
 .prepare-section {
+    position: relative;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
-    min-height: calc(100svh - 92px);
-    padding: clamp(250px, 42vh, 400px) 24px 96px;
+    height: calc(100dvh - 92px);
+    min-height: 0;
+    padding: clamp(32px, 5vh, 56px) 24px clamp(42px, 6vh, 70px);
+    overflow: hidden;
 }
 
 .prepare-box {
     text-align: center;
     width: min(100%, 940px);
-    margin-top: 0;
+    margin-top: -10px;
+}
+
+.prepare-section .back-button {
+    position: absolute;
+    top: clamp(32px, 5vh, 56px);
+    left: clamp(24px, 10.8vw, 155px);
 }
 
 .prepare-box h1 {
     font-family: 'Bethany Elingston', serif; 
-    font-size: clamp(40px, 3.25vw, 50px);
+    font-size: clamp(36px, 5.4vh, 50px);
     font-weight: normal;
     font-style: normal;
-    line-height: 1.22;
-    margin-bottom: 52px;
+    line-height: 1.12;
+    margin-bottom: clamp(36px, 6vh, 60px);
     color: var(--brown);
 }
 
 .prepare-box h2 {
     font-family: 'Bethany Elingston', serif;
-    font-size: clamp(40px, 3.25vw, 50px);
+    font-size: clamp(36px, 5vh, 50px);
     font-weight: normal;
     line-height: 1.2;
-    margin-bottom: 76px;
+    margin-bottom: clamp(58px, 9vh, 86px);
     color: var(--brown);
 }
 
@@ -36,7 +45,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 68px;
+    gap: 0;
 }
 
 .btn-mulai {
@@ -64,8 +73,15 @@
 
 @media (max-width: 768px) {
     .prepare-section {
-        min-height: calc(100svh - 144px);
-        padding: 150px 20px 80px;
+        height: auto;
+        min-height: calc(100dvh - 144px);
+        padding: 96px 20px 72px;
+        overflow: visible;
+    }
+
+    .prepare-section .back-button {
+        top: 26px;
+        left: 20px;
     }
 
     .prepare-box h1,
