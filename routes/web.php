@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminContentController;
+use App\Http\Controllers\AdminQuestionController;
+use App\Http\Controllers\AdminResultController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +29,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/assessment', [AssessmentController::class, 'show'])->name('assessment.show');
     Route::post('/assessment', [AssessmentController::class, 'answer'])->name('assessment.answer');
     Route::get('/result', [AssessmentController::class, 'result'])->name('result');
+
+    Route::prefix('/admin')->name('admin.')->group(function () {
+        Route::get('/content', [AdminContentController::class, 'index'])->name('content.index');
+        Route::put('/content/home', [AdminContentController::class, 'updateHome'])->name('content.home');
+        Route::put('/content/navigation', [AdminContentController::class, 'updateNavigation'])->name('content.navigation');
+        Route::put('/content/social-links', [AdminContentController::class, 'updateSocialLinks'])->name('content.social-links');
+        Route::resource('questions', AdminQuestionController::class)->except(['show']);
+        Route::resource('results', AdminResultController::class)->except(['show']);
+    });
 });
 
 Route::redirect('/index.html', '/');

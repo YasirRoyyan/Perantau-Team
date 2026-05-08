@@ -14,6 +14,9 @@
         <p class="hasil-label">Tipe kamu adalah</p>
         <h1 class="hasil-title" id="hasil-title">{{ $result['title'] }}</h1>
         <p class="hasil-desc" id="hasil-desc">{{ $result['description'] }}</p>
+        @if ($attempt)
+            <p class="hasil-desc">Hasil ini tersimpan di riwayat asesmenmu pada {{ $attempt->created_at->format('d/m/Y H:i') }}.</p>
+        @endif
 
         <div class="hasil-buttons">
             <a href="{{ route('home') }}" class="btn-menu">Menu Utama</a>

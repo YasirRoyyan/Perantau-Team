@@ -1,0 +1,48 @@
+.admin-subgrid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    padding: 16px;
+    border: 1px solid rgba(66, 35, 11, 0.12);
+    border-radius: 10px;
+    background: rgba(255, 253, 243, 0.72);
+}
+
+.admin-table-form {
+    display: grid;
+    gap: 18px;
+}
+
+.admin-table-form input,
+.admin-table-form select {
+    min-width: 120px;
+    padding: 8px 10px;
+}
+
+.admin-table-form input[type="checkbox"] {
+    min-width: 0;
+    width: 20px;
+    height: 20px;
+}
+
+.admin-small-input {
+    max-width: 74px;
+}
+
+.admin-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.admin-actions .btn-outline {
+    min-height: 36px;
+    padding: 0 14px;
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    .admin-subgrid {
+        grid-template-columns: 1fr;
+    }
+}

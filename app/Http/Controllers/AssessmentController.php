@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AssessmentAttempt;
+use App\Models\AssessmentQuestion;
+use App\Models\AssessmentResult;
+use App\Models\SiteContent;
+use App\Models\SocialLink;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -14,103 +19,24 @@ class AssessmentController extends Controller
 
     private const SESSION_STEP = 'interiology.step';
 
-    private const QUESTIONS = [
-        [
-            'question' => 'Kamu lebih suka ruangan yang bagaimana?',
-            'options' => ['Simpel dan rapi', 'Hangat dan nyaman', 'Modern dan elegan', 'Berwarna dan ceria'],
-        ],
-        [
-            'question' => 'Warna apa yang paling kamu suka untuk ruangan?',
-            'options' => ['Putih dan krem', 'Coklat dan kayu', 'Abu-abu dan hitam', 'Biru dan hijau'],
-        ],
-        [
-            'question' => 'Furniture seperti apa yang kamu suka?',
-            'options' => ['Kayu natural', 'Sofa empuk besar', 'Metal dan kaca', 'Campuran warna-warni'],
-        ],
-        [
-            'question' => 'Bagaimana pencahayaan ideal menurutmu?',
-            'options' => ['Cahaya alami dari jendela', 'Lampu hangat redup', 'Lampu terang modern', 'Lampu warna-warni'],
-        ],
-        [
-            'question' => 'Dekorasi apa yang kamu suka di dinding?',
-            'options' => ['Minimalis tanpa banyak hiasan', 'Foto keluarga dan kenangan', 'Lukisan abstrak', 'Poster dan seni pop'],
-        ],
-        [
-            'question' => 'Lantai seperti apa yang kamu pilih?',
-            'options' => ['Kayu natural', 'Karpet tebal', 'Marmer atau granit', 'Vinyl berwarna'],
-        ],
-        [
-            'question' => 'Bagaimana suasana ruangan impianmu?',
-            'options' => ['Tenang dan damai', 'Hangat seperti rumah nenek', 'Mewah dan berkelas', 'Seru dan penuh energi'],
-        ],
-        [
-            'question' => 'Apa yang paling penting dalam sebuah ruangan?',
-            'options' => ['Kerapian', 'Kenyamanan', 'Keindahan', 'Keunikan'],
-        ],
-        [
-            'question' => 'Apakah kamu menyukai tanaman di dalam ruangan?',
-            'options' => ['Ya, sedikit saja', 'Ya, banyak tanaman', 'Tidak terlalu', 'Lebih suka bunga palsu'],
-        ],
-        [
-            'question' => 'Gaya interior mana yang paling menarik?',
-            'options' => ['Minimalis', 'Scandinavian', 'Industrial', 'Bohemian'],
-        ],
-    ];
-
-    private const IMAGES = [
-        'assets/images/img-4.png',
-        'assets/images/img-5.png',
-        'assets/images/img3.png',
-        'assets/images/img-container.png',
-        'assets/images/img-4.png',
-        'assets/images/img-5.png',
-        'assets/images/img3.png',
-        'assets/images/img-container.png',
-        'assets/images/img-4.png',
-        'assets/images/img-5.png',
-    ];
-
-    private const TITLES = [
-        'Mulailah menjawab pertanyaan...',
-        '',
-        'Terus jawab pertanyaannya...',
-        '',
-        'Hmmm, seleramu bagus',
-        '',
-        'Ayoo, sedikit lagi...',
-        'Sedikit lagi...',
-        'Ruanganmu hampir selesai...',
-        'Hasilnya akan segera muncul...',
-    ];
-
-    private const RESULT_TYPES = ['minimalis', 'scandinavian', 'modern', 'bohemian'];
-
-    private const RESULTS = [
-        'minimalis' => [
-            'title' => 'Si Kalem Minimalis',
-            'description' => 'Kamu cocok terhadap furnitur yang berbahan kayu dan berbentuk simple, dengan warna yang kalem seperti coklat, putih, dan krem. Coba merek seperti Fabelio, Scandinavian, Warjo dsb.',
-            'image' => 'assets/images/img-container.png',
-        ],
-        'scandinavian' => [
-            'title' => 'Si Hangat Scandinavian',
-            'description' => 'Kamu menyukai ruangan yang hangat dan nyaman dengan sentuhan natural, warna lembut, dan furnitur kayu yang membuat ruangan terasa akrab.',
-            'image' => 'assets/images/img-Scandinavian.png',
-        ],
-        'modern' => [
-            'title' => 'Si Elegan Modern',
-            'description' => 'Kamu suka ruangan yang terlihat mewah dan berkelas, dengan bentuk tegas, warna netral, dan detail yang bersih tanpa terlalu ramai.',
-            'image' => 'assets/images/img-Modern.png',
-        ],
-        'bohemian' => [
-            'title' => 'Si Ceria Bohemian',
-            'description' => 'Kamu suka ruangan yang penuh warna dan karakter, dengan dekorasi ekspresif, tekstur berlapis, dan suasana yang bebas serta kreatif.',
-            'image' => 'assets/images/img-Bohemian.png',
-        ],
-    ];
+    private const SESSION_ATTEMPT = 'interiology.attempt';
 
     public function home(): View
     {
-        return view('pages.home');
+        $home = array_replace_recursive(
+            $this->defaultHomeContent(),
+            SiteContent::payload('home', []),
+        );
+
+        return view('pages.home', [
+            'hero' => $home['hero'],
+            'workflowTitle' => $home['workflow_title'],
+            'workflowSteps' => $home['workflow_steps'],
+            'showcase' => $home['showcase'],
+            'customRoomCta' => $home['custom_room_cta'],
+            'galleryImages' => $home['gallery_images'],
+            'footer' => $home['footer'] + ['socials' => SocialLink::activeOrFallback()],
+        ]);
     }
 
     public function prepare(Request $request): View
@@ -133,18 +59,30 @@ class AssessmentController extends Controller
             $this->initializeAssessment($request);
         }
 
+        $questions = AssessmentQuestion::ordered()->get();
+
+        if ($questions->isEmpty()) {
+            return redirect()->route('prepare')
+                ->with('error', 'Data asesmen belum tersedia. Jalankan database seeder terlebih dahulu.');
+        }
+
         $step = (int) $request->session()->get(self::SESSION_STEP, 0);
 
-        if ($step >= count(self::QUESTIONS)) {
+        if ($step >= $questions->count()) {
             return redirect()->route('result');
         }
 
+        $question = $questions->values()->get($step);
+
         return view('pages.assessment', [
-            'image' => self::IMAGES[$step],
+            'image' => $question->image,
             'progress' => $step + 1,
-            'question' => self::QUESTIONS[$step],
-            'title' => self::TITLES[$step],
-            'total' => count(self::QUESTIONS),
+            'question' => [
+                'question' => $question->question,
+                'options' => $question->options,
+            ],
+            'title' => $question->intro_title ?? '',
+            'total' => $questions->count(),
         ]);
     }
 
@@ -154,14 +92,24 @@ class AssessmentController extends Controller
             return redirect()->route('prepare');
         }
 
+        $questions = AssessmentQuestion::ordered()->get()->values();
+
+        if ($questions->isEmpty()) {
+            return redirect()->route('prepare')
+                ->with('error', 'Data asesmen belum tersedia. Jalankan database seeder terlebih dahulu.');
+        }
+
         $step = (int) $request->session()->get(self::SESSION_STEP, 0);
 
-        if ($step >= count(self::QUESTIONS)) {
+        if ($step >= $questions->count()) {
             return redirect()->route('result');
         }
 
+        $question = $questions->get($step);
+        $maxOption = max(count($question->options ?? []) - 1, 0);
+
         $validated = $request->validate([
-            'option' => ['required', 'integer', 'min:0', 'max:3'],
+            'option' => ['required', 'integer', 'min:0', 'max:'.$maxOption],
         ]);
 
         $answers = $request->session()->get(self::SESSION_ANSWERS, []);
@@ -171,8 +119,12 @@ class AssessmentController extends Controller
         $request->session()->put(self::SESSION_ANSWERS, $answers);
         $request->session()->put(self::SESSION_STEP, $nextStep);
 
-        if ($nextStep >= count(self::QUESTIONS)) {
-            $request->session()->put(self::SESSION_RESULT, $this->calculateResult($answers));
+        if ($nextStep >= $questions->count()) {
+            $resultKey = $this->calculateResult($answers);
+            $request->session()->put(self::SESSION_RESULT, $resultKey);
+
+            $attempt = $this->storeAttempt($request, $resultKey, $answers);
+            $request->session()->put(self::SESSION_ATTEMPT, $attempt?->id);
 
             return redirect()->route('result');
         }
@@ -188,9 +140,24 @@ class AssessmentController extends Controller
             return redirect()->route('prepare');
         }
 
+        $result = AssessmentResult::where('style_key', $type)->first()
+            ?? AssessmentResult::ordered()->first();
+
+        if (! $result) {
+            return redirect()->route('prepare')
+                ->with('error', 'Data hasil asesmen belum tersedia. Jalankan database seeder terlebih dahulu.');
+        }
+
         return view('pages.result', [
-            'result' => self::RESULTS[$type] ?? self::RESULTS['minimalis'],
-            'type' => $type,
+            'result' => [
+                'title' => $result->title,
+                'description' => $result->description,
+                'image' => $result->image,
+            ],
+            'attempt' => $request->session()->get(self::SESSION_ATTEMPT)
+                ? AssessmentAttempt::find($request->session()->get(self::SESSION_ATTEMPT))
+                : null,
+            'type' => $result->style_key,
         ]);
     }
 
@@ -199,6 +166,7 @@ class AssessmentController extends Controller
         $request->session()->put(self::SESSION_ANSWERS, []);
         $request->session()->put(self::SESSION_STEP, 0);
         $request->session()->forget(self::SESSION_RESULT);
+        $request->session()->forget(self::SESSION_ATTEMPT);
     }
 
     private function resetAssessment(Request $request): void
@@ -207,12 +175,39 @@ class AssessmentController extends Controller
             self::SESSION_ANSWERS,
             self::SESSION_RESULT,
             self::SESSION_STEP,
+            self::SESSION_ATTEMPT,
+        ]);
+    }
+
+    private function storeAttempt(Request $request, string $resultKey, array $answers): ?AssessmentAttempt
+    {
+        $result = AssessmentResult::where('style_key', $resultKey)->first()
+            ?? AssessmentResult::ordered()->first();
+
+        if (! $result || ! $request->user()) {
+            return null;
+        }
+
+        return AssessmentAttempt::create([
+            'user_id' => $request->user()->id,
+            'assessment_result_id' => $result->id,
+            'result_key' => $result->style_key,
+            'result_title' => $result->title,
+            'result_description' => $result->description,
+            'result_image' => $result->image,
+            'answers' => $answers,
         ]);
     }
 
     private function calculateResult(array $answers): string
     {
-        $counts = [0, 0, 0, 0];
+        $resultTypes = AssessmentResult::ordered()->pluck('style_key')->values();
+
+        if ($resultTypes->isEmpty()) {
+            return 'minimalis';
+        }
+
+        $counts = array_fill(0, $resultTypes->count(), 0);
 
         foreach ($answers as $answer) {
             if (array_key_exists($answer, $counts)) {
@@ -228,6 +223,36 @@ class AssessmentController extends Controller
             }
         }
 
-        return self::RESULT_TYPES[$maxIndex];
+        return $resultTypes->get($maxIndex, $resultTypes->first());
+    }
+
+    private function defaultHomeContent(): array
+    {
+        return [
+            'hero' => [
+                'title' => 'Kenali selera desain ruangan kamu di Interiology',
+                'description' => 'Jawab beberapa pertanyaan singkat dan lihat rekomendasi ruang tamu yang sesuai dengan kepribadianmu.',
+                'button' => 'Cari Selera mu!',
+            ],
+            'workflow_title' => 'Bagaimana cara untuk menentukan selera mu?',
+            'workflow_steps' => [
+                ['class' => 'step-card-1', 'icon' => 'assets/icons/icon-sofa.png', 'alt' => 'Sofa', 'label' => 'Mulai Asesmen'],
+                ['class' => 'step-card-2', 'icon' => 'assets/icons/icon-table.png', 'alt' => 'Nightstand', 'label' => 'Jawab beberapa pertanyaan'],
+                ['class' => 'step-card-3', 'icon' => 'assets/icons/icon-tv.png', 'alt' => 'Television', 'label' => 'Tampilan Interior Muncul Sesuai Jawaban'],
+                ['class' => 'step-card-4', 'icon' => 'assets/icons/icon-verified.png', 'alt' => 'Check', 'label' => 'Selamat Seleramu berhasil ditemukan!'],
+            ],
+            'showcase' => ['image' => 'assets/images/img-container.png', 'alt' => 'Contoh Ruangan'],
+            'custom_room_cta' => ['title' => 'Tertarik untuk membuat ruangan sendiri?', 'button' => 'Mulai Sekarang!'],
+            'gallery_images' => [
+                ['image' => 'assets/images/img3.png', 'alt' => 'Inspirasi 1'],
+                ['image' => 'assets/images/img-5.png', 'alt' => 'Inspirasi 2'],
+                ['image' => 'assets/images/img-4.png', 'alt' => 'Inspirasi 3'],
+            ],
+            'footer' => [
+                'title' => 'Tentang Interiology',
+                'description' => 'Website ini dirancang untuk membantu kamu menemukan gaya ruang tamu yang paling sesuai dengan kepribadian dan preferensimu. Melalui asesmen interaktif dan visualisasi sederhana, kami berharap kamu bisa lebih percaya diri dalam menentukan pilihan desain interior.',
+                'location' => 'Bandung, Jawa Barat, Indonesia',
+            ],
+        ];
     }
 }

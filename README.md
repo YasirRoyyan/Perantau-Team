@@ -9,19 +9,20 @@ Pemrograman Web - RPL 4A
 
 ## Deskripsi Project
 
-Interiology adalah website asesmen selera desain interior berbasis Laravel. Versi awal proyek yang masih HTML, CSS, dan JavaScript statis sudah dimigrasikan menjadi web dinamis dengan routing, Blade view, dan pengolahan jawaban di backend menggunakan session Laravel.
+Interiology adalah website asesmen selera desain interior berbasis Laravel. Konten halaman, menu, link sosial, pertanyaan asesmen, hasil rekomendasi, akun, dan riwayat asesmen disimpan di database sehingga dapat dikelola secara dinamis.
 
 ## Fitur
 
-- Halaman utama Interiology.
+- Halaman utama Interiology berbasis data `site_contents`.
 - Login, register, logout.
 - Role akun: `admin` dan `user`.
 - Dashboard sederhana sesuai role.
+- Panel admin untuk mengelola homepage, menu navigasi, link sosial, pertanyaan asesmen, dan hasil desain.
 - Halaman profil untuk mengubah data akun.
 - Halaman persiapan sebelum asesmen.
-- Asesmen 10 pertanyaan yang diproses oleh Laravel.
-- Penyimpanan progres jawaban di session.
-- Halaman hasil dinamis berdasarkan jawaban user.
+- Asesmen yang pertanyaan dan pilihan jawabannya diambil dari database.
+- Penyimpanan progres jawaban di session dan riwayat hasil di database.
+- Halaman hasil dinamis berdasarkan jawaban user dan data hasil dari database.
 - Download gambar rekomendasi interior.
 
 ## Cara Menjalankan
@@ -31,8 +32,14 @@ composer install
 copy .env.example .env
 php -r "file_exists('database/database.sqlite') || touch('database/database.sqlite');"
 php artisan key:generate
-php artisan migrate
+php artisan migrate --seed
 php artisan serve
+```
+
+Atau gunakan script Composer:
+
+```bash
+composer dev
 ```
 
 Setelah server berjalan, buka:
@@ -56,19 +63,28 @@ Seeder menyiapkan dua akun demo:
 - `/dashboard` dashboard user/admin.
 - `/profile` halaman profil.
 - `/prepare`, `/assessment`, dan `/result` untuk alur asesmen setelah login.
+- `/admin/content` panel admin untuk konten homepage, menu, dan sosial.
+- `/admin/questions` panel admin untuk pertanyaan asesmen.
+- `/admin/results` panel admin untuk hasil rekomendasi.
 
 ## Struktur Utama
 
 - `routes/web.php` untuk route halaman dan flow asesmen.
-- `app/Http/Controllers/AssessmentController.php` untuk logika asesmen dan hasil.
+- `app/Http/Controllers/AssessmentController.php` untuk logika asesmen, hasil, dan riwayat.
+- `app/Http/Controllers/AdminContentController.php` untuk pengelolaan konten dinamis.
+- `app/Http/Controllers/AdminQuestionController.php` untuk CRUD pertanyaan asesmen.
+- `app/Http/Controllers/AdminResultController.php` untuk CRUD hasil rekomendasi.
 - `app/Http/Controllers/AuthController.php` untuk login, register, dan logout.
 - `app/Http/Controllers/DashboardController.php` untuk dashboard role admin/user.
 - `app/Http/Controllers/ProfileController.php` untuk halaman profil.
+- `app/Models/SiteContent.php`, `NavigationItem.php`, dan `SocialLink.php` untuk konten website dinamis.
+- `app/Models/AssessmentQuestion.php`, `AssessmentResult.php`, dan `AssessmentAttempt.php` untuk asesmen dinamis dan riwayat user.
 - `resources/views/layouts/app.blade.php` untuk layout utama.
 - `resources/views/pages` untuk halaman Blade.
+- `resources/views/admin` untuk panel admin.
 - `resources/views/auth` untuk halaman login dan register.
 - `resources/views/partials/nav.blade.php` untuk navigasi bersama.
-- `public/assets/css` untuk file CSS dari halaman lama.
-- `public/assets/js` untuk JavaScript halaman lama yang masih dibutuhkan.
+- `public/assets/css` untuk stylesheet yang masih dibutuhkan tampilan Blade.
+- `public/assets/js` untuk JavaScript interaksi UI yang masih dibutuhkan.
 - `public/assets/images`, `public/assets/icons`, dan `public/assets/fonts` untuk asset visual dan font.
 - `database/database.sqlite` untuk database lokal Laravel.

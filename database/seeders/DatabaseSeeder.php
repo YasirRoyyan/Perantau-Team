@@ -16,6 +16,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(AssessmentDataSeeder::class);
+        $this->call(SiteContentSeeder::class);
+
         User::updateOrCreate(['email' => 'admin@interiology.test'], [
             'name' => 'Admin Interiology',
             'password' => Hash::make('password'),

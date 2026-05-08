@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\AssessmentAttempt;
 use App\Models\User;
+use Database\Seeders\AssessmentDataSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -75,6 +77,8 @@ class ExampleTest extends TestCase
 
     public function test_assessment_flow_calculates_result_on_backend(): void
     {
+        $this->seed(AssessmentDataSeeder::class);
+
         $user = User::factory()->create();
 
         $this->actingAs($user);
@@ -94,6 +98,12 @@ class ExampleTest extends TestCase
         $this->get('/result')
             ->assertStatus(200)
             ->assertSee('Si Elegan Modern');
+
+        $this->assertDatabaseHas('assessment_attempts', [
+            'user_id' => $user->id,
+            'result_key' => 'modern',
+        ]);
+        $this->assertSame(1, AssessmentAttempt::count());
     }
 
     public function test_legacy_static_urls_redirect_to_laravel_routes(): void

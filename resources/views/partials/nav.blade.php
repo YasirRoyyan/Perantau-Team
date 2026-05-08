@@ -1,15 +1,33 @@
 <nav class="navbar" @if ($home ?? false) id="navbar" @endif>
     <a class="nav-logo" href="{{ route('home') }}">Interiology</a>
     <ul class="nav-links">
-        <li><a href="{{ route('home') }}">Beranda</a></li>
-        <li><a href="{{ ($home ?? false) ? '#cara-kerja' : route('home').'#cara-kerja' }}">Cara Kerja</a></li>
-        <li><a href="{{ ($home ?? false) ? '#kustom-ruangan' : route('home').'#kustom-ruangan' }}">Kustom Ruangan</a></li>
-        <li><a href="{{ route('prepare') }}" class="{{ ($home ?? false) ? 'nav-cta' : '' }}">Cari Selera mu!</a></li>
-        <li><a href="{{ ($home ?? false) ? '#interiorgram' : route('home').'#interiorgram' }}">Interiorgram</a></li>
-        @guest
-            <li><a href="{{ route('login') }}" class="nav-login">Login</a></li>
-        @else
-            <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
+        @foreach ($navItems as $item)
+            @php
+                $authState = $item['auth_state'] ?? 'all';
+                $isVisible = $authState === 'all' || ($authState === 'guest' && auth()->guest()) || ($authState === 'auth' && auth()->check());
+                $href = $item['external_url'] ?? null;
+
+                if (! $href && ! empty($item['route_name'])) {
+                    $href = route($item['route_name']);
+
+                    if (! empty($item['anchor'])) {
+                        $href = ($home ?? false) && $item['route_name'] === 'home'
+                            ? '#'.$item['anchor']
+                            : $href.'#'.$item['anchor'];
+                    }
+                }
+
+                $href = $href ?: '#';
+                $classes = trim(($item['is_cta'] ?? false) && ($home ?? false) ? 'nav-cta' : '');
+                $classes = trim(($authState === 'guest' ? 'nav-login ' : '').$classes);
+            @endphp
+
+            @if ($isVisible)
+                <li><a href="{{ $href }}" @if ($classes) class="{{ $classes }}" @endif>{{ $item['label'] }}</a></li>
+            @endif
+        @endforeach
+
+        @auth
             <li class="account-menu">
                 <button type="button" class="account-trigger" aria-expanded="false" aria-haspopup="true">
                     <span class="account-avatar">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
@@ -41,7 +59,7 @@
                     </form>
                 </div>
             </li>
-        @endguest
+        @endauth
     </ul>
 </nav>
 
