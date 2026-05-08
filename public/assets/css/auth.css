@@ -497,7 +497,7 @@ textarea:focus {
     border-radius: 50%;
     background:
         linear-gradient(rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.2)),
-        url("../images/img3.png") center / cover no-repeat;
+        url("../images/profile-interiorgram.jpeg") center / cover no-repeat;
     color: transparent;
     overflow: hidden;
 }
@@ -573,7 +573,7 @@ textarea:focus {
     padding: clamp(28px, 4.4vh, 44px) clamp(48px, 6.2vw, 86px) 24px;
     background:
         linear-gradient(rgba(67, 35, 11, 0.48), rgba(67, 35, 11, 0.48)),
-        url("../images/img-container.png") center / cover no-repeat;
+        url("../images/banner-interiorgram.png") center / cover no-repeat;
     color: var(--white);
 }
 
