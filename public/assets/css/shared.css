@@ -154,11 +154,11 @@ ul {
 .account-trigger {
     display: inline-flex;
     align-items: center;
-    gap: 9px;
-    min-height: 48px;
-    padding: 7px 14px 7px 8px;
+    gap: 8px;
+    min-height: 42px;
+    padding: 5px 12px 5px 6px;
     border: 1px solid rgba(255, 253, 243, 0.42);
-    border-radius: 16px;
+    border-radius: 14px;
     background: rgba(255, 253, 243, 0.18);
     color: var(--white);
     cursor: pointer;
@@ -178,12 +178,12 @@ ul {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 34px;
-    height: 34px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     background: #F5CCA6;
     color: var(--brown);
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 800;
 }
 
@@ -204,14 +204,14 @@ ul {
 
 .account-dropdown {
     position: absolute;
-    top: calc(100% + 12px);
+    top: calc(100% + 10px);
     right: 0;
     z-index: 1200;
     display: none;
-    width: 228px;
-    padding: 14px;
+    width: 196px;
+    padding: 10px;
     border: 1px solid rgba(255, 253, 243, 0.35);
-    border-radius: 14px;
+    border-radius: 12px;
     background: rgba(84, 72, 61, 0.88);
     backdrop-filter: blur(14px);
     box-shadow: 0 18px 42px rgba(37, 20, 7, 0.22);
@@ -220,10 +220,10 @@ ul {
 .account-dropdown::before {
     content: "";
     position: absolute;
-    top: -8px;
-    right: 48px;
-    width: 16px;
-    height: 16px;
+    top: -6px;
+    right: 40px;
+    width: 12px;
+    height: 12px;
     border-left: 1px solid rgba(255, 253, 243, 0.35);
     border-top: 1px solid rgba(255, 253, 243, 0.35);
     background: rgba(84, 72, 61, 0.88);
@@ -233,23 +233,23 @@ ul {
 
 .account-menu.is-open .account-dropdown {
     display: grid;
-    gap: 10px;
+    gap: 6px;
 }
 
 .account-dropdown-item {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     width: 100%;
-    min-height: 52px;
-    padding: 0 16px;
+    min-height: 42px;
+    padding: 0 12px;
     border: 0;
-    border-radius: 10px;
+    border-radius: 8px;
     background: transparent;
     color: var(--white);
     cursor: pointer;
     font-family: 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
-    font-size: 17px;
+    font-size: 14px;
     font-weight: 600;
     text-align: left;
 }
@@ -262,16 +262,16 @@ ul {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
     background: rgba(245, 204, 166, 0.9);
     color: var(--brown);
 }
 
 .account-icon svg {
-    width: 22px;
-    height: 22px;
+    width: 17px;
+    height: 17px;
     fill: none;
     stroke: currentColor;
     stroke-linecap: round;
