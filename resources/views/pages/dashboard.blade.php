@@ -1,154 +1,73 @@
 @extends('layouts.app', [
     'title' => 'Interiology - Dashboard',
+    'bodyClass' => 'dashboard-shell',
     'styles' => ['assets/css/shared.css', 'assets/css/auth.css'],
 ])
 
 @section('body')
     @include('partials.nav')
 
+    @php
+        $displayName = trim($user->name);
+        $handle = '@'.strtolower(preg_replace('/[^a-z0-9]+/i', '', $displayName ?: 'interiology'));
+        $bio = $user->bio ?: 'Spread love and inspiration on interior.';
+        $galleryItems = range(1, 52);
+    @endphp
+
     <main class="dashboard-page">
-        <section class="dashboard-hero">
-            <div>
-                <p class="eyebrow">Dashboard</p>
-                <h1>Halo, {{ $user->name }}</h1>
-                <p class="auth-copy">Role kamu saat ini adalah <span class="role-badge">{{ ucfirst($user->role) }}</span>.</p>
-            </div>
-            <div class="dashboard-actions">
-                <a href="{{ route('prepare') }}" class="btn-submit">Mulai Asesmen</a>
-                <a href="{{ route('profile.show') }}" class="btn-outline">Edit Profil</a>
-                @if ($user->role === 'admin')
-                    <a href="{{ route('admin.content.index') }}" class="btn-outline">Kelola Konten</a>
-                @endif
+        <aside class="dashboard-profile-card" aria-label="Profil pengguna">
+            <div class="dashboard-avatar">{{ strtoupper(substr($displayName, 0, 1)) }}</div>
+            <h1>{{ $handle }}</h1>
+            <p>{{ $bio }}</p>
+
+            <dl class="dashboard-social-stats">
+                <div>
+                    <dt>Postingan</dt>
+                    <dd>37</dd>
+                </div>
+                <div>
+                    <dt>Mengikuti</dt>
+                    <dd>1.3k</dd>
+                </div>
+                <div>
+                    <dt>Pengikut</dt>
+                    <dd>4.0k</dd>
+                </div>
+            </dl>
+
+            <a href="{{ route('profile.show') }}" class="dashboard-edit-profile">Edit Profile</a>
+
+            @if ($user->role === 'admin')
+                <a href="{{ route('admin.content.index') }}" class="dashboard-admin-link">Kelola Konten</a>
+                <span class="sr-only">Akun Terbaru</span>
+            @endif
+        </aside>
+
+        <section class="dashboard-content" aria-labelledby="dashboard-title">
+            <header class="dashboard-cover">
+                <div class="dashboard-cover-top">
+                    <span class="dashboard-brand">Interiorgram</span>
+                    <label class="dashboard-search">
+                        <span class="sr-only">Cari inspirasi interior</span>
+                        <input type="search" placeholder="Cari">
+                    </label>
+                    <button type="button" class="dashboard-upload">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 15V4"></path>
+                            <path d="m7 9 5-5 5 5"></path>
+                            <path d="M5 12v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"></path>
+                        </svg>
+                        Upload
+                    </button>
+                </div>
+                <h2 id="dashboard-title">Jelajahi Inspirasi Interior</h2>
+            </header>
+
+            <div class="dashboard-gallery" aria-label="Galeri inspirasi interior">
+                @foreach ($galleryItems as $item)
+                    <article class="dashboard-gallery-card" aria-label="Inspirasi interior {{ $item }}"></article>
+                @endforeach
             </div>
         </section>
-
-        @if ($user->role === 'admin')
-            <section class="stats-grid">
-                <div class="stat-box">
-                    <span>Total Akun</span>
-                    <strong>{{ $adminData['totalUsers'] }}</strong>
-                </div>
-                <div class="stat-box">
-                    <span>Admin</span>
-                    <strong>{{ $adminData['totalAdmins'] }}</strong>
-                </div>
-                <div class="stat-box">
-                    <span>User</span>
-                    <strong>{{ $adminData['totalRegularUsers'] }}</strong>
-                </div>
-                <div class="stat-box">
-                    <span>Pertanyaan</span>
-                    <strong>{{ $adminData['totalQuestions'] }}</strong>
-                </div>
-                <div class="stat-box">
-                    <span>Hasil Desain</span>
-                    <strong>{{ $adminData['totalResults'] }}</strong>
-                </div>
-                <div class="stat-box">
-                    <span>Riwayat Asesmen</span>
-                    <strong>{{ $adminData['totalAttempts'] }}</strong>
-                </div>
-            </section>
-
-            <section class="panel">
-                <h2>Kelola Website</h2>
-                <div class="dashboard-actions">
-                    <a href="{{ route('admin.content.index') }}" class="btn-submit">Konten Homepage</a>
-                    <a href="{{ route('admin.questions.index') }}" class="btn-outline">Pertanyaan Asesmen</a>
-                    <a href="{{ route('admin.results.index') }}" class="btn-outline">Hasil Desain</a>
-                </div>
-            </section>
-
-            <section class="panel">
-                <h2>Akun Terbaru</h2>
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Nama</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th>Kota</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($adminData['latestUsers'] as $listedUser)
-                                <tr>
-                                    <td>{{ $listedUser->name }}</td>
-                                    <td>{{ $listedUser->email }}</td>
-                                    <td>{{ ucfirst($listedUser->role) }}</td>
-                                    <td>{{ $listedUser->city ?: '-' }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <section class="panel">
-                <h2>Riwayat Asesmen Terbaru</h2>
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>User</th>
-                                <th>Hasil</th>
-                                <th>Waktu</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($adminData['latestAttempts'] as $attempt)
-                                <tr>
-                                    <td>{{ $attempt->user?->name ?? '-' }}</td>
-                                    <td>{{ $attempt->result_title }}</td>
-                                    <td>{{ $attempt->created_at->format('d/m/Y H:i') }}</td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="3">Belum ada riwayat asesmen.</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-        @else
-            <section class="panel user-panel">
-                <h2>Ruang Personalmu</h2>
-                <p>Lengkapi profil, lalu lanjutkan asesmen untuk menemukan gaya interior yang paling cocok.</p>
-                <div class="profile-summary">
-                    <span>Kota</span>
-                    <strong>{{ $user->city ?: 'Belum diisi' }}</strong>
-                    <span>Telepon</span>
-                    <strong>{{ $user->phone ?: 'Belum diisi' }}</strong>
-                </div>
-            </section>
-
-            <section class="panel">
-                <h2>Riwayat Asesmenmu</h2>
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Hasil</th>
-                                <th>Waktu</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($attempts as $attempt)
-                                <tr>
-                                    <td>{{ $attempt->result_title }}</td>
-                                    <td>{{ $attempt->created_at->format('d/m/Y H:i') }}</td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="2">Belum ada riwayat. Mulai asesmen pertamamu dulu.</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-        @endif
     </main>
 @endsection
