@@ -15,7 +15,6 @@ Route::get('/assessment/start', [AssessmentController::class, 'start'])->name('a
 Route::get('/assessment', [AssessmentController::class, 'show'])->name('assessment.show');
 Route::post('/assessment', [AssessmentController::class, 'answer'])->name('assessment.answer');
 Route::get('/result', [AssessmentController::class, 'result'])->name('result');
-Route::view('/kustom-ruangan', 'pages.custom-room')->name('custom-room');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -29,6 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::view('/kustom-ruangan', 'pages.custom-room')->name('custom-room');
 
     Route::prefix('/admin')->name('admin.')->group(function () {
         Route::get('/content', [AdminContentController::class, 'index'])->name('content.index');
