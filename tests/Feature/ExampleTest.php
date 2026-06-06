@@ -28,15 +28,19 @@ class ExampleTest extends TestCase
         $this->get('/assessment/start')->assertRedirect('/assessment');
     }
 
-    public function test_custom_room_redirects_based_on_auth_state(): void
+    public function test_custom_room_page_is_available_for_guest_and_user(): void
     {
-        $this->get('/kustom-ruangan')->assertRedirect('/register');
+        $this->get('/kustom-ruangan')
+            ->assertStatus(200)
+            ->assertSee('Kustom Ruangan Kamu')
+            ->assertSee('Pilih furniture yang kamu mau');
 
         $user = User::factory()->create();
 
         $this->actingAs($user)
             ->get('/kustom-ruangan')
-            ->assertRedirect('/dashboard');
+            ->assertStatus(200)
+            ->assertSee('Selesai');
     }
 
     public function test_user_registers_then_logs_in_manually(): void

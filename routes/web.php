@@ -15,9 +15,7 @@ Route::get('/assessment/start', [AssessmentController::class, 'start'])->name('a
 Route::get('/assessment', [AssessmentController::class, 'show'])->name('assessment.show');
 Route::post('/assessment', [AssessmentController::class, 'answer'])->name('assessment.answer');
 Route::get('/result', [AssessmentController::class, 'result'])->name('result');
-Route::get('/kustom-ruangan', fn () => auth()->check()
-    ? redirect()->route('dashboard')
-    : redirect()->route('register'))->name('custom-room');
+Route::view('/kustom-ruangan', 'pages.custom-room')->name('custom-room');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');

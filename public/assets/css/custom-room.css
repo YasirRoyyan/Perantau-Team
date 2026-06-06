@@ -1,0 +1,549 @@
+body.custom-room-shell {
+    background: #FFFDF3;
+}
+
+.custom-room-page {
+    min-height: calc(100svh - 92px);
+    padding: 52px 24px 88px;
+    background: #FFFDF3;
+    color: #42230B;
+    overflow-x: hidden;
+}
+
+.custom-room-builder,
+.custom-room-result {
+    position: relative;
+    width: min(100%, 1240px);
+    min-height: 620px;
+    margin: 0 auto;
+}
+
+.custom-room-back {
+    position: absolute;
+    top: 9px;
+    left: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border: 1.4px solid rgba(66, 35, 11, 0.44);
+    border-radius: 50%;
+    color: #42230B;
+}
+
+.custom-room-back span {
+    position: relative;
+    width: 16px;
+    height: 16px;
+}
+
+.custom-room-back span::before {
+    content: "";
+    position: absolute;
+    top: 7px;
+    left: 2px;
+    width: 13px;
+    height: 1.6px;
+    border-radius: 999px;
+    background: currentColor;
+}
+
+.custom-room-back span::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 2px;
+    width: 9px;
+    height: 9px;
+    border-left: 1.6px solid currentColor;
+    border-bottom: 1.6px solid currentColor;
+    transform: rotate(45deg);
+}
+
+.custom-room-builder h1,
+.custom-room-result h1 {
+    margin: 0;
+    font-family: 'Bethany Elingston', serif;
+    font-size: 46px;
+    font-weight: 400;
+    line-height: 1;
+    text-align: center;
+    color: #42230B;
+}
+
+.custom-room-layout {
+    display: grid;
+    grid-template-columns: 600px 440px;
+    justify-content: center;
+    align-items: start;
+    gap: 58px;
+    margin-top: 62px;
+}
+
+.custom-room-preview {
+    display: grid;
+    gap: 14px;
+    margin: 0;
+}
+
+.custom-room-canvas,
+.custom-room-result-preview {
+    position: relative;
+    width: 600px;
+    height: 402px;
+    border-radius: 20px;
+    background: #E7E1D8;
+    overflow: hidden;
+    box-shadow: 0 16px 34px rgba(66, 35, 11, 0.08);
+}
+
+.custom-room-canvas.is-over {
+    outline: 3px solid rgba(216, 109, 23, 0.28);
+    outline-offset: 5px;
+}
+
+.custom-room-canvas > img,
+.custom-room-result-preview > img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.custom-room-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+}
+
+.custom-room-drop-hint {
+    position: absolute;
+    left: 50%;
+    bottom: 18px;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 0 18px;
+    border-radius: 999px;
+    background: rgba(255, 253, 243, 0.86);
+    color: #8A6245;
+    font-size: 13px;
+    font-weight: 700;
+    box-shadow: 0 10px 28px rgba(66, 35, 11, 0.12);
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+.custom-room-drop-hint.is-hidden {
+    display: none;
+}
+
+.custom-room-preview figcaption {
+    color: #9B7D62;
+    font-size: 13px;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.custom-room-choice {
+    width: 440px;
+    padding-top: 0;
+}
+
+.custom-room-choice h2,
+.custom-room-result-copy h2 {
+    margin: 0;
+    font-family: 'Bethany Elingston', serif;
+    font-size: 44px;
+    font-weight: 400;
+    line-height: 0.95;
+    color: #42230B;
+}
+
+.custom-room-choice p,
+.custom-room-result-copy p {
+    width: min(100%, 382px);
+    margin: 14px 0 0;
+    font-size: 14px;
+    line-height: 1.35;
+    color: #42230B;
+}
+
+.custom-room-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+    width: 100%;
+    margin-top: 24px;
+    padding: 5px;
+    border: 1px solid rgba(66, 35, 11, 0.14);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.78);
+}
+
+.custom-room-tabs button {
+    min-height: 40px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: #42230B;
+    cursor: pointer;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.custom-room-tabs button.is-active {
+    background: #342A22;
+    color: #FFFFFF;
+}
+
+.custom-room-item-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    max-height: 334px;
+    margin-top: 16px;
+    padding-right: 4px;
+    overflow-y: auto;
+}
+
+.custom-room-item {
+    display: grid;
+    justify-items: center;
+    gap: 6px;
+    min-height: 118px;
+    padding: 10px 8px;
+    border: 1.5px solid rgba(66, 35, 11, 0.16);
+    border-radius: 12px;
+    background: #FFFFFF;
+    color: #42230B;
+    cursor: grab;
+    font: inherit;
+    text-align: center;
+    box-shadow: 0 7px 18px rgba(66, 35, 11, 0.07);
+}
+
+.custom-room-item:active {
+    cursor: grabbing;
+}
+
+.custom-room-item img {
+    width: 92px;
+    height: 68px;
+    object-fit: contain;
+}
+
+.custom-room-item span {
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.placed-room-item {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    z-index: var(--z, 1);
+    display: block;
+    width: var(--item-width);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: grab;
+    transform: translate(-50%, -50%);
+    touch-action: none;
+}
+
+.placed-room-item:active {
+    cursor: grabbing;
+}
+
+.placed-room-item img {
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 12px 12px rgba(66, 35, 11, 0.2));
+    pointer-events: none;
+}
+
+.placed-room-item[data-type="walls"] img {
+    filter: drop-shadow(0 8px 10px rgba(66, 35, 11, 0.18));
+}
+
+.custom-room-actions {
+    display: flex;
+    gap: 20px;
+    margin-top: 24px;
+}
+
+.custom-room-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 132px;
+    height: 42px;
+    border: 0;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.custom-room-button-muted {
+    background: #E2E2E2;
+    color: #42230B;
+}
+
+.custom-room-button-finish {
+    background: #D86D17;
+    color: #FFFFFF;
+}
+
+.custom-room-button-finish:disabled {
+    background: #BEBEBE;
+    color: #FFFFFF;
+    cursor: default;
+}
+
+.custom-room-result {
+    display: grid;
+    justify-items: center;
+    align-content: start;
+}
+
+.custom-room-result[hidden] {
+    display: none;
+}
+
+.custom-room-result-preview {
+    width: 600px;
+    height: 402px;
+    margin-top: 54px;
+}
+
+.custom-room-result-copy {
+    display: grid;
+    justify-items: center;
+    margin-top: 28px;
+    text-align: center;
+}
+
+.custom-room-result-copy p {
+    width: 360px;
+}
+
+.custom-room-post {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 168px;
+    height: 42px;
+    margin-top: 22px;
+    border-radius: 8px;
+    background: #D86D17;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.custom-room-result-copy button {
+    margin-top: 13px;
+    border: 0;
+    background: transparent;
+    color: #9B7D62;
+    cursor: pointer;
+    font: inherit;
+    font-size: 13px;
+    text-decoration: underline;
+}
+
+button:focus-visible,
+a:focus-visible {
+    outline: 3px solid rgba(216, 109, 23, 0.22);
+    outline-offset: 2px;
+}
+
+@media (max-width: 1100px) {
+    .custom-room-layout {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        gap: 32px;
+    }
+
+    .custom-room-choice {
+        width: min(100%, 600px);
+    }
+
+    .custom-room-choice h2,
+    .custom-room-choice p {
+        text-align: center;
+        margin-right: auto;
+        margin-left: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .custom-room-page {
+        padding: 26px 18px 56px;
+    }
+
+    .custom-room-builder,
+    .custom-room-result {
+        width: min(100%, 420px);
+        min-height: 0;
+    }
+
+    .custom-room-back {
+        left: 2px;
+        width: 28px;
+        height: 28px;
+    }
+
+    .custom-room-back span {
+        width: 14px;
+        height: 14px;
+    }
+
+    .custom-room-builder h1,
+    .custom-room-result h1 {
+        max-width: calc(100% - 64px);
+        margin-right: auto;
+        margin-left: auto;
+        font-size: 30px;
+        line-height: 1.05;
+    }
+
+    .custom-room-layout {
+        gap: 22px;
+        margin-top: 32px;
+    }
+
+    .custom-room-canvas,
+    .custom-room-result-preview {
+        width: min(calc(100vw - 44px), 340px);
+        height: auto;
+        aspect-ratio: 512 / 342;
+        border-radius: 12px;
+    }
+
+    .custom-room-drop-hint {
+        bottom: 10px;
+        min-height: 26px;
+        padding: 0 12px;
+        font-size: 10px;
+    }
+
+    .custom-room-preview figcaption {
+        font-size: 8px;
+    }
+
+    .custom-room-choice {
+        width: min(100%, 340px);
+        display: grid;
+        justify-items: center;
+        text-align: center;
+    }
+
+    .custom-room-choice h2,
+    .custom-room-result-copy h2 {
+        font-size: 32px;
+    }
+
+    .custom-room-choice p {
+        width: min(100%, 270px);
+        margin-top: 10px;
+        font-size: 10px;
+    }
+
+    .custom-room-tabs {
+        margin-top: 18px;
+    }
+
+    .custom-room-tabs button {
+        min-height: 34px;
+        font-size: 12px;
+    }
+
+    .custom-room-item-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        max-height: none;
+    }
+
+    .custom-room-item {
+        min-height: 104px;
+    }
+
+    .custom-room-item img {
+        width: 82px;
+        height: 58px;
+    }
+
+    .custom-room-actions {
+        gap: 10px;
+        margin-top: 14px;
+    }
+
+    .custom-room-button {
+        width: 88px;
+        height: 32px;
+        border-radius: 6px;
+        font-size: 10px;
+    }
+
+    .custom-room-result-preview {
+        margin-top: 34px;
+    }
+
+    .custom-room-result-copy {
+        margin-top: 18px;
+    }
+
+    .custom-room-result-copy p {
+        width: min(100%, 260px);
+    }
+
+    .custom-room-post {
+        width: 130px;
+        height: 34px;
+        margin-top: 16px;
+        font-size: 11px;
+    }
+
+    .custom-room-result-copy button {
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .custom-room-builder h1,
+    .custom-room-result h1 {
+        font-size: 28px;
+    }
+
+    body.custom-room-shell .navbar {
+        padding-right: 14px;
+        padding-left: 14px;
+    }
+
+    body.custom-room-shell .nav-links {
+        display: grid;
+        grid-template-columns: repeat(2, max-content);
+        justify-content: center;
+        width: 100%;
+        gap: 10px 18px;
+    }
+
+    body.custom-room-shell .nav-links li:last-child {
+        grid-column: 1 / -1;
+        justify-self: center;
+    }
+
+    body.custom-room-shell .nav-links a {
+        font-size: 12px;
+    }
+}
