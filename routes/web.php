@@ -10,6 +10,14 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AssessmentController::class, 'home'])->name('home');
+Route::get('/prepare', [AssessmentController::class, 'prepare'])->name('prepare');
+Route::get('/assessment/start', [AssessmentController::class, 'start'])->name('assessment.start');
+Route::get('/assessment', [AssessmentController::class, 'show'])->name('assessment.show');
+Route::post('/assessment', [AssessmentController::class, 'answer'])->name('assessment.answer');
+Route::get('/result', [AssessmentController::class, 'result'])->name('result');
+Route::get('/kustom-ruangan', fn () => auth()->check()
+    ? redirect()->route('dashboard')
+    : redirect()->route('register'))->name('custom-room');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -23,12 +31,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
-
-    Route::get('/prepare', [AssessmentController::class, 'prepare'])->name('prepare');
-    Route::get('/assessment/start', [AssessmentController::class, 'start'])->name('assessment.start');
-    Route::get('/assessment', [AssessmentController::class, 'show'])->name('assessment.show');
-    Route::post('/assessment', [AssessmentController::class, 'answer'])->name('assessment.answer');
-    Route::get('/result', [AssessmentController::class, 'result'])->name('result');
 
     Route::prefix('/admin')->name('admin.')->group(function () {
         Route::get('/content', [AdminContentController::class, 'index'])->name('content.index');

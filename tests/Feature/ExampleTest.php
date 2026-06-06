@@ -22,9 +22,21 @@ class ExampleTest extends TestCase
         $response->assertDontSee('Akun');
     }
 
-    public function test_guest_is_redirected_to_login_before_assessment(): void
+    public function test_guest_can_start_assessment_without_login(): void
     {
-        $this->get('/assessment/start')->assertRedirect('/login');
+        $this->get('/prepare')->assertStatus(200);
+        $this->get('/assessment/start')->assertRedirect('/assessment');
+    }
+
+    public function test_custom_room_redirects_based_on_auth_state(): void
+    {
+        $this->get('/kustom-ruangan')->assertRedirect('/register');
+
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->get('/kustom-ruangan')
+            ->assertRedirect('/dashboard');
     }
 
     public function test_user_registers_then_logs_in_manually(): void

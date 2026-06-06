@@ -16,9 +16,12 @@
 /database/*.sqlite
 /database/*.sqlite-journal
 /public/storage
+/public/build
 /storage/*.key
 /storage/pail
 /vendor
+/node_modules
+package-lock.json
 _ide_helper.php
 Homestead.json
 Homestead.yaml

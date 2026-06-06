@@ -43,7 +43,7 @@ class SiteContentSeeder extends Seeder
         $navigationItems = [
             ['label' => 'Beranda', 'route_name' => 'home', 'anchor' => null, 'external_url' => null, 'auth_state' => 'all', 'is_cta' => false],
             ['label' => 'Cara Kerja', 'route_name' => 'home', 'anchor' => 'cara-kerja', 'external_url' => null, 'auth_state' => 'all', 'is_cta' => false],
-            ['label' => 'Kustom Ruangan', 'route_name' => 'home', 'anchor' => 'kustom-ruangan', 'external_url' => null, 'auth_state' => 'all', 'is_cta' => false],
+            ['label' => 'Kustom Ruangan', 'route_name' => 'custom-room', 'anchor' => null, 'external_url' => null, 'auth_state' => 'all', 'is_cta' => false],
             ['label' => 'Cari Selera mu!', 'route_name' => 'prepare', 'anchor' => null, 'external_url' => null, 'auth_state' => 'all', 'is_cta' => true],
             ['label' => 'Interiorgram', 'route_name' => 'home', 'anchor' => 'interiorgram', 'external_url' => null, 'auth_state' => 'all', 'is_cta' => false],
             ['label' => 'Login', 'route_name' => 'login', 'anchor' => null, 'external_url' => null, 'auth_state' => 'guest', 'is_cta' => false],
@@ -51,7 +51,7 @@ class SiteContentSeeder extends Seeder
         ];
 
         foreach ($navigationItems as $index => $item) {
-            NavigationItem::firstOrCreate(
+            NavigationItem::updateOrCreate(
                 ['sort_order' => $index + 1],
                 $item + ['sort_order' => $index + 1, 'is_active' => true],
             );

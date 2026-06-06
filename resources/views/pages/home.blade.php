@@ -35,7 +35,7 @@
 
             <div class="call-to-action" id="kustom-ruangan">
                 <h2>{{ $customRoomCta['title'] }}</h2>
-                <a href="{{ route('prepare') }}" class="btn-primary btn-dark">{{ $customRoomCta['button'] }}</a>
+                <a href="{{ route('custom-room') }}" class="btn-primary btn-dark">{{ $customRoomCta['button'] }}</a>
             </div>
         </section>
 
