@@ -15,7 +15,6 @@ return new class extends Migration
             $table->string('role')->default('user')->after('password');
             $table->string('phone')->nullable()->after('role');
             $table->string('city')->nullable()->after('phone');
-            $table->text('bio')->nullable()->after('city');
         });
     }
 

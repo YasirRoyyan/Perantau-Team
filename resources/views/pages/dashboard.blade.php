@@ -11,11 +11,6 @@
         $displayName = trim($user->name);
         $handle = '@'.strtolower(preg_replace('/[^a-z0-9]+/i', '', $displayName ?: 'interiology'));
         $bio = $user->bio ?: 'Spread love and inspiration on interior.';
-        $galleryItems = range(1, 52);
-
-        // Tambahan variabel dummy statistik untuk halaman dashboard (sesuai request posts dan likes)
-        $totalPosts = 0; 
-        $totalLikes = 0;
     @endphp
 
     <main class="dashboard-page">
@@ -78,7 +73,8 @@
                         </label>
                     </form>
 
-                    <button type="button" class="dashboard-upload" style="flex-shrink: 0;">
+                    {{-- MODIFIKASI: Mengarahkan tombol untuk memicu fungsi buka modal upload --}}
+                    <button type="button" class="dashboard-upload" style="flex-shrink: 0;" onclick="openUploadModal()">
                         <svg viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M12 15V4"></path>
                             <path d="m7 9 5-5 5 5"></path>
@@ -90,15 +86,98 @@
                 <h2 id="dashboard-title">Jelajahi Inspirasi Interior</h2>
             </header>
 
+            {{-- GRID GALERI UTAMA: Sekarang membaca data dinamis asli hasil upload database --}}
             <div class="dashboard-gallery" aria-label="Galeri inspirasi interior">
-                @foreach ($galleryItems as $item)
-                    <article class="dashboard-gallery-card" aria-label="Inspirasi interior {{ $item }}"></article>
-                @endforeach
+                @forelse ($galleryItems as $item)
+                    <article class="dashboard-gallery-card" style="background-image: url('{{ asset('storage/' . $item->image) }}'); background-size: cover; background-position: center; border-radius: 8px; aspect-ratio: 1/1; position: relative; cursor: pointer;" aria-label="Inspirasi interior dari {{ $item->user->name }}">
+                        <div style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.6); padding: 8px; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; color: #fff; font-size: 0.8rem; font-family: sans-serif;">
+                            <strong>{{ '@' . strtolower($item->user->name) }}</strong>
+                        </div>
+                    </article>
+                @empty
+                    {{-- Tampilan interaktif jika database tabel posts masih kosong --}}
+                    <div style="grid-column: 1/-1; text-align: center; padding: 80px 20px; color: #ccc; font-family: sans-serif;">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 12px; opacity: 0.6;">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg>
+                        <p style="font-size: 1.1rem; margin: 0;">Belum ada inspirasi interior yang dibagikan.</p>
+                        <p style="font-size: 0.85rem; opacity: 0.7; margin: 5px 0 0 0;">Yuk, jadilah orang pertama yang membagikan karya desain interior ruangan!</p>
+                    </div>
+                @endforelse
             </div>
         </section>
     </main>
 
-    {{-- REVISI TAMBAHAN: MODAL POP-UP UI CUSTOM (DIPAKSA HIDDEN SECARA DEFAULT) --}}
+    {{-- 🌟 1. MODAL POP-UP CUSTOM: UPLOAD POSTINGAN BARU (TWO-COLUMN INTERACTIVE LAYOUT) 🌟 --}}
+    <div id="upload-post-modal" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); align-items: center; justify-content: center; transition: all 0.3s ease;">
+        <form action="{{ route('post.store') }}" method="POST" enctype="multipart/form-data" style="background-color: #ffffff; width: 90%; max-width: 850px; border-radius: 16px; overflow: hidden; display: flex; box-shadow: 0 20px 40px rgba(0,0,0,0.4); max-height: 90vh; transform: scale(0.95); transition: transform 0.3s ease;" id="upload-modal-box">
+            @csrf
+            
+            {{-- SECTOR KIRI: Area Dropzone Tempat Ambil Foto Gambar & Preview Real-Time --}}
+            <div style="flex: 1.2; background-color: #f1ede6; display: flex; align-items: center; justify-content: center; position: relative; border-right: 1px solid #e0dacb; min-height: 450px;">
+                <input type="file" name="image" id="post-image-input" accept="image/*" required style="position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 10;" onchange="previewPostImage(this)">
+                
+                {{-- State Sebelum File Foto Dipilih --}}
+                <div id="upload-placeholder" style="text-align: center; padding: 20px; color: #5d534a; font-family: sans-serif;">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 10px;">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <p style="font-weight: bold; margin: 0 0 5px 0;">Pilih Gambar Interior</p>
+                    <p style="font-size: 0.8rem; opacity: 0.7; margin: 0;">Klik atau seret file foto ke area ini</p>
+                </div>
+
+                {{-- State Preview Gambar Ketika Berhasil Terbaca Lokal --}}
+                <img id="upload-image-preview" src="#" alt="Preview" style="display: none; width: 100%; height: 100%; object-fit: cover; position: absolute; top:0; left:0;">
+            </div>
+
+            {{-- SECTOR KANAN: Form Input Konten Caption, Identitas Akun, & Jumlah Status Post --}}
+            <div style="flex: 1; padding: 25px; display: flex; flex-direction: column; justify-content: space-between; background-color: #ffffff; font-family: sans-serif;">
+                <div>
+                    {{-- Header Pop-up & Tombol Silang --}}
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 style="margin: 0; font-size: 1.2rem; color: #5d534a; font-weight: 600;">Buat Postingan Baru</h3>
+                        <button type="button" onclick="closeUploadModal()" style="background: none; border: none; font-size: 1.6rem; cursor: pointer; color: #a09485; line-height: 1;">&times;</button>
+                    </div>
+
+                    {{-- Metadata Info Akun Aktif & Status Jumlah Postingan Sekarang --}}
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+                        @if ($user->avatar && \Storage::disk('public')->exists($user->avatar))
+                            <img src="{{ asset('storage/' . $user->avatar) }}" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 1px solid #e0dacb;">
+                        @else
+                            <div style="width: 42px; height: 42px; border-radius: 50%; background-color: #5d534a; color: #e0dacb; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.95rem;">
+                                {{ strtoupper(substr($displayName, 0, 1)) }}
+                            </div>
+                        @endif
+                        <div>
+                            <p style="margin: 0; font-weight: bold; color: #333; font-size: 0.95rem;">{{ $handle }}</p>
+                            {{-- REQUEST REVISI: "dibawah foto dan usn profile ada status jumlah postingan" --}}
+                            <p style="margin: 2px 0 0 0; font-size: 0.78rem; color: #777; font-weight: 500;">{{ $totalPosts }} postingan dibagikan</p>
+                        </div>
+                    </div>
+
+                    {{-- Kolom Input Editor Teks Caption --}}
+                    <div style="margin-bottom: 15px;">
+                        <textarea name="caption" rows="6" placeholder="Tulis deskripsi / caption inspirasi ruangan interior kamu di sini..." style="width: 100%; border: 1px solid #e0dacb; border-radius: 8px; padding: 12px; font-size: 0.95rem; resize: none; box-sizing: border-box; outline: none; font-family: sans-serif; color: #333;" oninput="countCaptionChars(this)"></textarea>
+                        <div style="text-align: right; font-size: 0.75rem; color: #a09485; margin-top: 5px;">
+                            <span id="char-counter">0</span>/1000 karakter
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Action Panel Buttons --}}
+                <div style="display: flex; gap: 10px;">
+                    <button type="button" onclick="closeUploadModal()" style="flex: 1; background-color: #f1ede6; color: #5d534a; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.95rem;">Batal</button>
+                    <button type="submit" style="flex: 2; background-color: #d17a22; color: #ffffff; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.95rem; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='#b8661b'" onmouseout="this.style.backgroundColor='#d17a22'">Post / Bagikan</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    {{-- 🌟 2. MODAL POP-UP UI CUSTOM: ALERTS PENCARIAN USER TIDAK DITEMUKAN 🌟 --}}
     <div id="custom-alert-modal" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); align-items: center; justify-content: center; backdrop-filter: blur(3px); transition: all 0.3s ease;">
         <div style="background-color: #5d534a; border: 2px solid #d17a22; border-radius: 12px; width: 90%; max-width: 400px; padding: 25px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transform: scale(0.9); transition: transform 0.3s ease; font-family: sans-serif;" id="modal-box">
             <div style="background-color: rgba(209, 122, 34, 0.15); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto;">
@@ -116,16 +195,60 @@
         </div>
     </div>
 
-    {{-- JAVASCRIPT LOGIKA PENCARIAN & POP-UP INTERAKTIF --}}
+    {{-- SCRIPTS LOGIKA PENGENDALI OPERASIONAL POP-UP MODAL --}}
     <script>
+        // --- LOGIKA UTAMA MODAL UPLOAD POSTINGAN BARU ---
+        function openUploadModal() {
+            const modal = document.getElementById('upload-post-modal');
+            const modalBox = document.getElementById('upload-modal-box');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modalBox.style.transform = 'scale(1)';
+            }, 50);
+        }
+
+        function closeUploadModal() {
+            const modal = document.getElementById('upload-post-modal');
+            const modalBox = document.getElementById('upload-modal-box');
+            modalBox.style.transform = 'scale(0.95)';
+            
+            setTimeout(() => {
+                modal.style.display = 'none';
+                // Reset isian form jika user membatalkan upload
+                document.getElementById('post-image-input').value = "";
+                document.getElementById('upload-image-preview').style.display = 'none';
+                document.getElementById('upload-placeholder').style.display = 'block';
+                document.getElementById('char-counter').innerText = "0";
+                document.querySelector('textarea[name="caption"]').value = "";
+            }, 150);
+        }
+
+        // Membaca berkas gambar lokal dari PC dan memajangnya langsung di sisi kiri modal
+        function previewPostImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('upload-image-preview').src = e.target.result;
+                    document.getElementById('upload-image-preview').style.display = 'block';
+                    document.getElementById('upload-placeholder').style.display = 'none';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Live counter penghitung batas karakter caption teks
+        function countCaptionChars(textarea) {
+            document.getElementById('char-counter').innerText = textarea.value.length;
+        }
+
+
+        // --- LOGIKA MODAL ALERT USER PENCARIAN (FITUR SEBELUMNYA) ---
         function showCustomAlert(message) {
             const modal = document.getElementById('custom-alert-modal');
             const modalBox = document.getElementById('modal-box');
             document.getElementById('modal-alert-message').innerText = message;
             
-            // Tampilkan backdrop modal menggunakan flexbox alignment
             modal.style.display = 'flex';
-            // Beri animasi pop-in kecil
             setTimeout(() => {
                 modalBox.style.transform = 'scale(1)';
             }, 50);
@@ -163,7 +286,6 @@
                     if (response.status === 200) {
                         window.location.href = targetUrl;
                     } else {
-                        // KINI MENGGUNAKAN POP-UP UI PREMIUM ASLI, BUKAN ALERT BROWSER LAGI
                         showCustomAlert(`Maaf, akun dengan nama "@${username}" tidak ditemukan atau belum terdaftar di dalam database Interiology.`);
                     }
                 })
@@ -173,11 +295,16 @@
                 });
         }
 
-        // Fitur Tambahan: Menutup modal pop-up ketika user klik di luar area kotak alert
+        // Fitur Tambahan: Klik di luar area kotak modal putih/coklat untuk menutup modal otomatis
         window.onclick = function(event) {
-            const modal = document.getElementById('custom-alert-modal');
-            if (event.target == modal) {
+            const alertModal = document.getElementById('custom-alert-modal');
+            const uploadModal = document.getElementById('upload-post-modal');
+            
+            if (event.target == alertModal) {
                 closeCustomAlert();
+            }
+            if (event.target == uploadModal) {
+                closeUploadModal();
             }
         }
     </script>

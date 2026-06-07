@@ -11,9 +11,6 @@
         $displayName = trim($user->name);
         $handle = '@'.strtolower(preg_replace('/[^a-z0-9]+/i', '', $displayName ?: 'interiology'));
         $bio = $user->bio ?: 'Spread love and inspiration on interior.';
-        
-        $totalPosts = 0; 
-        $totalLikes = 0; 
     @endphp
 
     {{-- Bagian Atas / Header Profil (Warna Cokelat Gelap) --}}
@@ -35,7 +32,7 @@
                 
                 <!-- Avatar Lingkaran Besar -->
                 <div class="profile-feed-avatar" style="width: 150px; height: 150px; flex-shrink: 0;">
-                    @if ($user->avatar)
+                    @if ($user->avatar && head(explode('/', $user->avatar)) !== 'dummy' && \Storage::disk('public')->exists($user->avatar))
                         <img src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar {{ $displayName }}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; aspect-ratio: 1/1; border: 3px solid #ffffff;">
                     @else
                         <div style="width: 100%; height: 100%; border-radius: 50%; background-color: #e0dacb; color: #5d534a; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; font-weight: bold; font-family: serif;">
@@ -48,7 +45,7 @@
                 <div style="flex-grow: 1;">
                     <h1 style="font-size: 1.8rem; font-family: serif; margin: 0 0 10px 0; color: #ffffff;">{{ $handle }}</h1>
                     
-                    <!-- STATISTIK REVISI: Hanya Postingan dan Likes -->
+                    <!-- STATISTIK DINAMIS: Update otomatis sesuai database post user terkait -->
                     <div style="display: flex; gap: 30px; margin-bottom: 15px; font-size: 0.9rem; opacity: 0.9;">
                         <div><strong style="font-size: 1.1rem;">{{ $totalPosts }}</strong> Postingan</div>
                         <div><strong style="font-size: 1.1rem;">{{ $totalLikes }}</strong> Total Suka</div>
@@ -89,20 +86,34 @@
         </div>
 
         {{-- AREA KONTEN CONTAINER --}}
-        <div style="width: 100%; max-width: 935px; margin: 0 auto;">
+        <div style="width: 100%; max-width: 935px; margin: 0 auto; padding: 20px 10px;">
             
-            <div id="content-posts" class="empty-feed-container" style="text-align: center; padding: 80px 20px; color: #726255; display: block;">
-                <div style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid #726255; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; opacity: 0.7;">
-                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path>
-                        <circle cx="12" cy="13" r="3"></circle>
-                    </svg>
-                </div>
-                <h2 style="font-family: serif; font-size: 1.5rem; margin: 0 0 8px 0; color: #4e443c;">Belum Ada Postingan</h2>
-                <p style="margin: 0; font-size: 0.9rem; opacity: 0.8; max-width: 300px; margin: 0 auto;">Inspirasi interior yang kamu bagikan nanti akan muncul di sini.</p>
+            {{-- GRID POSTINGAN USER --}}
+            <div id="content-posts" style="display: block;">
+                @if (count($posts) > 0)
+                    {{-- Grid 3 Kolom Ala Instagram --}}
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                        @foreach ($posts as $post)
+                            <article style="background-image: url('{{ asset('storage/' . $post->image) }}'); background-size: cover; background-position: center; aspect-ratio: 1/1; border-radius: 8px; position: relative; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='scale(1.02)'; this.style.boxShadow='0 5px 15px rgba(0,0,0,0.15)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.05)';">
+                            </article>
+                        @endforeach
+                    </div>
+                @else
+                    {{-- Default State jika user ini sama sekali belum pernah memposting --}}
+                    <div class="empty-feed-container" style="text-align: center; padding: 80px 20px; color: #726255;">
+                        <div style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid #726255; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; opacity: 0.7;">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path>
+                                <circle cx="12" cy="13" r="3"></circle>
+                            </svg>
+                        </div>
+                        <h2 style="font-family: serif; font-size: 1.5rem; margin: 0 0 8px 0; color: #4e443c;">Belum Ada Postingan</h2>
+                        <p style="margin: 0; font-size: 0.9rem; opacity: 0.8; max-width: 300px; margin: 0 auto;">Inspirasi interior yang dibagikan nanti akan muncul di sini.</p>
+                    </div>
+                @endif
             </div>
 
-            {{-- EMPTY STATE --}}
+            {{-- EMPTY STATE TAB TERSIMPAN --}}
             @if(auth()->id() === $user->id)
                 <div id="content-saved" class="empty-feed-container" style="text-align: center; padding: 80px 20px; color: #726255; display: none;">
                     <div style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid #726255; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; opacity: 0.7;">

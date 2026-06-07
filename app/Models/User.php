@@ -35,4 +35,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(AssessmentAttempt::class);
     }
+
+    // Relasi: Satu user bisa memposting banyak gambar
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
 }

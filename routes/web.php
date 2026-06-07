@@ -10,6 +10,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserProfileController;
 use Illuminate\Support\Facades\Route;
 
+// ==========================================
+// 🌍 ROUTE PUBLIC (Bisa diakses tanpa login)
+// ==========================================
 Route::get('/', [AssessmentController::class, 'home'])->name('home');
 Route::get('/prepare', [AssessmentController::class, 'prepare'])->name('prepare');
 Route::get('/assessment/start', [AssessmentController::class, 'start'])->name('assessment.start');
@@ -17,6 +20,9 @@ Route::get('/assessment', [AssessmentController::class, 'show'])->name('assessme
 Route::post('/assessment', [AssessmentController::class, 'answer'])->name('assessment.answer');
 Route::get('/result', [AssessmentController::class, 'result'])->name('result');
 
+// ==========================================
+// 🚪 ROUTE GUEST (Hanya diakses sebelum login)
+// ==========================================
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.store');
@@ -24,14 +30,22 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->name('register.store');
 });
 
+// ==========================================
+// 🔒 ROUTE PROTECTED (Wajib Login / Auth)
+// ==========================================
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    
+    // 📸 REVISI TAMBAHAN: Jalur untuk memproses unggahan postingan dari Pop-Up Modal
+    Route::post('/upload-post', [DashboardController::class, 'storePost'])->name('post.store');
+
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::view('/kustom-ruangan', 'pages.custom-room')->name('custom-room');
     Route::get('/user/{username}', [UserProfileController::class, 'show'])->name('user.profile');
 
+    // 🛠️ AREA CONTROL PANEL ADMIN
     Route::prefix('/admin')->name('admin.')->group(function () {
         Route::get('/content', [AdminContentController::class, 'index'])->name('content.index');
         Route::put('/content/home', [AdminContentController::class, 'updateHome'])->name('content.home');
@@ -42,6 +56,9 @@ Route::middleware('auth')->group(function () {
     });
 });
 
+// ==========================================
+// 🔄 ROUTE REDIRECTS (Pengalihan Halaman Lama)
+// ==========================================
 Route::redirect('/index.html', '/');
 Route::redirect('/HomePage.html', '/');
 Route::redirect('/PreparePage.html', '/prepare');
