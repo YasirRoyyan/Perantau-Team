@@ -23,6 +23,7 @@
                         <p class="custom-room-drop-hint" data-drop-hint>Tarik item ke ruangan ini</p>
                     </div>
                     <figcaption>*Furniture yang muncul sesuai dengan hasil tes kamu yang akurat</figcaption>
+                    <figcaption>*Gunakan key delete dan backspace untuk remove item</figcaption>
                 </figure>
 
                 <aside class="custom-room-choice" aria-label="Pilihan item ruangan">
