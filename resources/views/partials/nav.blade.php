@@ -25,15 +25,34 @@
         @foreach ($navItems as $item)
             @php
                 $authState = $item['auth_state'] ?? 'all';
-                $isVisible = $authState === 'all' || ($authState === 'guest' && auth()->guest()) || ($authState === 'auth' && auth()->check());
-                $isDashboardItem = ($item['route_name'] ?? null) === 'dashboard';
-                $isVisible = $isVisible && $authState !== 'guest' && ! ($isHome && $authState === 'auth');
-                $isVisible = $isVisible && ! $isDashboardItem;
+                
+                // 1. Cek visibilitas dasar menu
+                $isVisible = $authState === 'all' 
+                    || ($authState === 'guest' && auth()->guest()) 
+                    || ($authState === 'auth' && auth()->check());
+                
+                // 2. Sembunyikan menu "Dashboard" agar tidak duplikat dengan dropdown profil
+                if (strtolower($item['label']) === 'dashboard') {
+                    $isVisible = false;
+                }
+
+                // 3. [PERBAIKAN BARU] Sembunyikan teks "Login" dari barisan navbar tengah 
+                // karena di ujung kanan sudah ada tombol login khusus!
+                if (strtolower($item['label']) === 'login') {
+                    $isVisible = false;
+                }
+
                 $classes = trim(($item['is_cta'] ?? false) && $isHome ? 'nav-cta' : '');
+
+                // 4. Paksa menu Interiorgram agar langsung pindah page ke dashboard
+                $fixHref = $navHref($item);
+                if (strtolower($item['label']) === 'interiorgram') {
+                    $fixHref = route('dashboard');
+                }
             @endphp
 
             @if ($isVisible)
-                <li><a href="{{ $navHref($item) }}" @if ($classes) class="{{ $classes }}" @endif>{{ $item['label'] }}</a></li>
+                <li><a href="{{ $fixHref }}" @if ($classes) class="{{ $classes }}" @endif>{{ $item['label'] }}</a></li>
             @endif
         @endforeach
     </ul>
