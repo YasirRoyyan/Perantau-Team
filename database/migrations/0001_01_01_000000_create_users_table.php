@@ -17,6 +17,11 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            
+            // 🛠️ REVISI TAMBAHAN: Kolom Avatar & Bio untuk profile user baru
+            $table->string('avatar')->nullable()->default(null); // Kosong secara default
+            $table->text('bio')->default('Belum ada bio');       // Teks default jika baru daftar
+            
             $table->rememberToken();
             $table->timestamps();
         });
