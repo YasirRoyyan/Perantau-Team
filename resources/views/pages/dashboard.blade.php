@@ -16,7 +16,19 @@
 
     <main class="dashboard-page">
         <aside class="dashboard-profile-card" aria-label="Profil pengguna">
-            <div class="dashboard-avatar">{{ strtoupper(substr($displayName, 0, 1)) }}</div>
+            
+            {{-- REVISI: Logika dinamis untuk mendeteksi foto profil dari database --}}
+            @if ($user->avatar)
+                <div class="dashboard-avatar-wrapper" style="width: 150px; height: 150px; margin: 0 auto 15px auto; flex-shrink: 0;">
+                    <img src="{{ asset('storage/' . $user->avatar) }}" 
+                         alt="Foto Profil {{ $displayName }}" 
+                         style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; aspect-ratio: 1/1; display: block; border: 2px solid #d17a22;">
+                </div>
+            @else
+                {{-- Tampilan bawaan jika user belum pernah mengunggah foto profil --}}
+                <div class="dashboard-avatar">{{ strtoupper(substr($displayName, 0, 1)) }}</div>
+            @endif
+
             <h1>{{ $handle }}</h1>
             <p>{{ $bio }}</p>
 
