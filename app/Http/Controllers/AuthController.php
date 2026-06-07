@@ -35,7 +35,7 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->route('home');
+        return redirect()->intended(route('home'));
     }
 
     public function showRegister(): View
