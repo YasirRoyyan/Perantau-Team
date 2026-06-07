@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminContentController;
 use App\Http\Controllers\AdminQuestionController;
 use App\Http\Controllers\AdminResultController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserProfileController;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,7 @@ Route::get('/result', [AssessmentController::class, 'result'])->name('result');
 // 🚪 ROUTE GUEST (Hanya diakses sebelum login)
 // ==========================================
 Route::middleware('guest')->group(function () {
+    Route::post('/api/posts/store', [PostController::class, 'store']);
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.store');
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
@@ -42,7 +44,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::view('/kustom-ruangan', 'pages.custom-room')->name('custom-room');
+    Route::get('/kustom-ruangan', [PostController::class, 'customRoom'])->name('custom-room');
     Route::get('/user/{username}', [UserProfileController::class, 'show'])->name('user.profile');
 
     // 🛠️ AREA CONTROL PANEL ADMIN

@@ -168,6 +168,27 @@
         resultScreen.hidden = false;
     }
 
+    function simpanDesainRuangan(){
+        const areaDesain = document.getElementById('area-drag-drop');
+        html2canvas(areaDesain).then(canvas => {
+            const dataGambar = canvas.toDataURL('image/png');
+
+            fetch('/api/simpan-postingan', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ image: dataGambar })
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('Desainmu berhasil dipublish ke Interiorgram!');
+            window.location.href = '/interiogram';
+        });
+    });
+}
+
     dropZone.addEventListener('dragover', (event) => {
         event.preventDefault();
         dropZone.classList.add('is-over');
