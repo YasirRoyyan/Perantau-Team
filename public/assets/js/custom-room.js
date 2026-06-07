@@ -120,6 +120,9 @@
         item.setPointerCapture(event.pointerId);
         movePlacedItem(event, item);
 
+        root.querySelectorAll('.placed-room-item').forEach(el => el.classList.remove('is-selected'));
+        item.classList.add('is-selected');
+
         item.addEventListener('pointermove', handleMovingItem);
         item.addEventListener('pointerup', stopMovingItem, { once: true });
         item.addEventListener('pointercancel', stopMovingItem, { once: true });
@@ -198,6 +201,19 @@
     finishButton.addEventListener('click', () => {
         if (! finishButton.disabled) {
             showResult();
+        }
+    });
+
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Delete' || event.key === 'Backspace') {
+            // Cari barang di dalam ruangan yang sedang diseleksi
+            const selectedItem = root.querySelector('.placed-room-item.is-selected');
+            
+            if (selectedItem) {
+                selectedItem.remove(); // Hapus dari layar
+                setFinishState(); // Perbarui status tombol finish (apakah masih ada barang/tidak)
+                console.log('Furnitur berhasil dihapus.');
+            }
         }
     });
 
