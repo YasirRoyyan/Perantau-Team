@@ -7,10 +7,18 @@
     @include('partials.nav')
 
     <main class="profile-page">
+
+    
+
         <section class="profile-card">
             
+        <a href="{{ route('dashboard') }}" class="back-button" aria-label="Kembali ke beranda">
+            <span class="back-icon" aria-hidden="true"></span>
+        </a>
+        <br>
+        <br>
             <div class="profile-heading" style="display: flex; align-items: center; gap: 20px; width: 100%; margin-bottom: 25px;">
-                
+                <br>
                 <div class="profile-avatar-wrapper" style="flex-shrink: 0; width: 80px; height: 80px;">
                     <img id="avatarPreview" src="{{ $user->avatar ? asset('storage/' . $user->avatar) : asset('assets/images/default-avatar.png') }}"  
                          alt="Foto Profil"
