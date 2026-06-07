@@ -12,38 +12,44 @@
         $handle = '@'.strtolower(preg_replace('/[^a-z0-9]+/i', '', $displayName ?: 'interiology'));
         $bio = $user->bio ?: 'Spread love and inspiration on interior.';
         $galleryItems = range(1, 52);
+
+        // Tambahan variabel dummy statistik untuk halaman dashboard (sesuai request posts dan likes)
+        $totalPosts = 0; 
+        $totalLikes = 0;
     @endphp
 
     <main class="dashboard-page">
         <aside class="dashboard-profile-card" aria-label="Profil pengguna">
             
-            {{-- REVISI: Logika dinamis untuk mendeteksi foto profil dari database --}}
-            @if ($user->avatar)
-                <div class="dashboard-avatar-wrapper" style="width: 150px; height: 150px; margin: 0 auto 15px auto; flex-shrink: 0;">
-                    <img src="{{ asset('storage/' . $user->avatar) }}" 
-                         alt="Foto Profil {{ $displayName }}" 
-                         style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; aspect-ratio: 1/1; display: block; border: 2px solid #d17a22;">
-                </div>
-            @else
-                {{-- Tampilan bawaan jika user belum pernah mengunggah foto profil --}}
-                <div class="dashboard-avatar">{{ strtoupper(substr($displayName, 0, 1)) }}</div>
-            @endif
+            <a href="{{ route('user.profile', $user->name) }}" style="text-decoration: none; display: block; margin: 0 auto 15px auto; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+                @if ($user->avatar)
+                    <div class="dashboard-avatar-wrapper" style="width: 150px; height: 150px; margin: 0 auto; flex-shrink: 0;">
+                        <img src="{{ asset('storage/' . $user->avatar) }}" 
+                             alt="Foto Profil {{ $displayName }}" 
+                             style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; aspect-ratio: 1/1; display: block; border: 2px solid #d17a22;">
+                    </div>
+                @else
 
-            <h1>{{ $handle }}</h1>
+                    <div class="dashboard-avatar" style="margin: 0 auto;">{{ strtoupper(substr($displayName, 0, 1)) }}</div>
+                @endif
+            </a>
+
+            <h1>
+                <a href="{{ route('user.profile', $user->name) }}" style="color: inherit; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#d17a22'" onmouseout="this.style.color='inherit'">
+                    {{ $handle }}
+                </a>
+            </h1>
+            
             <p>{{ $bio }}</p>
 
-            <dl class="dashboard-social-stats">
-                <div>
-                    <dt>Postingan</dt>
-                    <dd>37</dd>
+            <dl class="dashboard-social-stats" style="display: flex; justify-content: center; align-items: center; gap: 40px; margin: 20px 0; padding: 0; list-style: none;">
+                <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+                    <dt style="font-size: 0.85rem; color: #ccc; order: 1; margin-bottom: 4px;">Postingan</dt>
+                    <dd style="font-size: 1.6rem; font-weight: bold; color: #ffffff; margin: 0; order: 2;">{{ $totalPosts }}</dd>
                 </div>
-                <div>
-                    <dt>Mengikuti</dt>
-                    <dd>1.3k</dd>
-                </div>
-                <div>
-                    <dt>Pengikut</dt>
-                    <dd>4.0k</dd>
+                <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+                    <dt style="font-size: 0.85rem; color: #ccc; order: 1; margin-bottom: 4px;">Total Suka</dt>
+                    <dd style="font-size: 1.6rem; font-weight: bold; color: #ffffff; margin: 0; order: 2;">{{ $totalLikes }}</dd>
                 </div>
             </dl>
 
