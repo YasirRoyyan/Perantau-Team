@@ -21,16 +21,20 @@
     <main class="dashboard-page">
         <aside class="dashboard-profile-card" aria-label="Profil pengguna">
             
+            {{-- REVISI AVATAR DASHBOARD: PAKSA MATIKAN BACKGROUND IMAGE BAWAAN CSS --}}
             <a href="{{ route('user.profile', $user->name) }}" style="text-decoration: none; display: block; margin: 0 auto 15px auto; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
-                @if ($user->avatar)
+                {{-- Hanya tampilkan foto jika user mengunggah foto profil asli --}}
+                @if ($user->avatar && head(explode('/', $user->avatar)) !== 'dummy' && \Storage::disk('public')->exists($user->avatar))
                     <div class="dashboard-avatar-wrapper" style="width: 150px; height: 150px; margin: 0 auto; flex-shrink: 0;">
                         <img src="{{ asset('storage/' . $user->avatar) }}" 
                              alt="Foto Profil {{ $displayName }}" 
                              style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; aspect-ratio: 1/1; display: block; border: 2px solid #d17a22;">
                     </div>
                 @else
-
-                    <div class="dashboard-avatar" style="margin: 0 auto;">{{ strtoupper(substr($displayName, 0, 1)) }}</div>
+                    {{-- DEFAULT: Ditambahkan 'background-image: none !important' agar gambar dummy CSS hilang total --}}
+                    <div class="dashboard-avatar" style="margin: 0 auto; width: 150px; height: 150px; border-radius: 50%; background-color: #5d534a; color: #e0dacb; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; font-weight: bold; border: 2px solid #d17a22; font-family: serif; box-shadow: 0 4px 10px rgba(0,0,0,0.15); background-image: none !important;">
+                        {{ strtoupper(substr($displayName, 0, 1)) }}
+                    </div>
                 @endif
             </a>
 
