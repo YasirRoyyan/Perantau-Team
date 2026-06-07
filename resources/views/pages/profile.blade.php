@@ -7,19 +7,43 @@
     @include('partials.nav')
 
     <main class="profile-page">
+
+    
+
         <section class="profile-card">
-            <div class="profile-heading">
-                <div>
-                    <p class="eyebrow">Profil</p>
-                    <h1>{{ $user->name }}</h1>
-                    <p class="auth-copy">Kelola data akun dan profil singkat kamu.</p>
+            
+        <a href="{{ route('dashboard') }}" class="back-button" aria-label="Kembali ke beranda">
+            <span class="back-icon" aria-hidden="true"></span>
+        </a>
+        <br>
+        <br>
+            <div class="profile-heading" style="display: flex; align-items: center; gap: 20px; width: 100%; margin-bottom: 25px;">
+                <br>
+                <div class="profile-avatar-wrapper" style="flex-shrink: 0; width: 80px; height: 80px;">
+                    <img id="avatarPreview" src="{{ $user->avatar ? asset('storage/' . $user->avatar) : asset('assets/images/default-avatar.png') }}"  
+                         alt="Foto Profil"
+                         style="width: 100%; height: 100%; border-radius: 50%; aspect-ratio: 1/1; object-fit: cover; border: 2px solid #d17a22; display: block;">
                 </div>
-                <span class="role-badge">{{ ucfirst($user->role) }}</span>
+
+                <div style="flex-grow: 1;">
+                    <p class="eyebrow" style="margin: 0; color: #d17a22; font-weight: bold; font-size: 0.85rem; text-transform: uppercase;">Profil</p>
+                    <h1 style="margin: 5px 0 0 0; font-size: 2.2rem; font-family: serif;">{{ $user->name }}</h1>
+                    <p class="auth-copy" style="margin: 2px 0 0 0; color: #666; font-size: 0.9rem;">Kelola data akun dan profil singkat kamu.</p>
+                </div>
+
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 10px; flex-shrink: 0;">
+                    <span class="role-badge" style="margin: 0;">{{ ucfirst($user->role) }}</span>
+                    
+                    <label style="background-color: #d17a22; color: white; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 500; text-align: center; transition: background 0.2s;">
+                         Ganti Foto
+                        <input type="file" id="avatarInput" name="avatar" form="profileForm" accept="image/*" style="display: none;" onchange="previewImage(event)">
+                    </label>
+                </div>
             </div>
 
             @include('partials.alerts')
 
-            <form action="{{ route('profile.update') }}" method="POST" class="profile-form">
+            <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" id="profileForm" class="profile-form">
                 @csrf
                 @method('PUT')
 
@@ -84,4 +108,22 @@
 
 @push('scripts')
     <script src="{{ asset('assets/js/password-toggle.js') }}"></script>
+    
+    <script>
+        function previewImage(event) {
+            const input = event.target;
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const preview = document.getElementById('avatarPreview');
+                    if (preview) {
+                        preview.src = e.target.result;
+                    }
+                }
+                
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
 @endpush

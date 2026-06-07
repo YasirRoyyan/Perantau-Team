@@ -23,6 +23,22 @@
             <a href="{{ route('prepare') }}" class="btn-tes-baru">Mulai Tes Baru</a>
         </div>
 
-        <a href="{{ asset($result['image']) }}" class="download-link" id="download-link" download="interiology-hasil-{{ $type }}.png">Download Gambar di sini</a>
+        <!-- <div style="text-align: center; margin-top: 25px; margin-bottom: 5px;">
+            <a href="{{ route('custom-room') }}" class="download-link" style="color: #d17a22; font-weight: 600; text-decoration: underline;">
+                Tertarik mengatur tata letak furnitur tipe ini? Coba Fitur Kustom Ruangan di sini
+            </a>
+        </div> -->
+
+        <div style="text-align: center; margin-top: 30px; display: flex; flex-direction: column; gap: 8px; align-items: center;">
+            
+            <a href="{{ route('custom-room') }}" class="download-link" style="color: #311e0b; font-weight: 600; text-decoration: underline; margin: 0; padding: 0;">
+                Tertarik menyusun ruangan anda sendiri? Coba disini!
+            </a>
+
+            <a href="{{ asset($result['image']) }}" class="download-link" id="download-link" download="interiology-hasil-{{ $type }}.png" style="margin: 0; padding: 0;">
+                Download Gambar di sini
+            </a>
+            
+        </div>
     </main>
 @endsection
