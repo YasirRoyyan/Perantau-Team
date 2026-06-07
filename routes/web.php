@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminQuestionController;
 use App\Http\Controllers\AdminResultController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AssessmentController::class, 'home'])->name('home');
@@ -29,6 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::view('/kustom-ruangan', 'pages.custom-room')->name('custom-room');
+    Route::get('/user/{username}', [UserProfileController::class, 'show'])->name('user.profile');
 
     Route::prefix('/admin')->name('admin.')->group(function () {
         Route::get('/content', [AdminContentController::class, 'index'])->name('content.index');
