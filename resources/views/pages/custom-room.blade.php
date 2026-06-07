@@ -66,12 +66,15 @@
             </div>
 
             <div class="posts-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
-
-                @foreach ( $posts as $post )
+                @forelse ($posts as $post)
                     <div class="post-card" style="background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
                         <img src="{{ asset('storage/' . $post->design_image) }}" alt="Hasil Desain Ruangan" style="width: 100%; height: 250px; object-fit: cover;">
                     </div>
-                @endforeach
+                @empty
+                    <div style="grid-column: 1 / -1; padding: 24px; text-align: center; color: #726255; background: #fff; border-radius: 20px;">
+                        Belum ada hasil desain yang diposting.
+                    </div>
+                @endforelse
             </div>
         </section>
     </main>

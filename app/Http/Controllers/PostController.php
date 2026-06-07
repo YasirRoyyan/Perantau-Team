@@ -32,9 +32,16 @@ class PostController extends Controller
     }
 
     public function index()
-{
-    $allPosts = Post::latest()->get();
+    {
+        $allPosts = Post::latest()->get();
 
-    return view('interiorgram', ['posts' => $allPosts]);
-}
+        return view('interiorgram', ['posts' => $allPosts]);
+    }
+
+    public function customRoom()
+    {
+        $posts = Post::latest()->get();
+
+        return view('pages.custom-room', ['posts' => $posts]);
+    }
 }

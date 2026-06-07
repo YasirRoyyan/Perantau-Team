@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::view('/kustom-ruangan', 'pages.custom-room')->name('custom-room');
+    Route::get('/kustom-ruangan', [PostController::class, 'customRoom'])->name('custom-room');
     Route::get('/user/{username}', [UserProfileController::class, 'show'])->name('user.profile');
 
     Route::prefix('/admin')->name('admin.')->group(function () {
