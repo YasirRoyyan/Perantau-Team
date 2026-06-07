@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminContentController;
 use App\Http\Controllers\AdminQuestionController;
 use App\Http\Controllers\AdminResultController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,6 +18,7 @@ Route::post('/assessment', [AssessmentController::class, 'answer'])->name('asses
 Route::get('/result', [AssessmentController::class, 'result'])->name('result');
 
 Route::middleware('guest')->group(function () {
+    Route::post('/api/posts/store', [PostController::class, 'store']);
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.store');
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
