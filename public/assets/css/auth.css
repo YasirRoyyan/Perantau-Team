@@ -577,6 +577,15 @@ textarea:focus {
     transform: translateY(-1px);
 }
 
+.dashboard-profile-card {
+    gap: 0;
+}
+
+.dashboard-profile-card p {
+    margin-top: 12px;
+    line-height: 1.35;
+}
+
 .dashboard-admin-link {
     margin-top: 12px;
     border: 1px solid rgba(255, 253, 243, 0.42);
@@ -692,6 +701,32 @@ textarea:focus {
     border-radius: 18px;
     overflow: hidden;
     background: #d3d3d3;
+}
+
+.dashboard-gallery-card--post {
+    box-shadow: 0 10px 22px rgba(40, 25, 12, 0.12);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.dashboard-gallery-card--post:hover,
+.dashboard-gallery-card--post:focus-visible {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 16px 28px rgba(40, 25, 12, 0.18);
+    outline: none;
+}
+
+.dashboard-gallery-card__label {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: 10px 11px 9px;
+    border-bottom-left-radius: 18px;
+    border-bottom-right-radius: 18px;
+    background: linear-gradient(to top, rgba(18, 10, 6, 0.72), rgba(18, 10, 6, 0));
+    color: var(--white);
+    font-family: 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.2;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
 }
 
 .sr-only {
@@ -853,6 +888,40 @@ th {
         padding: 24px 20px 56px;
     }
 
+    .profile-feed-top-section {
+        padding: 32px 18px !important;
+    }
+
+    .profile-feed-top-section > div {
+        max-width: 100% !important;
+    }
+
+    .profile-feed-top-section > div > div[style*="gap: 60px"] {
+        gap: 22px !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+    }
+
+    .profile-feed-top-section .profile-feed-avatar {
+        width: 118px !important;
+        height: 118px !important;
+    }
+
+    .profile-feed-top-section h1 {
+        font-size: clamp(28px, 8vw, 40px) !important;
+    }
+
+    .profile-feed-top-section p {
+        max-width: 100% !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+    .profile-feed-top-section a[href*="profile.show"] {
+        min-height: 42px;
+    }
+
     .dashboard-page {
         grid-template-columns: 1fr;
         grid-template-rows: auto minmax(0, 1fr);
@@ -936,6 +1005,13 @@ th {
     .dashboard-gallery-card {
         height: 168px;
         border-radius: 22px;
+    }
+
+    .dashboard-gallery-card__label {
+        border-bottom-left-radius: 22px;
+        border-bottom-right-radius: 22px;
+        font-size: 12px;
+        padding: 8px 10px 7px;
     }
 
     .auth-card,

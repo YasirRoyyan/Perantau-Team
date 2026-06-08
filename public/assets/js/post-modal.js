@@ -23,8 +23,28 @@
     const closeTargets = modal.querySelectorAll('[data-post-modal-close]');
 
     let activeCard = null;
+    let closeTimer = null;
+
+    function pulseButton(button) {
+        if (! button) {
+            return;
+        }
+
+        button.classList.remove('is-pulsing');
+        void button.offsetWidth;
+        button.classList.add('is-pulsing');
+
+        window.setTimeout(() => {
+            button.classList.remove('is-pulsing');
+        }, 240);
+    }
 
     function openModal(card) {
+        if (closeTimer) {
+            window.clearTimeout(closeTimer);
+            closeTimer = null;
+        }
+
         activeCard = card;
         const ownerId = Number(card.dataset.postOwnerId || 0);
         const liked = card.dataset.postLiked === '1';
@@ -50,14 +70,22 @@
         deleteConfirmButton.disabled = false;
 
         modal.hidden = false;
+        window.requestAnimationFrame(() => {
+            modal.classList.add('is-open');
+        });
         document.body.style.overflow = 'hidden';
     }
 
     function closeModal() {
-        modal.hidden = true;
+        modal.classList.remove('is-open');
         document.body.style.overflow = '';
         deleteConfirm.hidden = true;
         activeCard = null;
+
+        closeTimer = window.setTimeout(() => {
+            modal.hidden = true;
+            closeTimer = null;
+        }, 220);
     }
 
     async function toggleLike() {
@@ -93,6 +121,7 @@
             activeCard.dataset.postLikes = String(likesCount);
             likesEl.textContent = likesCount + ' suka';
             likeButton.classList.toggle('is-active', liked);
+            pulseButton(likeButton);
 
             if (ownerId === currentUserId) {
                 document.querySelectorAll('[data-profile-total-likes], [data-dashboard-total-likes]').forEach((totalLikesEl) => {
@@ -136,6 +165,7 @@
             const favorited = Boolean(data.favorited);
             activeCard.dataset.postFavorited = favorited ? '1' : '0';
             favoriteButton.classList.toggle('is-active', favorited);
+            pulseButton(favoriteButton);
             statusEl.textContent = favorited ? 'Disimpan ke favorit' : 'Dihapus dari favorit';
         } catch (error) {
             statusEl.textContent = error.message || 'Gagal memperbarui favorit.';

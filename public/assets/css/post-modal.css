@@ -13,6 +13,8 @@
     inset: 0;
     background: rgba(24, 18, 12, 0.72);
     backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: opacity 0.22s ease;
 }
 
 .post-detail-modal__dialog {
@@ -25,6 +27,18 @@
     display: grid;
     grid-template-columns: 1.15fr 0.85fr;
     box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+    transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.post-detail-modal.is-open .post-detail-modal__backdrop {
+    opacity: 1;
+}
+
+.post-detail-modal.is-open .post-detail-modal__dialog {
+    opacity: 1;
+    transform: translateY(0) scale(1);
 }
 
 .post-detail-modal__close {
@@ -56,7 +70,7 @@
 }
 
 .post-detail-modal__content {
-    padding: 28px;
+    padding: 30px 30px 28px;
     display: grid;
     align-content: start;
     gap: 18px;
@@ -66,7 +80,7 @@
 .post-detail-modal__author {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 15px;
 }
 
 .post-detail-modal__author img {
@@ -79,7 +93,7 @@
 
 .post-detail-modal__author-copy {
     display: grid;
-    gap: 3px;
+    gap: 4px;
     min-width: 0;
 }
 
@@ -135,12 +149,13 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-top: 4px;
+    margin-top: 2px;
+    flex-wrap: wrap;
 }
 
 .post-detail-modal__icon-btn {
-    width: 46px;
-    height: 46px;
+    width: 48px;
+    height: 48px;
     border-radius: 12px;
     border: 0;
     background: #efe7d8;
@@ -149,6 +164,10 @@
     justify-content: center;
     cursor: pointer;
     transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.post-detail-modal__icon-btn.is-pulsing {
+    animation: postActionPulse 0.22s ease;
 }
 
 .post-detail-modal__icon-btn svg {
@@ -196,7 +215,8 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-top: 2px;
+    margin-top: 4px;
+    flex-wrap: wrap;
 }
 
 .post-detail-modal__link {
@@ -300,5 +320,40 @@
 
     .post-detail-modal__media img {
         max-height: 48vh;
+    }
+
+    .post-detail-modal__content {
+        padding: 24px 22px 22px;
+        gap: 16px;
+    }
+
+    .post-detail-modal__author img {
+        width: 48px;
+        height: 48px;
+    }
+
+    .post-detail-modal__icon-btn {
+        width: 46px;
+        height: 46px;
+    }
+
+    .post-detail-modal__actions {
+        gap: 10px;
+    }
+
+    .post-detail-modal__link {
+        width: fit-content;
+    }
+}
+
+@keyframes postActionPulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.08);
+    }
+    100% {
+        transform: scale(1);
     }
 }

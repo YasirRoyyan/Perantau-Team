@@ -10,10 +10,10 @@
 @endphp
 
 <article
-    class="dashboard-gallery-card"
+    class="dashboard-gallery-card dashboard-gallery-card--post"
     tabindex="0"
     role="button"
-    style="background-image: url('{{ asset('storage/' . $post->image) }}'); background-size: cover; background-position: center; border-radius: 8px; aspect-ratio: 1/1; position: relative; cursor: pointer;"
+    style="background-image: linear-gradient(to bottom, rgba(24, 18, 12, 0.05) 42%, rgba(24, 18, 12, 0.58) 100%), url('{{ asset('storage/' . $post->image) }}'); background-size: cover; background-position: center; border-radius: 8px; aspect-ratio: 1/1; position: relative; cursor: pointer; transition: transform 0.18s ease, box-shadow 0.18s ease;"
     aria-label="Inspirasi interior dari {{ $post->user->name }}"
     data-post-card
     data-post-id="{{ $post->id }}"
@@ -33,7 +33,7 @@
     data-post-profile-url="{{ route('user.profile', $post->user->name) }}"
     data-post-user-avatar="{{ $avatar }}"
 >
-    <div style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.6); padding: 8px; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; color: #fff; font-size: 0.8rem; font-family: sans-serif;">
+    <div class="dashboard-gallery-card__label">
         <strong>{{ '@' . strtolower($post->user->name) }}</strong>
     </div>
 </article>
