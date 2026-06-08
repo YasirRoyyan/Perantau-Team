@@ -14,6 +14,9 @@
     const finishButton = root.querySelector('[data-finish-room]');
     const resetButton = root.querySelector('[data-reset-room]');
     const editButton = root.querySelector('[data-edit-room]');
+    const postButton = root.querySelector('[data-post-room]');
+    const postStatus = root.querySelector('[data-post-status]');
+    const captionInput = root.querySelector('[data-room-caption]');
     const dropHint = root.querySelector('[data-drop-hint]');
 
     const assetPath = (fileName) => new URL('../images/'+fileName, document.currentScript.src).href;
@@ -168,26 +171,87 @@
         resultScreen.hidden = false;
     }
 
-    function simpanDesainRuangan(){
-        const areaDesain = document.getElementById('area-drag-drop');
-        html2canvas(areaDesain).then(canvas => {
-            const dataGambar = canvas.toDataURL('image/png');
-
-            fetch('/api/simpan-postingan', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({ image: dataGambar })
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert('Desainmu berhasil dipublish ke Interiorgram!');
-            window.location.href = '/interiogram';
+    function loadImage(src) {
+        return new Promise((resolve, reject) => {
+            const image = new Image();
+            image.onload = () => resolve(image);
+            image.onerror = reject;
+            image.src = src;
         });
-    });
-}
+    }
+
+    async function captureResultPreview() {
+        const preview = root.querySelector('[data-result-preview]');
+        const previewRect = preview.getBoundingClientRect();
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+
+        canvas.width = Math.round(previewRect.width);
+        canvas.height = Math.round(previewRect.height);
+
+        const baseImage = await loadImage(preview.querySelector('img').src);
+        context.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
+
+        for (const item of Array.from(resultLayer.querySelectorAll('.placed-room-item'))) {
+            const itemImage = item.querySelector('img');
+            const itemRect = item.getBoundingClientRect();
+            const renderedImage = await loadImage(itemImage.src);
+
+            context.drawImage(
+                renderedImage,
+                itemRect.left - previewRect.left,
+                itemRect.top - previewRect.top,
+                itemRect.width,
+                itemRect.height
+            );
+        }
+
+        return canvas.toDataURL('image/png');
+    }
+
+    async function postRoomDesign() {
+        if (! postButton) {
+            return;
+        }
+
+        postButton.disabled = true;
+        postButton.textContent = 'Memposting...';
+
+        if (postStatus) {
+            postStatus.textContent = '';
+        }
+
+        try {
+            const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            const image = await captureResultPreview();
+            const response = await fetch('/api/posts/store', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': token || ''
+                },
+                body: JSON.stringify({
+                    image,
+                    caption: captionInput ? captionInput.value.trim() : ''
+                })
+            });
+
+            if (! response.ok) {
+                const data = await response.json().catch(() => ({}));
+                throw new Error(data.message || 'Desain gagal diposting.');
+            }
+
+            window.location.href = '/dashboard';
+        } catch (error) {
+            postButton.disabled = false;
+            postButton.textContent = 'Posting Sekarang';
+
+            if (postStatus) {
+                postStatus.textContent = error.message || 'Desain gagal diposting.';
+            }
+        }
+    }
 
     dropZone.addEventListener('dragover', (event) => {
         event.preventDefault();
@@ -218,6 +282,7 @@
 
     resetButton.addEventListener('click', resetRoom);
     editButton.addEventListener('click', resetRoom);
+    postButton?.addEventListener('click', postRoomDesign);
 
     finishButton.addEventListener('click', () => {
         if (! finishButton.disabled) {

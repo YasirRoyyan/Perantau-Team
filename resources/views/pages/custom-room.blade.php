@@ -61,25 +61,18 @@
             <div class="custom-room-result-copy">
                 <h2>Ruangan yang bagus!</h2>
                 <p>Posting ruanganmu ke Interiorgram dan dapatkan banyak suka dari pengguna lain!</p>
-                <a href="{{ route('dashboard') }}" class="custom-room-post">Posting Sekarang</a>
+                <label class="custom-room-caption-field">
+                    <span>Catatan postingan (opsional)</span>
+                    <textarea data-room-caption rows="4" placeholder="Tulis catatan singkat untuk postingan ini..."></textarea>
+                </label>
+                <button type="button" class="custom-room-post" data-post-room>Posting Sekarang</button>
+                <p class="custom-room-post-status" data-post-status aria-live="polite"></p>
                 <button type="button" data-edit-room>Kembali ke beranda atau edit</button>
-            </div>
-
-            <div class="posts-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
-                @forelse ($posts as $post)
-                    <div class="post-card" style="background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                        <img src="{{ asset('storage/' . $post->design_image) }}" alt="Hasil Desain Ruangan" style="width: 100%; height: 250px; object-fit: cover;">
-                    </div>
-                @empty
-                    <div style="grid-column: 1 / -1; padding: 24px; text-align: center; color: #726255; background: #fff; border-radius: 20px;">
-                        Belum ada hasil desain yang diposting.
-                    </div>
-                @endforelse
             </div>
         </section>
     </main>
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('assets/js/custom-room.js') }}"></script>
+    <script src="{{ asset('assets/js/custom-room.js') }}?v={{ filemtime(public_path('assets/js/custom-room.js')) }}"></script>
 @endpush

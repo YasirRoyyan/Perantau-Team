@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\PostFavorite;
+use App\Models\PostLike;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
@@ -22,14 +25,22 @@ class DashboardController extends Controller
         $totalLikes = $user->posts()->sum('likes_count');
 
         // 4. Mengambil SEMUA postingan terbaru dari database untuk dipajang di galeri utama
-        $galleryItems = Post::with('user')->latest()->get();
+        $galleryItems = Post::with('user')
+            ->latest()
+            ->get()
+            ->filter(fn ($post) => Storage::disk('public')->exists($post->image))
+            ->values();
+        $likedPostIds = PostLike::where('user_id', $user->id)->pluck('post_id')->all();
+        $favoritedPostIds = PostFavorite::where('user_id', $user->id)->pluck('post_id')->all();
 
         // 5. 🛠️ REVISI SOLUSI: Mengarahkan jalur pembacaan view ke dalam folder pages
         return view('pages.dashboard', [
             'user' => $user,
             'totalPosts' => $totalPosts,
             'totalLikes' => $totalLikes,
-            'galleryItems' => $galleryItems
+            'galleryItems' => $galleryItems,
+            'likedPostIds' => $likedPostIds,
+            'favoritedPostIds' => $favoritedPostIds
         ]);
     }
 
@@ -49,12 +60,13 @@ class DashboardController extends Controller
             
             // Simpan file gambar secara fisik ke folder: storage/app/public/posts
             $path = $request->file('image')->store('posts', 'public');
+            $caption = trim((string) $request->caption);
 
             // 3. Simpan record data baru ke dalam tabel 'posts' di database
             Post::create([
                 'user_id' => auth()->id(), // ID user yang sedang login
                 'image' => $path,          // Path gambar hasil upload
-                'caption' => $request->caption
+                'caption' => $caption !== '' ? $caption : null
             ]);
 
             return redirect()->back()->with('success', 'Inspirasi interior berhasil dibagikan!');

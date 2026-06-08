@@ -32,7 +32,7 @@
                         <div style="width: 120px; height: 120px; background-color: #DDD; border-radius: 50%; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; font-size: 40px;">
                             👤
                         </div>
-                        <h3 style="margin: 5px 0; color: #FFD9C0;">{{ $post->username }}</h3>
+                        <h3 style="margin: 5px 0; color: #FFD9C0;">{{ $post->user?->name ?? 'Pengguna' }}</h3>
                         
                         <p style="font-size: 14px; color: #E8D8CE; font-style: italic; margin-top: 15px; padding: 0 10px; line-height: 1.5;">
                             "{{ $post->caption }}"
@@ -41,7 +41,7 @@
 
                     <div style="width: 75%; padding: 20px 40px; display: flex; align-items: center; justify-content: center; background-color: #FFFDF9;">
                         <div style="width: 100%; max-width: 600px; border-radius: 20px; overflow: hidden; box-shadow: 0 8px 16px rgba(0,0,0,0.1);">
-                            <img src="{{ asset('storage/' . $post->design_image) }}" alt="Desain Kustom Ruangan" style="width: 100%; height: auto; display: block; object-fit: cover;">
+                            <img src="{{ asset('storage/' . $post->image) }}" alt="Desain Kustom Ruangan" style="width: 100%; height: auto; display: block; object-fit: cover;">
                         </div>
                     </div>
 

@@ -20,7 +20,7 @@
             <div class="profile-heading" style="display: flex; align-items: center; gap: 20px; width: 100%; margin-bottom: 25px;">
                 <br>
                 <div class="profile-avatar-wrapper" style="flex-shrink: 0; width: 80px; height: 80px;">
-                    <img id="avatarPreview" src="{{ $user->avatar ? asset('storage/' . $user->avatar) : asset('assets/images/default-avatar.png') }}"  
+                    <img id="avatarPreview" src="{{ $user->avatar && \Storage::disk('public')->exists($user->avatar) ? asset('storage/' . $user->avatar) : asset('assets/images/default-avatar.png') }}"  
                          alt="Foto Profil"
                          style="width: 100%; height: 100%; border-radius: 50%; aspect-ratio: 1/1; object-fit: cover; border: 2px solid #d17a22; display: block;">
                 </div>

@@ -1,7 +1,7 @@
 @extends('layouts.app', [
     'title' => 'Interiology - Dashboard',
     'bodyClass' => 'dashboard-shell',
-    'styles' => ['assets/css/shared.css', 'assets/css/auth.css'],
+    'styles' => ['assets/css/shared.css', 'assets/css/auth.css', 'assets/css/post-modal.css'],
 ])
 
 @section('body')
@@ -48,11 +48,17 @@
                 </div>
                 <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
                     <dt style="font-size: 0.85rem; color: #ccc; order: 1; margin-bottom: 4px;">Total Suka</dt>
-                    <dd style="font-size: 1.6rem; font-weight: bold; color: #ffffff; margin: 0; order: 2;">{{ $totalLikes }}</dd>
+                    <dd data-dashboard-total-likes style="font-size: 1.6rem; font-weight: bold; color: #ffffff; margin: 0; order: 2;">{{ $totalLikes }}</dd>
                 </div>
             </dl>
 
-            <a href="{{ route('profile.show') }}" class="dashboard-edit-profile">Edit Profile</a>
+            <a href="{{ route('user.profile', $user->name) }}" class="dashboard-edit-profile dashboard-view-profile" aria-label="Buka profil Interiorgram kamu">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M20 21a8 8 0 0 0-16 0"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                Profil Saya
+            </a>
 
             @if ($user->role === 'admin')
                 <a href="{{ route('admin.content.index') }}" class="dashboard-admin-link">Kelola Konten</a>
@@ -89,11 +95,7 @@
             {{-- GRID GALERI UTAMA: Sekarang membaca data dinamis asli hasil upload database --}}
             <div class="dashboard-gallery" aria-label="Galeri inspirasi interior">
                 @forelse ($galleryItems as $item)
-                    <article class="dashboard-gallery-card" style="background-image: url('{{ asset('storage/' . $item->image) }}'); background-size: cover; background-position: center; border-radius: 8px; aspect-ratio: 1/1; position: relative; cursor: pointer;" aria-label="Inspirasi interior dari {{ $item->user->name }}">
-                        <div style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.6); padding: 8px; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; color: #fff; font-size: 0.8rem; font-family: sans-serif;">
-                            <strong>{{ '@' . strtolower($item->user->name) }}</strong>
-                        </div>
-                    </article>
+                    @include('partials.post-card', ['post' => $item, 'likedPostIds' => $likedPostIds, 'favoritedPostIds' => $favoritedPostIds])
                 @empty
                     {{-- Tampilan interaktif jika database tabel posts masih kosong --}}
                     <div style="grid-column: 1/-1; text-align: center; padding: 80px 20px; color: #ccc; font-family: sans-serif;">
@@ -109,6 +111,8 @@
             </div>
         </section>
     </main>
+
+    @include('partials.post-detail-modal')
 
     {{-- 🌟 1. MODAL POP-UP CUSTOM: UPLOAD POSTINGAN BARU (TWO-COLUMN INTERACTIVE LAYOUT) 🌟 --}}
     <div id="upload-post-modal" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); align-items: center; justify-content: center; transition: all 0.3s ease;">
@@ -309,3 +313,7 @@
         }
     </script>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('assets/js/post-modal.js') }}?v={{ filemtime(public_path('assets/js/post-modal.js')) }}"></script>
+@endpush

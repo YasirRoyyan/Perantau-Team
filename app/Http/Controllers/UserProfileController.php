@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Post;
+use App\Models\PostFavorite;
+use App\Models\PostLike;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 
 class UserProfileController extends Controller
 {
@@ -22,14 +26,31 @@ class UserProfileController extends Controller
         $totalLikes = $user->posts()->sum('likes_count');
 
         // 4. Ambil semua postingan milik user ini untuk dipajang di grid bawah profilnya
-        $posts = $user->posts()->latest()->get();
+        $posts = $user->posts()
+            ->latest()
+            ->get()
+            ->filter(fn ($post) => Storage::disk('public')->exists($post->image))
+            ->values();
+        $likedPostIds = PostLike::where('user_id', auth()->id())->pluck('post_id')->all();
+        $favoritedPostIds = PostFavorite::where('user_id', auth()->id())->pluck('post_id')->all();
+        $savedPosts = $user->id === auth()->id()
+            ? Post::with('user')
+                ->whereIn('id', $favoritedPostIds)
+                ->latest()
+                ->get()
+                ->filter(fn ($post) => Storage::disk('public')->exists($post->image))
+                ->values()
+            : collect();
 
         // 5. Kirim data ke file blade user-profile
         return view('pages.user-profile', [
             'user' => $user,
             'totalPosts' => $totalPosts,
             'totalLikes' => $totalLikes,
-            'posts' => $posts
+            'posts' => $posts,
+            'likedPostIds' => $likedPostIds,
+            'favoritedPostIds' => $favoritedPostIds,
+            'savedPosts' => $savedPosts,
         ]);
     }
 }

@@ -1,6 +1,6 @@
 @extends('layouts.app', [
     'title' => 'Interiology - ' . $user->name,
-    'styles' => ['assets/css/shared.css', 'assets/css/auth.css'],
+    'styles' => ['assets/css/shared.css', 'assets/css/auth.css', 'assets/css/post-modal.css'],
 ])
 
 @section('body')
@@ -14,7 +14,7 @@
     @endphp
 
     {{-- Bagian Atas / Header Profil (Warna Cokelat Gelap) --}}
-    <header class="profile-feed-top-section" style="background-color: #5d534a; color: #ffffff; padding: 50px 20px; text-align: center;">
+    <header class="profile-feed-top-section" style="background-color: #5d534a; color: #ffffff; padding: 50px 20px; text-align: center;" data-profile-owner-id="{{ $user->id }}">
         <div style="width: 100%; max-width: 935px; margin: 0 auto; position: relative;">
             
             {{-- Tombol Back Arrow di kiri atas --}}
@@ -48,7 +48,7 @@
                     <!-- STATISTIK DINAMIS: Update otomatis sesuai database post user terkait -->
                     <div style="display: flex; gap: 30px; margin-bottom: 15px; font-size: 0.9rem; opacity: 0.9;">
                         <div><strong style="font-size: 1.1rem;">{{ $totalPosts }}</strong> Postingan</div>
-                        <div><strong style="font-size: 1.1rem;">{{ $totalLikes }}</strong> Total Suka</div>
+                        <div><strong data-profile-total-likes style="font-size: 1.1rem;">{{ $totalLikes }}</strong> Total Suka</div>
                     </div>
 
                     <!-- Keterangan Bio -->
@@ -94,8 +94,7 @@
                     {{-- Grid 3 Kolom Ala Instagram --}}
                     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
                         @foreach ($posts as $post)
-                            <article style="background-image: url('{{ asset('storage/' . $post->image) }}'); background-size: cover; background-position: center; aspect-ratio: 1/1; border-radius: 8px; position: relative; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='scale(1.02)'; this.style.boxShadow='0 5px 15px rgba(0,0,0,0.15)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.05)';">
-                            </article>
+                            @include('partials.post-card', ['post' => $post, 'likedPostIds' => $likedPostIds, 'favoritedPostIds' => $favoritedPostIds])
                         @endforeach
                     </div>
                 @else
@@ -115,20 +114,32 @@
 
             {{-- EMPTY STATE TAB TERSIMPAN --}}
             @if(auth()->id() === $user->id)
-                <div id="content-saved" class="empty-feed-container" style="text-align: center; padding: 80px 20px; color: #726255; display: none;">
-                    <div style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid #726255; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; opacity: 0.7;">
-                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                        </svg>
-                    </div>
-                    <h2 style="font-family: serif; font-size: 1.5rem; margin: 0 0 8px 0; color: #4e443c;">Belum Ada Inspirasi Tersimpan</h2>
-                    <p style="margin: 0; font-size: 0.9rem; opacity: 0.8; max-width: 300px; margin: 0 auto;">Postingan interior orang lain yang kamu simpan akan terkumpul di sini.</p>
+                <div id="content-saved" style="display: none;">
+                    @if ($savedPosts->count() > 0)
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                            @foreach ($savedPosts as $post)
+                                @include('partials.post-card', ['post' => $post, 'likedPostIds' => $likedPostIds, 'favoritedPostIds' => $favoritedPostIds])
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="empty-feed-container" style="text-align: center; padding: 80px 20px; color: #726255;">
+                            <div style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid #726255; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; opacity: 0.7;">
+                                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                                </svg>
+                            </div>
+                            <h2 style="font-family: serif; font-size: 1.5rem; margin: 0 0 8px 0; color: #4e443c;">Belum Ada Inspirasi Tersimpan</h2>
+                            <p style="margin: 0; font-size: 0.9rem; opacity: 0.8; max-width: 300px; margin: 0 auto;">Postingan interior orang lain yang kamu simpan akan terkumpul di sini.</p>
+                        </div>
+                    @endif
                 </div>
             @endif
 
         </div>
 
     </main>
+
+    @include('partials.post-detail-modal')
 
     {{-- JAVASCRIPT UNTUK INTERAKSI PERGANTIAN TAB --}}
     <script>
@@ -174,3 +185,7 @@
         }
     </script>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('assets/js/post-modal.js') }}?v={{ filemtime(public_path('assets/js/post-modal.js')) }}"></script>
+@endpush

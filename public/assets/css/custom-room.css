@@ -351,7 +351,7 @@ body.custom-room-shell {
     font-weight: 700;
 }
 
-.custom-room-result-copy button {
+.custom-room-result-copy button:not(.custom-room-post) {
     margin-top: 13px;
     border: 0;
     background: transparent;
@@ -360,6 +360,49 @@ body.custom-room-shell {
     font: inherit;
     font-size: 13px;
     text-decoration: underline;
+}
+
+.custom-room-post:disabled {
+    cursor: wait;
+    opacity: 0.72;
+}
+
+.custom-room-post-status {
+    min-height: 18px;
+    color: #9A321D;
+}
+
+.custom-room-caption-field {
+    display: grid;
+    gap: 8px;
+    width: min(100%, 360px);
+    margin-top: 18px;
+    text-align: left;
+}
+
+.custom-room-caption-field span {
+    font-size: 13px;
+    color: #5d534a;
+    font-weight: 600;
+}
+
+.custom-room-caption-field textarea {
+    width: 100%;
+    min-height: 92px;
+    resize: vertical;
+    border: 1px solid #d8cfc0;
+    border-radius: 10px;
+    padding: 12px;
+    font: inherit;
+    font-size: 14px;
+    color: #42230B;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+.custom-room-caption-field textarea:focus {
+    outline: 2px solid rgba(216, 109, 23, 0.22);
+    outline-offset: 2px;
 }
 
 button:focus-visible,
@@ -514,7 +557,7 @@ a:focus-visible {
         font-size: 11px;
     }
 
-    .custom-room-result-copy button {
+    .custom-room-result-copy button:not(.custom-room-post) {
         font-size: 10px;
     }
 }

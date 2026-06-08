@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminContentController;
 use App\Http\Controllers\AdminQuestionController;
 use App\Http\Controllers\AdminResultController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PostInteractionController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserProfileController;
@@ -25,7 +26,6 @@ Route::get('/result', [AssessmentController::class, 'result'])->name('result');
 // 🚪 ROUTE GUEST (Hanya diakses sebelum login)
 // ==========================================
 Route::middleware('guest')->group(function () {
-    Route::post('/api/posts/store', [PostController::class, 'store']);
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.store');
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
@@ -41,6 +41,10 @@ Route::middleware('auth')->group(function () {
     
     // 📸 REVISI TAMBAHAN: Jalur untuk memproses unggahan postingan dari Pop-Up Modal
     Route::post('/upload-post', [DashboardController::class, 'storePost'])->name('post.store');
+    Route::post('/api/posts/store', [PostController::class, 'store'])->name('custom-post.store');
+    Route::post('/posts/{post}/like', [PostInteractionController::class, 'toggleLike'])->name('posts.like');
+    Route::post('/posts/{post}/favorite', [PostInteractionController::class, 'toggleFavorite'])->name('posts.favorite');
+    Route::delete('/posts/{post}', [PostInteractionController::class, 'destroy'])->name('posts.destroy');
 
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
