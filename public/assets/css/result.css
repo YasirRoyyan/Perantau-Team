@@ -1,6 +1,6 @@
 .hasil-section {
     min-height: calc(100svh - 92px);
-    padding: 77px 24px 52px;
+    padding: 70px 24px 48px;
     text-align: center;
 }
 
@@ -20,38 +20,38 @@
 }
 
 .hasil-label {
-    margin-top: 49px;
+    margin: 34px 0 0;
     font-family: 'Helvetica Neue light', Helvetica, Arial, sans-serif;
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 500;
     line-height: 1;
     color: var(--brown);
 }
 
 .hasil-title {
-    margin-top: 15px;
+    margin: 14px 0 0;
     font-family: 'Bethany Elingston', serif;
-    font-size: clamp(58px, 6vw, 90px);
+    font-size: clamp(52px, 5.2vw, 78px);
     font-weight: normal;
-    line-height: 0.95;
+    line-height: 0.92;
     color: var(--brown);
 }
 
 .hasil-desc {
     width: min(100%, 626px);
-    margin: 58px auto 0;
+    margin: 38px auto 0;
     font-family: 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
-    font-size: 22px;
+    font-size: 19px;
     font-weight: 500;
-    line-height: 1.15;
+    line-height: 1.22;
     color: var(--brown);
 }
 
 .hasil-buttons {
     display: flex;
     justify-content: center;
-    gap: 26px;
-    margin-top: 72px;
+    gap: 22px;
+    margin-top: 44px;
 }
 
 .btn-menu,
@@ -59,11 +59,11 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    width: 207px;
-    height: 63px;
-    border-radius: 18px;
+    width: 186px;
+    height: 56px;
+    border-radius: 16px;
     font-family: 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 500;
     transition: transform 0.3s ease, background-color 0.3s ease;
 }
@@ -92,9 +92,9 @@
 
 .download-link {
     display: inline-block;
-    margin-top: 110px;
+    margin-top: 86px;
     font-family: 'Helvetica Neue Light', Helvetica, Arial, sans-serif;
-    font-size: 16px;
+    font-size: 15px;
     line-height: 1.1;
     color: var(--brown);
     text-decoration: underline;
@@ -118,33 +118,36 @@
     }
 
     .hasil-label {
-        margin-top: 38px;
-        font-size: 18px;
+        margin-top: 28px;
+        font-size: 17px;
     }
 
     .hasil-title {
-        font-size: 48px;
-        line-height: 1;
+        margin-top: 10px;
+        font-size: 40px;
+        line-height: 0.98;
     }
 
     .hasil-desc {
-        margin-top: 38px;
-        font-size: 18px;
+        margin-top: 24px;
+        font-size: 17px;
     }
 
     .hasil-buttons {
         flex-direction: column;
         align-items: center;
         gap: 14px;
-        margin-top: 50px;
+        margin-top: 38px;
     }
 
     .btn-menu,
     .btn-tes-baru {
-        width: min(100%, 268px);
+        width: min(100%, 246px);
+        height: 52px;
+        font-size: 17px;
     }
 
     .download-link {
-        margin-top: 70px;
+        margin-top: 62px;
     }
 }

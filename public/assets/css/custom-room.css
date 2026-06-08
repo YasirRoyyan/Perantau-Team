@@ -172,6 +172,33 @@ body.custom-room-shell {
     color: #42230B;
 }
 
+.custom-room-style-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+    margin-top: 22px;
+}
+
+.custom-room-style-tabs button {
+    min-height: 36px;
+    padding: 0 14px;
+    border: 1px solid rgba(66, 35, 11, 0.16);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.82);
+    color: #42230B;
+    cursor: pointer;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.custom-room-style-tabs button.is-active {
+    border-color: #342A22;
+    background: #342A22;
+    color: #FFFFFF;
+}
+
 .custom-room-tabs {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -268,10 +295,76 @@ body.custom-room-shell {
     height: auto;
     filter: drop-shadow(0 12px 12px rgba(66, 35, 11, 0.2));
     pointer-events: none;
+    transform: scale(var(--flip-x, 1), var(--flip-y, 1));
+}
+
+.placed-room-item.is-selected img {
+    outline: 3px solid rgba(216, 109, 23, 0.72);
+    outline-offset: 3px;
+    border-radius: 8px;
 }
 
 .placed-room-item[data-type="walls"] img {
     filter: drop-shadow(0 8px 10px rgba(66, 35, 11, 0.18));
+}
+
+.custom-room-item-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 48px;
+    padding: 8px 10px 8px 16px;
+    border: 1px solid rgba(66, 35, 11, 0.12);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 12px 26px rgba(66, 35, 11, 0.08);
+}
+
+.custom-room-item-toolbar[hidden] {
+    display: none;
+}
+
+.custom-room-item-toolbar span {
+    min-width: 0;
+    color: #5B473A;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.custom-room-item-toolbar-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 6px;
+}
+
+.custom-room-item-toolbar button {
+    min-width: 42px;
+    min-height: 32px;
+    padding: 0 10px;
+    border: 0;
+    border-radius: 9px;
+    background: #EEE5D8;
+    color: #42230B;
+    cursor: pointer;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.custom-room-item-toolbar button:hover {
+    background: #DFD1C0;
+}
+
+.custom-room-item-toolbar [data-item-delete] {
+    background: #3A2D25;
+    color: #FFFFFF;
+}
+
+.custom-room-item-toolbar [data-item-delete]:hover {
+    background: #2B211B;
 }
 
 .custom-room-actions {
@@ -349,6 +442,20 @@ body.custom-room-shell {
     color: #FFFFFF;
     font-size: 14px;
     font-weight: 700;
+    border: 1px solid rgba(66, 35, 11, 0.12);
+    box-shadow: 0 10px 18px rgba(216, 109, 23, 0.16);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.custom-room-post:hover {
+    background: #C86113;
+    box-shadow: 0 12px 22px rgba(216, 109, 23, 0.22);
+    transform: translateY(-1px);
+}
+
+.custom-room-post:focus-visible {
+    outline: 2px solid rgba(216, 109, 23, 0.18);
+    outline-offset: 3px;
 }
 
 .custom-room-result-copy button:not(.custom-room-post) {
@@ -370,6 +477,132 @@ body.custom-room-shell {
 .custom-room-post-status {
     min-height: 18px;
     color: #9A321D;
+}
+
+.custom-room-upload-page {
+    min-height: calc(100svh - 92px);
+    padding: 34px 24px 76px;
+    background: #FFFDF3;
+    color: #42230B;
+}
+
+.custom-room-upload-card {
+    display: grid;
+    grid-template-columns: minmax(0, 0.96fr) minmax(360px, 0.82fr);
+    width: min(100%, 1240px);
+    margin: 0 auto;
+    border-radius: 24px;
+    overflow: hidden;
+    background: #FFFFFF;
+    box-shadow: 0 18px 40px rgba(66, 35, 11, 0.12);
+}
+
+.custom-room-upload-preview {
+    min-height: 640px;
+    background: #EEE8DF;
+}
+
+.custom-room-upload-preview img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.custom-room-upload-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 28px 32px 30px;
+    background: #FFFFFF;
+}
+
+.custom-room-upload-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.custom-room-upload-head .avatar {
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid rgba(66, 35, 11, 0.12);
+}
+
+.custom-room-upload-title {
+    display: grid;
+    gap: 2px;
+}
+
+.custom-room-upload-title h2 {
+    margin: 0;
+    font-family: 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+    font-size: 18px;
+    line-height: 1.15;
+    color: #42230B;
+}
+
+.custom-room-upload-title p,
+.custom-room-upload-style {
+    margin: 0;
+    color: #8A7360;
+    font-size: 13px;
+}
+
+.custom-room-upload-form textarea {
+    width: 100%;
+    min-height: 220px;
+    resize: vertical;
+    border: 1px solid #E4D9CA;
+    border-radius: 16px;
+    padding: 16px;
+    font: inherit;
+    font-size: 15px;
+    line-height: 1.45;
+    color: #42230B;
+    background: #FFF;
+    box-sizing: border-box;
+}
+
+.custom-room-upload-form textarea:focus {
+    outline: 2px solid rgba(216, 109, 23, 0.2);
+    outline-offset: 2px;
+}
+
+.custom-room-upload-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 14px;
+    margin-top: auto;
+}
+
+.custom-room-upload-actions a,
+.custom-room-upload-actions button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 132px;
+    min-height: 46px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 12px;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 800;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.custom-room-upload-actions a {
+    background: #EDE4D7;
+    color: #5B473A;
+}
+
+.custom-room-upload-actions button {
+    background: #D86D17;
+    color: #FFFFFF;
 }
 
 .custom-room-caption-field {
@@ -485,6 +718,21 @@ a:focus-visible {
         font-size: 8px;
     }
 
+    .custom-room-item-toolbar {
+        width: min(calc(100vw - 44px), 340px);
+        flex-direction: column;
+        align-items: stretch;
+        padding: 10px;
+    }
+
+    .custom-room-item-toolbar span {
+        text-align: center;
+    }
+
+    .custom-room-item-toolbar-actions {
+        justify-content: center;
+    }
+
     .custom-room-choice {
         width: min(100%, 340px);
         display: grid;
@@ -501,6 +749,10 @@ a:focus-visible {
         width: min(100%, 270px);
         margin-top: 10px;
         font-size: 10px;
+    }
+
+    .custom-room-style-tabs {
+        justify-content: center;
     }
 
     .custom-room-tabs {
@@ -559,6 +811,32 @@ a:focus-visible {
 
     .custom-room-result-copy button:not(.custom-room-post) {
         font-size: 10px;
+    }
+
+    .custom-room-upload-page {
+        padding: 18px 14px 46px;
+    }
+
+    .custom-room-upload-card {
+        grid-template-columns: 1fr;
+        border-radius: 18px;
+    }
+
+    .custom-room-upload-preview {
+        min-height: 280px;
+    }
+
+    .custom-room-upload-form {
+        padding: 20px 18px 22px;
+    }
+
+    .custom-room-upload-actions {
+        flex-direction: column;
+    }
+
+    .custom-room-upload-actions a,
+    .custom-room-upload-actions button {
+        width: 100%;
     }
 }
 

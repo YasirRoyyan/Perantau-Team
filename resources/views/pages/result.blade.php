@@ -14,9 +14,6 @@
         <p class="hasil-label">Tipe kamu adalah</p>
         <h1 class="hasil-title" id="hasil-title">{{ $result['title'] }}</h1>
         <p class="hasil-desc" id="hasil-desc">{{ $result['description'] }}</p>
-        @if ($attempt)
-            <p class="hasil-desc">Hasil ini tersimpan di riwayat asesmenmu pada {{ $attempt->created_at->format('d/m/Y H:i') }}.</p>
-        @endif
 
         <div class="hasil-buttons">
             <a href="{{ route('home') }}" class="btn-menu">Menu Utama</a>
@@ -31,7 +28,7 @@
 
         <div style="text-align: center; margin-top: 30px; display: flex; flex-direction: column; gap: 8px; align-items: center;">
             
-            <a href="{{ route('custom-room') }}" class="download-link" style="color: #311e0b; font-weight: 600; text-decoration: underline; margin: 0; padding: 0;">
+            <a href="{{ route('custom-room', ['style' => $type]) }}" class="download-link" style="color: #311e0b; font-weight: 600; text-decoration: underline; margin: 0; padding: 0;">
                 Tertarik menyusun ruangan anda sendiri? Coba disini!
             </a>
 

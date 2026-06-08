@@ -42,6 +42,8 @@ Route::middleware('auth')->group(function () {
     // 📸 REVISI TAMBAHAN: Jalur untuk memproses unggahan postingan dari Pop-Up Modal
     Route::post('/upload-post', [DashboardController::class, 'storePost'])->name('post.store');
     Route::post('/api/posts/store', [PostController::class, 'store'])->name('custom-post.store');
+    Route::post('/custom-room/draft', [PostController::class, 'stashCustomRoomDraft'])->name('custom-room.draft');
+    Route::get('/custom-room/upload', [PostController::class, 'showCustomRoomUpload'])->name('custom-room.upload');
     Route::post('/posts/{post}/like', [PostInteractionController::class, 'toggleLike'])->name('posts.like');
     Route::post('/posts/{post}/favorite', [PostInteractionController::class, 'toggleFavorite'])->name('posts.favorite');
     Route::delete('/posts/{post}', [PostInteractionController::class, 'destroy'])->name('posts.destroy');

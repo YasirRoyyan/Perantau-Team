@@ -21,6 +21,15 @@ class AssessmentController extends Controller
 
     private const SESSION_ATTEMPT = 'interiology.attempt';
 
+    private const RESULT_STYLE_ORDER = [
+        'scandinavian',
+        'bohemian',
+        'japandi',
+        'minimalist',
+        'modern',
+        'industrial',
+    ];
+
     public function home(): View
     {
         $home = array_replace_recursive(
@@ -134,13 +143,13 @@ class AssessmentController extends Controller
 
     public function result(Request $request): View|RedirectResponse
     {
-        $type = $request->session()->get(self::SESSION_RESULT);
+        $type = $this->normalizeResultKey($request->session()->get(self::SESSION_RESULT));
 
         if (! $type) {
             return redirect()->route('prepare');
         }
 
-        $result = AssessmentResult::where('style_key', $type)->first()
+        $result = $this->resolveAssessmentResult($type)
             ?? AssessmentResult::ordered()->first();
 
         if (! $result) {
@@ -181,7 +190,7 @@ class AssessmentController extends Controller
 
     private function storeAttempt(Request $request, string $resultKey, array $answers): ?AssessmentAttempt
     {
-        $result = AssessmentResult::where('style_key', $resultKey)->first()
+        $result = $this->resolveAssessmentResult($this->normalizeResultKey($resultKey))
             ?? AssessmentResult::ordered()->first();
 
         if (! $result || ! $request->user()) {
@@ -201,12 +210,7 @@ class AssessmentController extends Controller
 
     private function calculateResult(array $answers): string
     {
-        $resultTypes = AssessmentResult::ordered()->pluck('style_key')->values();
-
-        if ($resultTypes->isEmpty()) {
-            return 'minimalis';
-        }
-
+        $resultTypes = collect(self::RESULT_STYLE_ORDER);
         $counts = array_fill(0, $resultTypes->count(), 0);
 
         foreach ($answers as $answer) {
@@ -223,7 +227,39 @@ class AssessmentController extends Controller
             }
         }
 
-        return $resultTypes->get($maxIndex, $resultTypes->first());
+        return $resultTypes->get($maxIndex, 'scandinavian');
+    }
+
+    private function normalizeResultKey(?string $key): ?string
+    {
+        if (! $key) {
+            return null;
+        }
+
+        if ($key === 'minimalis') {
+            return 'minimalist';
+        }
+
+        return in_array($key, self::RESULT_STYLE_ORDER, true) ? $key : null;
+    }
+
+    private function resolveAssessmentResult(?string $key): ?AssessmentResult
+    {
+        if (! $key) {
+            return null;
+        }
+
+        $result = AssessmentResult::where('style_key', $key)->first();
+
+        if ($result) {
+            return $result;
+        }
+
+        if ($key === 'minimalist') {
+            return AssessmentResult::where('style_key', 'minimalis')->first();
+        }
+
+        return null;
     }
 
     private function defaultHomeContent(): array

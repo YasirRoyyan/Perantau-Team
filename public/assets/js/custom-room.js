@@ -1,10 +1,12 @@
 (function () {
     const root = document.querySelector('[data-custom-room]');
 
-    if (! root) {
+    if (!root) {
         return;
     }
 
+    const configElement = root.querySelector('[data-custom-room-config]');
+    const roomConfig = configElement ? JSON.parse(configElement.textContent || '{}') : {};
     const builderScreen = root.querySelector('[data-builder-screen]');
     const resultScreen = root.querySelector('[data-result-screen]');
     const dropZone = root.querySelector('[data-drop-zone]');
@@ -13,51 +15,201 @@
     const palette = root.querySelector('[data-item-palette]');
     const finishButton = root.querySelector('[data-finish-room]');
     const resetButton = root.querySelector('[data-reset-room]');
-    const editButton = root.querySelector('[data-edit-room]');
     const postButton = root.querySelector('[data-post-room]');
     const postStatus = root.querySelector('[data-post-status]');
-    const captionInput = root.querySelector('[data-room-caption]');
     const dropHint = root.querySelector('[data-drop-hint]');
+    const styleButtons = root.querySelectorAll('[data-room-style]');
+    const categoryButtons = root.querySelectorAll('[data-item-category]');
+    const builderPreview = root.querySelector('[data-room-preview]');
+    const resultPreview = root.querySelector('[data-result-preview] > img');
+    const itemToolbar = root.querySelector('[data-item-toolbar]');
+    const itemToolbarLabel = root.querySelector('[data-item-toolbar-label]');
+    const sizeDecreaseButton = root.querySelector('[data-item-size="decrease"]');
+    const sizeIncreaseButton = root.querySelector('[data-item-size="increase"]');
+    const flipHorizontalButton = root.querySelector('[data-item-flip="horizontal"]');
+    const flipVerticalButton = root.querySelector('[data-item-flip="vertical"]');
+    const resetItemButton = root.querySelector('[data-item-reset]');
+    const deleteItemButton = root.querySelector('[data-item-delete]');
 
-    const assetPath = (fileName) => new URL('../images/'+fileName, document.currentScript.src).href;
+    const styleOrder = Object.keys(roomConfig.styles || {});
+    const itemIndex = new Map();
+    const categoryOrder = ['chairs', 'tables', 'walls'];
 
-    const items = [
-        { id: 'chair-sofa', type: 'chairs', name: 'Sofa Kayu', image: assetPath('custom-item-sofa.png'), width: 270, x: 46, y: 73 },
-        { id: 'chair-lounge', type: 'chairs', name: 'Kursi Santai', image: assetPath('custom-item-chair.png'), width: 128, x: 63, y: 62 },
-        { id: 'table-cabinet', type: 'tables', name: 'Meja Kabinet', image: assetPath('custom-item-cabinet.png'), width: 210, x: 50, y: 73 },
-        { id: 'wall-frame', type: 'walls', name: 'Hiasan Dinding', image: assetPath('custom-item-frame.png'), width: 86, x: 50, y: 32 },
-        { id: 'wall-lamp', type: 'walls', name: 'Lampu Berdiri', image: assetPath('custom-item-lamp.png'), width: 72, x: 70, y: 62 },
-        { id: 'wall-plant', type: 'walls', name: 'Tanaman', image: assetPath('custom-item-plant.png'), width: 58, x: 74, y: 66 },
-        { id: 'wall-rug', type: 'walls', name: 'Karpet', image: assetPath('custom-item-rug.png'), width: 230, x: 50, y: 84 },
-        { id: 'wall-vases', type: 'walls', name: 'Vas Dekor', image: assetPath('custom-item-vases.png'), width: 74, x: 34, y: 78 },
-        { id: 'wall-books', type: 'walls', name: 'Buku Dekor', image: assetPath('custom-item-books.png'), width: 86, x: 36, y: 77 },
-    ];
+    styleOrder.forEach((styleKey) => {
+        Object.values(roomConfig.items?.[styleKey] || {}).flat().forEach((item) => {
+            itemIndex.set(item.id, item);
+        });
+    });
 
-    let activeCategory = 'chairs';
+    let activeStyle = roomConfig.activeStyle || root.dataset.defaultStyle || styleOrder[0] || 'scandinavian';
+    let activeCategory = roomConfig.activeCategory || 'chairs';
     let placedCount = 0;
     let movingItem = null;
+    let selectedItem = null;
+
+    const SIZE_STEP = 16;
+    const MIN_ITEM_WIDTH = 42;
+    const MAX_ITEM_WIDTH = 420;
+
+    function setBackground(styleKey) {
+        const background = roomConfig.styles?.[styleKey]?.background;
+
+        if (background && builderPreview) {
+            builderPreview.src = background;
+        }
+
+        if (background && resultPreview) {
+            resultPreview.src = background;
+        }
+    }
+
+    function updateStyleButtons() {
+        styleButtons.forEach((button) => {
+            const isActive = button.dataset.roomStyle === activeStyle;
+            button.classList.toggle('is-active', isActive);
+            button.setAttribute('aria-selected', String(isActive));
+        });
+    }
+
+    function updateCategoryButtons() {
+        categoryButtons.forEach((button) => {
+            const isActive = button.dataset.itemCategory === activeCategory;
+            button.classList.toggle('is-active', isActive);
+            button.setAttribute('aria-selected', String(isActive));
+        });
+    }
+
+    function currentItems() {
+        return roomConfig.items?.[activeStyle]?.[activeCategory] || [];
+    }
 
     function getItem(id) {
-        return items.find((item) => item.id === id);
+        return itemIndex.get(id) || null;
+    }
+
+    function clamp(value, min, max) {
+        return Math.min(Math.max(value, min), max);
+    }
+
+    function getDropPosition(event) {
+        const rect = dropZone.getBoundingClientRect();
+        const x = clamp(((event.clientX - rect.left) / rect.width) * 100, 5, 95);
+        const y = clamp(((event.clientY - rect.top) / rect.height) * 100, 8, 94);
+
+        return { x, y };
     }
 
     function setFinishState() {
         const hasItems = roomLayer.children.length > 0;
-        finishButton.disabled = ! hasItems;
-        dropHint.classList.toggle('is-hidden', hasItems);
+        finishButton.disabled = !hasItems;
+
+        if (dropHint) {
+            dropHint.classList.toggle('is-hidden', hasItems);
+        }
+    }
+
+    function clearSelection() {
+        if (selectedItem) {
+            selectedItem.classList.remove('is-selected');
+            selectedItem = null;
+        }
+
+        updateItemToolbar();
+    }
+
+    function selectItem(item) {
+        clearSelection();
+        selectedItem = item;
+        item.classList.add('is-selected');
+        updateItemToolbar();
+    }
+
+    function updateItemToolbar() {
+        if (!itemToolbar) {
+            return;
+        }
+
+        itemToolbar.hidden = !selectedItem;
+
+        if (selectedItem && itemToolbarLabel) {
+            const item = getItem(selectedItem.dataset.itemId);
+            const width = Math.round(getItemWidth(selectedItem));
+            itemToolbarLabel.textContent = (item?.name || 'Item terpilih') + ' - ' + width + 'px';
+        }
+    }
+
+    function getItemWidth(item) {
+        return Number.parseFloat(item.style.getPropertyValue('--item-width')) || Number.parseFloat(item.dataset.defaultWidth) || 120;
+    }
+
+    function setItemWidth(item, width) {
+        const nextWidth = clamp(width, MIN_ITEM_WIDTH, MAX_ITEM_WIDTH);
+        item.style.setProperty('--item-width', nextWidth + 'px');
+        updateItemToolbar();
+    }
+
+    function updateItemTransform(item) {
+        item.style.setProperty('--flip-x', item.dataset.flipX || '1');
+        item.style.setProperty('--flip-y', item.dataset.flipY || '1');
+    }
+
+    function resizeSelectedItem(delta) {
+        if (!selectedItem) {
+            return;
+        }
+
+        setItemWidth(selectedItem, getItemWidth(selectedItem) + delta);
+    }
+
+    function flipSelectedItem(axis) {
+        if (!selectedItem) {
+            return;
+        }
+
+        if (axis === 'horizontal') {
+            selectedItem.dataset.flipX = selectedItem.dataset.flipX === '-1' ? '1' : '-1';
+        }
+
+        if (axis === 'vertical') {
+            selectedItem.dataset.flipY = selectedItem.dataset.flipY === '-1' ? '1' : '-1';
+        }
+
+        updateItemTransform(selectedItem);
+    }
+
+    function resetSelectedItem() {
+        if (!selectedItem) {
+            return;
+        }
+
+        setItemWidth(selectedItem, Number.parseFloat(selectedItem.dataset.defaultWidth) || getItemWidth(selectedItem));
+        selectedItem.dataset.flipX = '1';
+        selectedItem.dataset.flipY = '1';
+        updateItemTransform(selectedItem);
+    }
+
+    function deleteSelectedItem() {
+        if (!selectedItem) {
+            return;
+        }
+
+        selectedItem.remove();
+        selectedItem = null;
+        updateItemToolbar();
+        setFinishState();
     }
 
     function renderPalette() {
         palette.innerHTML = '';
 
-        items.filter((item) => item.type === activeCategory).forEach((item) => {
+        currentItems().forEach((item) => {
             const button = document.createElement('button');
             button.type = 'button';
             button.className = 'custom-room-item';
             button.draggable = true;
             button.dataset.itemId = item.id;
-            button.setAttribute('aria-label', 'Tarik '+item.name+' ke ruangan');
-            button.innerHTML = '<img src="'+item.image+'" alt=""><span>'+item.name+'</span>';
+            button.setAttribute('aria-label', 'Tarik ' + item.name + ' ke ruangan');
+            button.innerHTML = '<img src="' + item.image + '" alt=""><span>' + item.name + '</span>';
 
             button.addEventListener('dragstart', (event) => {
                 event.dataTransfer.setData('text/plain', item.id);
@@ -74,26 +226,29 @@
 
     function setActiveCategory(category) {
         activeCategory = category;
-
-        root.querySelectorAll('[data-item-category]').forEach((button) => {
-            const isActive = button.dataset.itemCategory === category;
-            button.classList.toggle('is-active', isActive);
-            button.setAttribute('aria-selected', String(isActive));
-        });
-
+        updateCategoryButtons();
         renderPalette();
     }
 
-    function clamp(value, min, max) {
-        return Math.min(Math.max(value, min), max);
-    }
+    function setActiveStyle(styleKey, resetRoom = true) {
+        if (!roomConfig.styles?.[styleKey]) {
+            return;
+        }
 
-    function getDropPosition(event) {
-        const rect = dropZone.getBoundingClientRect();
-        const x = clamp(((event.clientX - rect.left) / rect.width) * 100, 5, 95);
-        const y = clamp(((event.clientY - rect.top) / rect.height) * 100, 8, 94);
+        activeStyle = styleKey;
+        updateStyleButtons();
+        setBackground(styleKey);
 
-        return { x, y };
+        if (resetRoom) {
+            roomLayer.innerHTML = '';
+            resultLayer.innerHTML = '';
+            builderScreen.hidden = false;
+            resultScreen.hidden = true;
+            placedCount = 0;
+        }
+
+        setActiveCategory(activeCategory);
+        setFinishState();
     }
 
     function addItem(item, x, y) {
@@ -105,12 +260,16 @@
         button.dataset.type = item.type;
         button.dataset.itemId = item.id;
         button.dataset.placedId = String(placedCount);
-        button.setAttribute('aria-label', item.name+' di ruangan');
-        button.style.setProperty('--x', x+'%');
-        button.style.setProperty('--y', y+'%');
+        button.dataset.defaultWidth = String(item.width);
+        button.dataset.flipX = '1';
+        button.dataset.flipY = '1';
+        button.setAttribute('aria-label', item.name + ' di ruangan');
+        button.style.setProperty('--x', x + '%');
+        button.style.setProperty('--y', y + '%');
         button.style.setProperty('--z', String(Math.round(y * 10)));
-        button.style.setProperty('--item-width', item.width+'px');
-        button.innerHTML = '<img src="'+item.image+'" alt="">';
+        button.style.setProperty('--item-width', item.width + 'px');
+        updateItemTransform(button);
+        button.innerHTML = '<img src="' + item.image + '" alt="">';
 
         button.addEventListener('pointerdown', startMovingItem);
         roomLayer.appendChild(button);
@@ -123,8 +282,7 @@
         item.setPointerCapture(event.pointerId);
         movePlacedItem(event, item);
 
-        root.querySelectorAll('.placed-room-item').forEach(el => el.classList.remove('is-selected'));
-        item.classList.add('is-selected');
+        selectItem(item);
 
         item.addEventListener('pointermove', handleMovingItem);
         item.addEventListener('pointerup', stopMovingItem, { once: true });
@@ -145,8 +303,8 @@
 
     function movePlacedItem(event, item) {
         const position = getDropPosition(event);
-        item.style.setProperty('--x', position.x+'%');
-        item.style.setProperty('--y', position.y+'%');
+        item.style.setProperty('--x', position.x + '%');
+        item.style.setProperty('--y', position.y + '%');
         item.style.setProperty('--z', String(Math.round(position.y * 10)));
     }
 
@@ -155,14 +313,18 @@
         resultLayer.innerHTML = '';
         builderScreen.hidden = false;
         resultScreen.hidden = true;
+        placedCount = 0;
+        clearSelection();
         setFinishState();
     }
 
     function showResult() {
+        clearSelection();
         resultLayer.innerHTML = '';
 
         Array.from(roomLayer.children).forEach((item) => {
             const clone = item.cloneNode(true);
+            clone.classList.remove('is-selected');
             clone.removeAttribute('aria-label');
             resultLayer.appendChild(clone);
         });
@@ -196,26 +358,35 @@
             const itemImage = item.querySelector('img');
             const itemRect = item.getBoundingClientRect();
             const renderedImage = await loadImage(itemImage.src);
+            const flipX = item.dataset.flipX === '-1' ? -1 : 1;
+            const flipY = item.dataset.flipY === '-1' ? -1 : 1;
+            const x = itemRect.left - previewRect.left;
+            const y = itemRect.top - previewRect.top;
+
+            context.save();
+            context.translate(x + (flipX === -1 ? itemRect.width : 0), y + (flipY === -1 ? itemRect.height : 0));
+            context.scale(flipX, flipY);
 
             context.drawImage(
                 renderedImage,
-                itemRect.left - previewRect.left,
-                itemRect.top - previewRect.top,
+                0,
+                0,
                 itemRect.width,
                 itemRect.height
             );
+            context.restore();
         }
 
         return canvas.toDataURL('image/png');
     }
 
     async function postRoomDesign() {
-        if (! postButton) {
+        if (!postButton) {
             return;
         }
 
         postButton.disabled = true;
-        postButton.textContent = 'Memposting...';
+        postButton.textContent = 'Memproses...';
 
         if (postStatus) {
             postStatus.textContent = '';
@@ -224,31 +395,32 @@
         try {
             const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
             const image = await captureResultPreview();
-            const response = await fetch('/api/posts/store', {
+            const response = await fetch(root.dataset.draftUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
-                    'X-CSRF-TOKEN': token || ''
+                    'X-CSRF-TOKEN': token || '',
                 },
                 body: JSON.stringify({
                     image,
-                    caption: captionInput ? captionInput.value.trim() : ''
-                })
+                    style: activeStyle,
+                }),
             });
 
-            if (! response.ok) {
-                const data = await response.json().catch(() => ({}));
-                throw new Error(data.message || 'Desain gagal diposting.');
+            const data = await response.json().catch(() => ({}));
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Gagal menyiapkan halaman upload.');
             }
 
-            window.location.href = '/dashboard';
+            window.location.href = data.redirect || root.dataset.uploadUrl;
         } catch (error) {
             postButton.disabled = false;
             postButton.textContent = 'Posting Sekarang';
 
             if (postStatus) {
-                postStatus.textContent = error.message || 'Desain gagal diposting.';
+                postStatus.textContent = error.message || 'Gagal menyiapkan halaman upload.';
             }
         }
     }
@@ -268,7 +440,7 @@
 
         const item = getItem(event.dataTransfer.getData('text/plain'));
 
-        if (! item) {
+        if (!item) {
             return;
         }
 
@@ -276,33 +448,57 @@
         addItem(item, position.x, position.y);
     });
 
-    root.querySelectorAll('[data-item-category]').forEach((button) => {
+    styleButtons.forEach((button) => {
+        button.addEventListener('click', () => setActiveStyle(button.dataset.roomStyle));
+    });
+
+    categoryButtons.forEach((button) => {
         button.addEventListener('click', () => setActiveCategory(button.dataset.itemCategory));
     });
 
-    resetButton.addEventListener('click', resetRoom);
-    editButton.addEventListener('click', resetRoom);
+    resetButton?.addEventListener('click', resetRoom);
     postButton?.addEventListener('click', postRoomDesign);
+    sizeDecreaseButton?.addEventListener('click', () => resizeSelectedItem(-SIZE_STEP));
+    sizeIncreaseButton?.addEventListener('click', () => resizeSelectedItem(SIZE_STEP));
+    flipHorizontalButton?.addEventListener('click', () => flipSelectedItem('horizontal'));
+    flipVerticalButton?.addEventListener('click', () => flipSelectedItem('vertical'));
+    resetItemButton?.addEventListener('click', resetSelectedItem);
+    deleteItemButton?.addEventListener('click', deleteSelectedItem);
+    itemToolbar?.addEventListener('pointerdown', (event) => event.stopPropagation());
 
     finishButton.addEventListener('click', () => {
-        if (! finishButton.disabled) {
+        if (!finishButton.disabled) {
             showResult();
         }
     });
 
-    document.addEventListener('keydown', function(event) {
+    document.addEventListener('keydown', (event) => {
+        const activeElement = document.activeElement;
+        const isTypingField = ['INPUT', 'TEXTAREA', 'SELECT'].includes(activeElement?.tagName) || activeElement?.isContentEditable;
+
+        if (isTypingField) {
+            return;
+        }
+
         if (event.key === 'Delete' || event.key === 'Backspace') {
-            // Cari barang di dalam ruangan yang sedang diseleksi
-            const selectedItem = root.querySelector('.placed-room-item.is-selected');
-            
-            if (selectedItem) {
-                selectedItem.remove(); // Hapus dari layar
-                setFinishState(); // Perbarui status tombol finish (apakah masih ada barang/tidak)
-                console.log('Furnitur berhasil dihapus.');
+            deleteSelectedItem();
+        }
+    });
+
+    document.addEventListener('pointerdown', (event) => {
+        if (resultScreen.hidden) {
+            const clickedItem = event.target.closest?.('.placed-room-item');
+            const clickedToolbar = event.target.closest?.('[data-item-toolbar]');
+
+            if (!clickedItem && !clickedToolbar) {
+                clearSelection();
             }
         }
     });
 
+    setActiveStyle(activeStyle, false);
+    updateCategoryButtons();
     renderPalette();
     setFinishState();
+    updateItemToolbar();
 }());
