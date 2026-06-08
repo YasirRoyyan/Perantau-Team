@@ -7,6 +7,7 @@ use App\Models\NavigationItem;
 use Illuminate\Foundation\Console\ServeCommand as FrameworkServeCommand;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,5 +29,9 @@ class AppServiceProvider extends ServiceProvider
         View::composer('partials.nav', function ($view) {
             $view->with('navItems', NavigationItem::activeOrFallback());
         });
+
+        if (config('app.env') === 'production' || isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https'){
+            URL::forceScheme('https');
+        }
     }
 }
