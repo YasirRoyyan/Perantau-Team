@@ -10,6 +10,15 @@
         "laravel/framework": "^13.7",
         "laravel/tinker": "^3.0"
     },
+    "config": {
+	"platform": {
+	     "php": "8.4.22"	
+	 },
+	 "allow-plugins": {
+	     "pestphp/pest-plugin": true,
+	     "php-http/discovery": true
+	 }
+    },
     "require-dev": {
         "fakerphp/faker": "^1.23",
         "laravel/pail": "^1.2.5",
