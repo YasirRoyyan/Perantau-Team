@@ -41,7 +41,7 @@
 
                     <div style="width: 75%; padding: 20px 40px; display: flex; align-items: center; justify-content: center; background-color: #FFFDF9;">
                         <div style="width: 100%; max-width: 600px; border-radius: 20px; overflow: hidden; box-shadow: 0 8px 16px rgba(0,0,0,0.1);">
-                            <img src="{{ asset('storage/' . $post->image) }}" alt="Desain Kustom Ruangan" style="width: 100%; height: auto; display: block; object-fit: cover;">
+                            <img src="{{ \Storage::url($post->image) }}" alt="Desain Kustom Ruangan" style="width: 100%; height: auto; display: block; object-fit: cover;">
                         </div>
                     </div>
 

@@ -21,7 +21,7 @@
                 {{-- Hanya tampilkan foto jika user mengunggah foto profil asli --}}
                 @if ($user->avatar && head(explode('/', $user->avatar)) !== 'dummy' && \Storage::disk('public')->exists($user->avatar))
                     <div class="dashboard-avatar-wrapper" style="width: 150px; height: 150px; margin: 0 auto; flex-shrink: 0;">
-                        <img src="{{ asset('storage/' . $user->avatar) }}" 
+                        <img src="{{ \Storage::url($user->avatar) }}" 
                              alt="Foto Profil {{ $displayName }}" 
                              style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; aspect-ratio: 1/1; display: block; border: 2px solid #ffffff;">
                     </div>
@@ -150,7 +150,7 @@
                     {{-- Metadata Info Akun Aktif & Status Jumlah Postingan Sekarang --}}
                     <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
                         @if ($user->avatar && \Storage::disk('public')->exists($user->avatar))
-                            <img src="{{ asset('storage/' . $user->avatar) }}" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 1px solid #e0dacb;">
+                            <img src="{{ \Storage::url($user->avatar) }}" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 1px solid #e0dacb;">
                         @else
                             <div style="width: 42px; height: 42px; border-radius: 50%; background-color: #5d534a; color: #e0dacb; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.95rem;">
                                 {{ strtoupper(substr($displayName, 0, 1)) }}

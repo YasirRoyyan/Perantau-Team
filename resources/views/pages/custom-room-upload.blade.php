@@ -20,7 +20,7 @@
                 <div class="custom-room-upload-head">
                     <img
                         class="avatar"
-                        src="{{ $user?->avatar && \Storage::disk('public')->exists($user->avatar) ? asset('storage/' . $user->avatar) : asset('assets/images/profile-interiorgram.jpeg') }}"
+                        src="{{ $user?->avatar && \Storage::disk('public')->exists($user->avatar) ? \Storage::url($user->avatar) : asset('assets/images/profile-interiorgram.jpeg') }}"
                         alt="Avatar {{ $user?->name ?? 'Pengguna' }}"
                     >
                     <div class="custom-room-upload-title">

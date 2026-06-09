@@ -33,7 +33,7 @@
                 <!-- Avatar Lingkaran Besar -->
                 <div class="profile-feed-avatar" style="width: 150px; height: 150px; flex-shrink: 0;">
                     @if ($user->avatar && head(explode('/', $user->avatar)) !== 'dummy' && \Storage::disk('public')->exists($user->avatar))
-                        <img src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar {{ $displayName }}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; aspect-ratio: 1/1; border: 3px solid #ffffff;">
+                        <img src="{{ \Storage::url($user->avatar) }}" alt="Avatar {{ $displayName }}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; aspect-ratio: 1/1; border: 3px solid #ffffff;">
                     @else
                         <div style="width: 100%; height: 100%; border-radius: 50%; background-color: #e0dacb; color: #5d534a; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; font-weight: bold; font-family: serif;">
                             {{ strtoupper(substr($displayName, 0, 1)) }}

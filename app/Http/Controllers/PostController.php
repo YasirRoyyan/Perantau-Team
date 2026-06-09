@@ -152,7 +152,7 @@ class PostController extends Controller
         }
 
         $fileName = 'posts/custom_room_'.Str::uuid().'.png';
-        Storage::disk('public')->put($fileName, $decodedImage);
+        Storage::disk(env('FILESYSTEM_DISK', 'public'))->put($fileName, $decodedImage);
 
         $caption = trim((string) ($validated['caption'] ?? ''));
 
