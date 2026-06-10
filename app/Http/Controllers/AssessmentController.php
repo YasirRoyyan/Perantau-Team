@@ -95,6 +95,27 @@ class AssessmentController extends Controller
         ]);
     }
 
+    public function back(Request $request): RedirectResponse
+    {
+        if (! $request->session()->has(self::SESSION_STEP)) {
+            return redirect()->route('prepare');
+        }
+
+        $step = (int) $request->session()->get(self::SESSION_STEP, 0);
+
+        if ($step <= 0) {
+            return redirect()->route('prepare');
+        }
+
+        $answers = $request->session()->get(self::SESSION_ANSWERS, []);
+        array_pop($answers);
+
+        $request->session()->put(self::SESSION_ANSWERS, $answers);
+        $request->session()->put(self::SESSION_STEP, max($step - 1, 0));
+
+        return redirect()->route('assessment.show');
+    }
+
     public function answer(Request $request): RedirectResponse
     {
         if (! $request->session()->has(self::SESSION_STEP)) {

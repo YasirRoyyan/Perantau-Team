@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [AssessmentController::class, 'home'])->name('home');
 Route::get('/prepare', [AssessmentController::class, 'prepare'])->name('prepare');
 Route::get('/assessment/start', [AssessmentController::class, 'start'])->name('assessment.start');
+Route::get('/assessment/back', [AssessmentController::class, 'back'])->name('assessment.back');
 Route::get('/assessment', [AssessmentController::class, 'show'])->name('assessment.show');
 Route::post('/assessment', [AssessmentController::class, 'answer'])->name('assessment.answer');
 Route::get('/result', [AssessmentController::class, 'result'])->name('result');

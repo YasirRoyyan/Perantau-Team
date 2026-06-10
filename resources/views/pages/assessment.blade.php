@@ -7,7 +7,7 @@
     @include('partials.nav')
 
     <main class="asesmen-section">
-        <a href="{{ route('prepare') }}" class="back-button" aria-label="Kembali ke halaman persiapan">
+        <a href="{{ route('assessment.back') }}" class="back-button" aria-label="Kembali ke pertanyaan sebelumnya">
             <span class="back-icon" aria-hidden="true"></span>
         </a>
 
@@ -31,4 +31,33 @@
             @endforeach
         </form>
     </main>
+
+    @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var confirmUnsaved = true;
+            var form = document.getElementById('options');
+
+            var disablePrompt = function () {
+                confirmUnsaved = false;
+            };
+
+            var beforeUnloadHandler = function (event) {
+                if (!confirmUnsaved) {
+                    return;
+                }
+                var message = 'Data asesmen Anda belum tersimpan. Jika Anda meninggalkan halaman ini, jawaban saat ini tidak akan tersimpan.';
+                event.preventDefault();
+                event.returnValue = message;
+                return message;
+            };
+
+            window.addEventListener('beforeunload', beforeUnloadHandler);
+
+            if (form) {
+                form.addEventListener('submit', disablePrompt);
+            }
+        });
+    </script>
+    @endpush
 @endsection
