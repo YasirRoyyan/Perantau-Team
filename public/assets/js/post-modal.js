@@ -172,7 +172,7 @@
                 headers: {
                     'Accept': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
-                    'X-Socket-ID': window.Echo?.socketId?.() || '',
+                    'X-Socket-ID': window.Echo?.socketId?.() || window.InteriologySocketId?.() || '',
                 },
             });
 

@@ -315,26 +315,16 @@
 @endsection
 
 @push('scripts')
-    <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.17.0/dist/echo.iife.min.js"></script>
+    <script src="{{ asset('assets/js/vendor/pusher.min.js') }}?v={{ filemtime(public_path('assets/js/vendor/pusher.min.js')) }}"></script>
     <script>
-        window.Pusher = Pusher;
-        window.Echo = new Echo({
-            broadcaster: 'reverb',
+        window.InteriologyReverb = {
             key: @json(config('broadcasting.connections.reverb.key')),
-            wsHost: @json(config('broadcasting.connections.reverb.options.host')),
-            wsPort: @json((int) config('broadcasting.connections.reverb.options.port')),
-            wssPort: @json((int) config('broadcasting.connections.reverb.options.port')),
+            host: @json(config('broadcasting.connections.reverb.options.host')),
+            port: @json((int) config('broadcasting.connections.reverb.options.port')),
             forceTLS: @json((config('broadcasting.connections.reverb.options.scheme') ?? 'https') === 'https'),
-            enabledTransports: ['ws', 'wss'],
-            auth: {
-                headers: {
-                    'X-CSRF-TOKEN': @json(csrf_token()),
-                    'X-Requested-With': 'XMLHttpRequest',
-                },
-            },
-        });
+            authEndpoint: '/broadcasting/auth',
+        };
     </script>
     <script src="{{ asset('assets/js/post-modal.js') }}?v={{ filemtime(public_path('assets/js/post-modal.js')) }}"></script>
-    <script src="{{ asset('assets/js/dashboard-realtime.js') }}?v={{ filemtime(public_path('assets/js/dashboard-realtime.js')) }}"></script>
+    <script src="{{ asset('assets/js/reverb-client.js') }}?v={{ filemtime(public_path('assets/js/reverb-client.js')) }}"></script>
 @endpush
