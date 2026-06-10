@@ -13,7 +13,7 @@
         $bio = $user->bio ?: 'Spread love and inspiration on interior.';
     @endphp
 
-    <main class="dashboard-page">
+    <main class="dashboard-page" data-dashboard-realtime data-current-user-id="{{ $user->id }}">
         <aside class="dashboard-profile-card" aria-label="Profil pengguna">
             
             {{-- REVISI AVATAR DASHBOARD: PAKSA MATIKAN BACKGROUND IMAGE BAWAAN CSS --}}
@@ -315,5 +315,26 @@
 @endsection
 
 @push('scripts')
+    <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.17.0/dist/echo.iife.min.js"></script>
+    <script>
+        window.Pusher = Pusher;
+        window.Echo = new Echo({
+            broadcaster: 'reverb',
+            key: @json(config('broadcasting.connections.reverb.key')),
+            wsHost: @json(config('broadcasting.connections.reverb.options.host')),
+            wsPort: @json((int) config('broadcasting.connections.reverb.options.port')),
+            wssPort: @json((int) config('broadcasting.connections.reverb.options.port')),
+            forceTLS: @json((config('broadcasting.connections.reverb.options.scheme') ?? 'https') === 'https'),
+            enabledTransports: ['ws', 'wss'],
+            auth: {
+                headers: {
+                    'X-CSRF-TOKEN': @json(csrf_token()),
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+            },
+        });
+    </script>
     <script src="{{ asset('assets/js/post-modal.js') }}?v={{ filemtime(public_path('assets/js/post-modal.js')) }}"></script>
+    <script src="{{ asset('assets/js/dashboard-realtime.js') }}?v={{ filemtime(public_path('assets/js/dashboard-realtime.js')) }}"></script>
 @endpush

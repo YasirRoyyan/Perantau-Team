@@ -24,13 +24,23 @@ class ProfileController extends Controller
         $user = $request->user();
 
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:100'],
+            'name' => ['required', 'string', 'max:25', 'regex:/^[A-Za-z0-9]+$/'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
-            'phone' => ['nullable', 'string', 'max:30'],
-            'city' => ['nullable', 'string', 'max:80'],
-            'bio' => ['nullable', 'string', 'max:500'],
-            'password' => ['nullable', 'confirmed', Password::min(8)],
+            'phone' => ['nullable', 'string', 'max:20', 'regex:/^\+?[0-9]+$/'],
+            'city' => ['nullable', 'string', 'max:80', 'regex:/^[A-Za-z\s]+$/'],
+            'bio' => ['nullable', 'string', 'max:50'],
+            'password' => ['nullable', 'confirmed', Password::min(8), 'max:25'],
             'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'], 
+        ], [
+            'name.regex' => 'Nama hanya boleh berisi huruf dan angka tanpa spasi atau simbol.',
+            'name.max' => 'Nama maksimal 25 karakter.',
+            'email.email' => 'Email harus menggunakan format email yang valid.',
+            'phone.regex' => 'Nomor telepon hanya boleh berisi angka dan kode negara di awal, contoh +628123456789.',
+            'phone.max' => 'Nomor telepon maksimal 20 karakter.',
+            'city.regex' => 'Kota hanya boleh berisi huruf dan spasi.',
+            'city.max' => 'Nama kota maksimal 80 karakter.',
+            'bio.max' => 'Bio maksimal 50 karakter.',
+            'password.max' => 'Password baru maksimal 25 karakter.',
         ]);
 
         if (blank($validated['password'])) {

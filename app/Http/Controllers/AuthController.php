@@ -19,9 +19,13 @@ class AuthController extends Controller
     public function login(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'login' => ['required_without:email', 'nullable', 'string'],
+            'login' => ['required_without:email', 'nullable', 'string', 'max:25', 'not_regex:/\s/'],
             'email' => ['nullable', 'email'],
-            'password' => ['required', 'string'],
+            'password' => ['required', 'string', 'max:25'],
+        ], [
+            'login.max' => 'Nama pengguna maksimal 25 karakter.',
+            'login.not_regex' => 'Nama pengguna tidak boleh menggunakan spasi.',
+            'password.max' => 'Kata sandi maksimal 25 karakter.',
         ]);
 
         $identifier = $validated['login'] ?? $validated['email'] ?? '';
@@ -46,9 +50,13 @@ class AuthController extends Controller
     public function register(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:100'],
+            'name' => ['required', 'string', 'max:25', 'not_regex:/\s/'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'confirmed', Password::min(8)],
+            'password' => ['required', 'confirmed', Password::min(8), 'max:25'],
+        ], [
+            'name.max' => 'Nama pengguna maksimal 25 karakter.',
+            'name.not_regex' => 'Nama pengguna tidak boleh menggunakan spasi.',
+            'password.max' => 'Kata sandi maksimal 25 karakter.',
         ]);
 
         $validated['role'] = 'user';

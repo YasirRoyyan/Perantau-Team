@@ -49,7 +49,8 @@
 
                 <label>
                     Nama
-                    <input type="text" name="name" value="{{ old('name', $user->name) }}" required>
+                    <input type="text" name="name" value="{{ old('name', $user->name) }}" maxlength="25" pattern="[A-Za-z0-9]+" data-alpha-num-only required>
+                    <small class="form-note">Maksimal 25 karakter, hanya huruf dan angka tanpa spasi.</small>
                 </label>
 
                 <label>
@@ -59,23 +60,27 @@
 
                 <label>
                     Nomor Telepon
-                    <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" placeholder="Opsional">
+                    <input type="tel" name="phone" value="{{ old('phone', $user->phone) }}" placeholder="Contoh: +628123456789" maxlength="20" inputmode="tel" pattern="\+?[0-9]*" data-phone-only>
+                    <small class="form-note">Hanya angka, boleh diawali kode negara seperti +62.</small>
                 </label>
 
                 <label>
                     Kota
-                    <input type="text" name="city" value="{{ old('city', $user->city) }}" placeholder="Contoh: Bandung">
+                    <input type="text" name="city" value="{{ old('city', $user->city) }}" placeholder="Contoh: Bandung" maxlength="80" pattern="[A-Za-z\s]+" list="cityOptions" data-city-input autocomplete="off">
+                    <datalist id="cityOptions"></datalist>
+                    <small class="form-note">Ketik huruf awal kota. Hanya huruf dan spasi.</small>
                 </label>
 
                 <label class="full-span">
                     Bio
-                    <textarea name="bio" rows="4" placeholder="Ceritakan selera interior kamu secara singkat">{{ old('bio', $user->bio) }}</textarea>
+                    <textarea name="bio" rows="4" maxlength="50" placeholder="Ceritakan selera interior kamu secara singkat" data-character-count="bioCounter">{{ old('bio', $user->bio) }}</textarea>
+                    <small class="form-note"><span id="bioCounter">0</span>/50 karakter</small>
                 </label>
 
                 <label>
                     Password Baru
                     <span class="password-field">
-                        <input type="password" name="password" placeholder="Kosongkan jika tidak diubah">
+                        <input type="password" name="password" placeholder="Kosongkan jika tidak diubah" minlength="8" maxlength="25">
                         <button type="button" class="password-toggle" aria-label="Tampilkan password" aria-pressed="false">
                             <svg class="password-eye-icon" viewBox="0 0 24 24" aria-hidden="true">
                                 <path class="eye-outline" d="M2.5 12s3.45-5.5 9.5-5.5 9.5 5.5 9.5 5.5-3.45 5.5-9.5 5.5S2.5 12 2.5 12Z"></path>
@@ -84,12 +89,13 @@
                             </svg>
                         </button>
                     </span>
+                    <small class="form-note">Minimal 8 karakter dan maksimal 25 karakter.</small>
                 </label>
 
                 <label>
                     Konfirmasi Password Baru
                     <span class="password-field">
-                        <input type="password" name="password_confirmation" placeholder="Ulangi password baru">
+                        <input type="password" name="password_confirmation" placeholder="Ulangi password baru" minlength="8" maxlength="25">
                         <button type="button" class="password-toggle" aria-label="Tampilkan password" aria-pressed="false">
                             <svg class="password-eye-icon" viewBox="0 0 24 24" aria-hidden="true">
                                 <path class="eye-outline" d="M2.5 12s3.45-5.5 9.5-5.5 9.5 5.5 9.5 5.5-3.45 5.5-9.5 5.5S2.5 12 2.5 12Z"></path>
@@ -125,5 +131,70 @@
                 reader.readAsDataURL(input.files[0]);
             }
         }
+
+        const cityNames = [
+            'Ambon', 'Balikpapan', 'Banda Aceh', 'Bandar Lampung', 'Bandung', 'Banjar',
+            'Banjarbaru', 'Banjarmasin', 'Batam', 'Batu', 'Bekasi', 'Bengkulu', 'Binjai',
+            'Bitung', 'Blitar', 'Bogor', 'Bontang', 'Bukittinggi', 'Cilegon', 'Cimahi',
+            'Cirebon', 'Denpasar', 'Depok', 'Dumai', 'Gorontalo', 'Jakarta', 'Jambi',
+            'Jayapura', 'Kediri', 'Kendari', 'Kupang', 'Langsa', 'Lhokseumawe', 'Madiun',
+            'Magelang', 'Makassar', 'Malang', 'Manado', 'Mataram', 'Medan', 'Metro',
+            'Mojokerto', 'Padang', 'Padang Panjang', 'Padangsidimpuan', 'Palangkaraya',
+            'Palembang', 'Palopo', 'Palu', 'Pangkalpinang', 'Parepare', 'Pariaman',
+            'Pasuruan', 'Payakumbuh', 'Pekalongan', 'Pekanbaru', 'Pematangsiantar',
+            'Pontianak', 'Prabumulih', 'Probolinggo', 'Sabang', 'Salatiga', 'Samarinda',
+            'Semarang', 'Serang', 'Sibolga', 'Singkawang', 'Solok', 'Sorong', 'Subulussalam',
+            'Sukabumi', 'Surabaya', 'Surakarta', 'Tangerang', 'Tangerang Selatan',
+            'Tanjungbalai', 'Tanjungpinang', 'Tarakan', 'Tasikmalaya', 'Tebing Tinggi',
+            'Tegal', 'Ternate', 'Tidore Kepulauan', 'Tomohon', 'Tual', 'Yogyakarta'
+        ];
+
+        const cityInput = document.querySelector('[data-city-input]');
+        const cityOptions = document.getElementById('cityOptions');
+
+        function renderCityOptions(query = '') {
+            if (!cityOptions) return;
+
+            const normalizedQuery = query.trim().toLowerCase();
+            const matches = cityNames
+                .filter((city) => !normalizedQuery || city.toLowerCase().startsWith(normalizedQuery))
+                .slice(0, 12);
+
+            cityOptions.innerHTML = matches.map((city) => `<option value="${city}"></option>`).join('');
+        }
+
+        document.querySelectorAll('[data-alpha-num-only]').forEach((input) => {
+            input.addEventListener('input', () => {
+                input.value = input.value.replace(/[^A-Za-z0-9]/g, '');
+            });
+        });
+
+        document.querySelectorAll('[data-phone-only]').forEach((input) => {
+            input.addEventListener('input', () => {
+                let value = input.value.replace(/[^\d+]/g, '');
+                value = value.replace(/(?!^)\+/g, '');
+                input.value = value;
+            });
+        });
+
+        if (cityInput) {
+            cityInput.addEventListener('input', () => {
+                cityInput.value = cityInput.value.replace(/[^A-Za-z\s]/g, '');
+                renderCityOptions(cityInput.value);
+            });
+            renderCityOptions(cityInput.value);
+        }
+
+        document.querySelectorAll('[data-character-count]').forEach((field) => {
+            const counter = document.getElementById(field.dataset.characterCount);
+            if (!counter) return;
+
+            const updateCounter = () => {
+                counter.textContent = field.value.length;
+            };
+
+            field.addEventListener('input', updateCounter);
+            updateCounter();
+        });
     </script>
 @endpush

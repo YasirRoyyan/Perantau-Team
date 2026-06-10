@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PostLikeUpdated;
 use App\Models\Post;
 use App\Models\PostFavorite;
 use App\Models\PostLike;
@@ -42,6 +43,14 @@ class PostInteractionController extends Controller
         });
 
         $post->refresh();
+
+        broadcast(new PostLikeUpdated(
+            postId: (int) $post->id,
+            postOwnerId: (int) $post->user_id,
+            likesCount: (int) $post->likes_count,
+            liked: (bool) $result['liked'],
+            actorId: (int) $userId,
+        ))->toOthers();
 
         return response()->json([
             'success' => true,

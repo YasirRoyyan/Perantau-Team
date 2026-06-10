@@ -27,9 +27,24 @@
                     @csrf
 
                     <input type="email" name="email" value="{{ old('email') }}" placeholder="Email" aria-label="Email" autocomplete="off" required>
-                    <input type="text" name="name" value="{{ old('name') }}" placeholder="Nama Pengguna" aria-label="Nama Pengguna" autocomplete="off" required>
-                    <input type="password" name="password" placeholder="Kata Sandi" aria-label="Kata Sandi" autocomplete="new-password" required>
-                    <input type="password" name="password_confirmation" placeholder="Ulangi Kata Sandi" aria-label="Ulangi Kata Sandi" autocomplete="new-password" required>
+
+                    <label class="auth-field">
+                        <span class="sr-only">Nama Pengguna</span>
+                        <input type="text" name="name" value="{{ old('name') }}" placeholder="Nama Pengguna" aria-label="Nama Pengguna" autocomplete="off" maxlength="25" pattern="\S+" data-no-space="true" data-limit-message="Nama pengguna sudah mencapai batas 25 karakter." data-space-message="Nama pengguna tidak boleh menggunakan spasi." required>
+                        <small class="auth-limit-note" aria-live="polite"></small>
+                    </label>
+
+                    <label class="auth-field">
+                        <span class="sr-only">Kata Sandi</span>
+                        <input type="password" name="password" placeholder="Kata Sandi" aria-label="Kata Sandi" autocomplete="new-password" maxlength="25" data-limit-message="Kata sandi sudah mencapai batas 25 karakter." required>
+                        <small class="auth-limit-note" aria-live="polite"></small>
+                    </label>
+
+                    <label class="auth-field">
+                        <span class="sr-only">Ulangi Kata Sandi</span>
+                        <input type="password" name="password_confirmation" placeholder="Ulangi Kata Sandi" aria-label="Ulangi Kata Sandi" autocomplete="new-password" maxlength="25" data-limit-message="Konfirmasi kata sandi sudah mencapai batas 25 karakter." required>
+                        <small class="auth-limit-note" aria-live="polite"></small>
+                    </label>
 
                     <button type="submit" class="btn-submit">Daftar</button>
                 </form>
@@ -43,3 +58,23 @@
         </section>
     </main>
 @endsection
+
+@push('scripts')
+    <script>
+        document.querySelectorAll('.auth-field input').forEach((input) => {
+            const note = input.closest('.auth-field')?.querySelector('.auth-limit-note');
+            if (!note) return;
+
+            const updateNote = () => {
+                const hasSpace = input.dataset.noSpace === 'true' && /\s/.test(input.value);
+                const atLimit = input.maxLength > 0 && input.value.length >= input.maxLength;
+
+                note.textContent = hasSpace ? input.dataset.spaceMessage : (atLimit ? input.dataset.limitMessage : '');
+                note.classList.toggle('is-visible', hasSpace || atLimit);
+            };
+
+            input.addEventListener('input', updateNote);
+            updateNote();
+        });
+    </script>
+@endpush
