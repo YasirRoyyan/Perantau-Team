@@ -46,6 +46,7 @@
         }
 
         activeCard = card;
+        modal.dataset.activePostId = card.dataset.postId || '';
         const ownerId = Number(card.dataset.postOwnerId || 0);
         const liked = card.dataset.postLiked === '1';
         const favorited = card.dataset.postFavorited === '1';
@@ -81,12 +82,79 @@
         document.body.style.overflow = '';
         deleteConfirm.hidden = true;
         activeCard = null;
+        modal.dataset.activePostId = '';
 
         closeTimer = window.setTimeout(() => {
             modal.hidden = true;
             closeTimer = null;
         }, 220);
     }
+
+    function updateDashboardTotals(ownerId, liked) {
+        if (Number(ownerId || 0) !== currentUserId) {
+            return;
+        }
+
+        const delta = liked ? 1 : -1;
+
+        document.querySelectorAll('[data-profile-total-likes], [data-dashboard-total-likes]').forEach((totalLikesEl) => {
+            const currentTotal = Number.parseInt(totalLikesEl.textContent.replace(/[^\d-]/g, ''), 10) || 0;
+            totalLikesEl.textContent = String(Math.max(0, currentTotal + delta));
+        });
+    }
+
+    function syncPostLikeState(payload, options = {}) {
+        const postId = Number(payload?.post_id || payload?.postId || 0);
+
+        if (! postId) {
+            return;
+        }
+
+        const likesCount = Number(payload?.likes_count ?? payload?.likesCount ?? 0);
+        const liked = Boolean(payload?.liked);
+        const actorId = Number(payload?.actor_id ?? payload?.actorId ?? 0);
+        const ownerId = Number(payload?.post_owner_id ?? payload?.postOwnerId ?? 0);
+        const source = options.source || 'broadcast';
+        const shouldSyncLikeState = source === 'local' || actorId === currentUserId;
+        const matchingCards = Array.from(document.querySelectorAll(`[data-post-card][data-post-id="${postId}"]`));
+        const alreadySynced = matchingCards.length > 0 && matchingCards.every((card) => {
+            const currentLikes = Number(card.dataset.postLikes || 0);
+            const likesMatch = currentLikes === likesCount;
+            const likedMatch = ! shouldSyncLikeState || (card.dataset.postLiked === (liked ? '1' : '0'));
+
+            return likesMatch && likedMatch;
+        });
+
+        if (source === 'broadcast' && alreadySynced) {
+            return;
+        }
+
+        matchingCards.forEach((card) => {
+            card.dataset.postLikes = String(likesCount);
+
+            if (shouldSyncLikeState) {
+                card.dataset.postLiked = liked ? '1' : '0';
+            }
+
+            const likeCountEl = card.querySelector('[data-post-like-count]');
+
+            if (likeCountEl) {
+                likeCountEl.textContent = likesCount + ' suka';
+            }
+        });
+
+        if (Number.parseInt(modal.dataset.activePostId || '0', 10) === postId) {
+            likesEl.textContent = likesCount + ' suka';
+
+            if (shouldSyncLikeState) {
+                likeButton.classList.toggle('is-active', liked);
+            }
+        }
+
+        updateDashboardTotals(ownerId, liked);
+    }
+
+    window.InteriologyPostLikeSync = syncPostLikeState;
 
     async function toggleLike() {
         if (! activeCard || likeButton.disabled) {
@@ -104,6 +172,7 @@
                 headers: {
                     'Accept': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+                    'X-Socket-ID': window.Echo?.socketId?.() || '',
                 },
             });
 
@@ -117,18 +186,17 @@
             const likesCount = Number(data.likes_count || 0);
             const ownerId = Number(activeCard.dataset.postOwnerId || 0);
 
-            activeCard.dataset.postLiked = liked ? '1' : '0';
-            activeCard.dataset.postLikes = String(likesCount);
-            likesEl.textContent = likesCount + ' suka';
-            likeButton.classList.toggle('is-active', liked);
-            pulseButton(likeButton);
+            syncPostLikeState({
+                post_id: Number(activeCard.dataset.postId || 0),
+                post_owner_id: ownerId,
+                likes_count: likesCount,
+                liked,
+                actor_id: currentUserId,
+            }, {
+                source: 'local',
+            });
 
-            if (ownerId === currentUserId) {
-                document.querySelectorAll('[data-profile-total-likes], [data-dashboard-total-likes]').forEach((totalLikesEl) => {
-                    const currentTotal = Number(totalLikesEl.textContent.trim() || 0);
-                    totalLikesEl.textContent = String(currentTotal + (liked ? 1 : -1));
-                });
-            }
+            pulseButton(likeButton);
 
             statusEl.textContent = liked ? 'Disukai' : 'Suka dibatalkan';
         } catch (error) {

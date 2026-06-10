@@ -33,7 +33,8 @@
     data-post-profile-url="{{ route('user.profile', $post->user->name) }}"
     data-post-user-avatar="{{ $avatar }}"
 >
-    <div class="dashboard-gallery-card__label">
+    <div class="dashboard-gallery-card__label" style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
         <strong>{{ '@' . strtolower($post->user->name) }}</strong>
+        <span data-post-like-count>{{ $post->likes_count }} suka</span>
     </div>
 </article>
