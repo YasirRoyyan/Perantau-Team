@@ -29,7 +29,6 @@ class UserProfileController extends Controller
         $posts = $user->posts()
             ->latest()
             ->get()
-            ->filter(fn ($post) => Storage::disk('public')->exists($post->image))
             ->values();
         $likedPostIds = PostLike::where('user_id', auth()->id())->pluck('post_id')->all();
         $favoritedPostIds = PostFavorite::where('user_id', auth()->id())->pluck('post_id')->all();
@@ -38,7 +37,6 @@ class UserProfileController extends Controller
                 ->whereIn('id', $favoritedPostIds)
                 ->latest()
                 ->get()
-                ->filter(fn ($post) => Storage::disk('public')->exists($post->image))
                 ->values()
             : collect();
 

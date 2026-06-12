@@ -28,7 +28,6 @@ class DashboardController extends Controller
         $galleryItems = Post::with('user')
             ->latest()
             ->get()
-            ->filter(fn ($post) => Storage::disk('public')->exists($post->image))
             ->values();
         $likedPostIds = PostLike::where('user_id', $user->id)->pluck('post_id')->all();
         $favoritedPostIds = PostFavorite::where('user_id', $user->id)->pluck('post_id')->all();

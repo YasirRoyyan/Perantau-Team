@@ -1,5 +1,6 @@
 @php
     $likedIds = $likedPostIds ?? [];
+    $likedIds = $likedPostIds ?? [];
     $favoritedIds = $favoritedPostIds ?? [];
     $canDelete = auth()->id() === $post->user_id;
     $isLiked = in_array($post->id, $likedIds);
@@ -7,13 +8,19 @@
     $avatar = $post->user->avatar && \Storage::disk('public')->exists($post->user->avatar)
         ? \Storage::url($post->user->avatar)
         : asset('assets/images/default-avatar.png');
+
+    $imageUrl = str_starts_with($post->image, 'http') 
+        ? $post->image 
+        : \Storage::url($post->image);
+        
+
 @endphp
 
 <article
     class="dashboard-gallery-card dashboard-gallery-card--post"
     tabindex="0"
     role="button"
-    style="background-image: linear-gradient(to bottom, rgba(24, 18, 12, 0.05) 42%, rgba(24, 18, 12, 0.58) 100%), url('{{ \Storage::url($post->image) }}'); background-size: cover; background-position: center; border-radius: 8px; aspect-ratio: 1/1; position: relative; cursor: pointer; transition: transform 0.18s ease, box-shadow 0.18s ease;"
+    style="background-image: linear-gradient(to bottom, rgba(24, 18, 12, 0.05) 42%, rgba(24, 18, 12, 0.58) 100%), url('{{ $imageUrl }}'); background-size: cover; background-position: center; border-radius: 8px; aspect-ratio: 1/1; position: relative; cursor: pointer; transition: transform 0.18s ease, box-shadow 0.18s ease;"
     aria-label="Inspirasi interior dari {{ $post->user->name }}"
     data-post-card
     data-post-id="{{ $post->id }}"
@@ -21,7 +28,7 @@
     data-post-owner-name="{{ $post->user->name }}"
     data-post-owner-bio="{{ $post->user->bio ?: 'Belum ada bio' }}"
     data-post-caption="{{ $post->caption ?: '' }}"
-    data-post-image="{{ \Storage::url($post->image) }}"
+    data-post-image="{{ $imageUrl }}"
     data-post-image-alt="Desain interior dari {{ $post->user->name }}"
     data-post-likes="{{ $post->likes_count }}"
     data-post-liked="{{ $isLiked ? 1 : 0 }}"
