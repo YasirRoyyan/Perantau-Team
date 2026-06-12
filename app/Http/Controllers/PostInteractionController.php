@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\PostLikeUpdated;
 use App\Models\Post;
 use App\Models\PostFavorite;
 use App\Models\PostLike;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Pusher\Pusher;
 
 class PostInteractionController extends Controller
 {
@@ -44,19 +45,57 @@ class PostInteractionController extends Controller
 
         $post->refresh();
 
-        broadcast(new PostLikeUpdated(
+        $this->broadcastLikeUpdated(
             postId: (int) $post->id,
             postOwnerId: (int) $post->user_id,
             likesCount: (int) $post->likes_count,
             liked: (bool) $result['liked'],
             actorId: (int) $userId,
-        ))->toOthers();
+        );
 
         return response()->json([
             'success' => true,
             'liked' => $result['liked'],
             'likes_count' => (int) $post->likes_count,
         ]);
+    }
+
+    private function broadcastLikeUpdated(
+        int $postId,
+        int $postOwnerId,
+        int $likesCount,
+        bool $liked,
+        int $actorId,
+    ): void {
+        $connection = config('broadcasting.connections.reverb');
+        $options = $connection['options'];
+
+        try {
+            $pusher = new Pusher(
+                $connection['key'],
+                $connection['secret'],
+                $connection['app_id'],
+                [
+                    'host' => $options['host'],
+                    'port' => (int) $options['port'],
+                    'scheme' => $options['scheme'],
+                    'useTLS' => (bool) $options['useTLS'],
+                ],
+            );
+
+            $pusher->trigger('interiology.dashboard', 'post.like.updated', [
+                'post_id' => $postId,
+                'post_owner_id' => $postOwnerId,
+                'likes_count' => $likesCount,
+                'liked' => $liked,
+                'actor_id' => $actorId,
+            ]);
+        } catch (\Throwable $error) {
+            Log::warning('Gagal mengirim realtime like ke Reverb.', [
+                'post_id' => $postId,
+                'message' => $error->getMessage(),
+            ]);
+        }
     }
 
     public function toggleFavorite(Request $request, Post $post): JsonResponse

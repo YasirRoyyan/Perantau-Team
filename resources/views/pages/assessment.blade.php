@@ -57,6 +57,13 @@
             if (form) {
                 form.addEventListener('submit', disablePrompt);
             }
+
+            var backButton = document.querySelector('.back-button');
+            if (backButton) {
+                backButton.addEventListener('click', function () {
+                    disablePrompt();
+                });
+            }
         });
     </script>
     @endpush
